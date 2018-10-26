@@ -7,9 +7,8 @@ const request = require('request')
 const app = express()
 
 // bot fb page
-const token = "EAADiQpmWQRgBADh9iaWMEylkKLsURLCiN1YPG10Vit7MqM3oKfcPMUZBMijbdNcJPtjTrLB6C68zwGi2if7BxzAhBGGZAaZCRoHFXr5LRBFOh7PNmWPFU1uJe48QWdqqZCd9XWtP1Tyiydhi07MFyCkKEZAuvieXX5sv2v6PiCQZDZD";
-
-const msngerServerUrl = 'https://chatbotwilliam.herokuapp.com/bot';
+const token = "EAADiQpmWQRgBAPVQFJqPNXoVYZAPU24wI7tF9eY6P3hZAcZBD4OkwRck76ZARhfs8iZBcAEP1o3oh0a9JkkfLPUx9tC6UM3KCUk6bI5EBzdYZBAg2b3mG50Hi1enhg1dUqDjYDfnQemPLJx8AnKsPkR8ZBoRlDnZBjrrDQ8wFGqU1AZDZD";
+const msngerServerUrl = 'https://mecatobot.herokuapp.com/bot';
 
 app.set('port', (process.env.PORT || 5000))
 
@@ -89,12 +88,7 @@ app.post('/webhook/', function (req, res) {
 
 function sendTextMessage(sender, text) {
     if (text != 'null') {
-        let messageData = {"attachment": {
-                "type": "image",
-                "payload": {
-                    "url": "https://www.google.com.co/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
-                }
-            }
+        let messageData = {"text":text
         }
 
         request({
