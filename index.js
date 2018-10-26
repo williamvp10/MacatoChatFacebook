@@ -6,8 +6,8 @@ const request = require('request')
 
 const app = express()
 
-// weatherman fb page
-const token = "EAAghpqdArs0BABZBBuirkF5PS171dxcVVLj5sn8V0id2hVikA9HoP11YacqKjb83mtXCx4o11bGjLsopIlvJxZAWtjKvzCGCTZBdSFyAD1eT485xjJZCSVEFNyjUZA29Rvi5KELOzl4CggZCs9SvExfWL4UOzdZAiaZCaoFPUy27HQZDZD";
+// bot fb page
+const token = "EAADiQpmWQRgBADh9iaWMEylkKLsURLCiN1YPG10Vit7MqM3oKfcPMUZBMijbdNcJPtjTrLB6C68zwGi2if7BxzAhBGGZAaZCRoHFXr5LRBFOh7PNmWPFU1uJe48QWdqqZCd9XWtP1Tyiydhi07MFyCkKEZAuvieXX5sv2v6PiCQZDZD";
 
 const msngerServerUrl = 'https://chatbotwilliam.herokuapp.com/bot';
 
@@ -23,12 +23,12 @@ app.use(express.static('public'))
 
 // Index route
 app.get('/', function (req, res) {
-    res.send('Hello world, I am Weatherman!.')
+    res.send('Hello world, I am Mecato Bot!.')
 })
 
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
-    if (req.query['hub.verify_token'] === 'iam-weatherman-bot') {
+    if (req.query['hub.verify_token'] === 'Mecato-Bot') {
         res.send(req.query['hub.challenge'])
     }
     res.send('Error, wrong token')
