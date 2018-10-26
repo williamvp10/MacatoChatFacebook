@@ -88,7 +88,7 @@ app.post('/webhook/', function (req, res) {
 
 function sendTextMessage(sender, text) {
     if (text != 'null') {
-        let messageData = {"text":text
+        let messageData = {'text':text
         }
 
         request({
