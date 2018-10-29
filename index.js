@@ -68,15 +68,18 @@ app.post('/webhook/', function (req, res) {
                             // Print out the response body
                             //console.log(body)
                             body = body.substring(1, body.length - 1);
-                            body = body.replace(/\\/g, '')
-                            console.log(body)
-                            let botOut = JSON.parse(body)
+                            body = body.replace(/\\/g, '');
+                            console.log(body);
+                            let botOut = JSON.parse(body);
 
                             if (botOut.botUtterance != null) {
-                                sendTextMessage(sender, botOut.botUtterance)
+                                 alert(botOut.botUtterance+" "+botOut.button0+" "+botOut.button1+" "
+                                         +botOut.button2+" ");
+                                sendTextMessage(sender, botOut.botUtterance);
+                                sendTextMessageButon(sender, botOut.button0);
                             }
                         } else {
-                            sendTextMessage(sender, 'Error!')
+                            sendTextMessage(sender, 'Error!');
                         }
                     });
         }
@@ -102,9 +105,48 @@ function sendTextMessage(sender, text) {
             }
         }, function (error, response, body) {
             if (error) {
-                console.log('Error sending messages: ', error)
+                console.log('Error sending messages: ', error);
             } else if (response.body.error) {
-                console.log('Error: ', response.body.error)
+                console.log('Error: ', response.body.error);
+            }
+        })
+    }
+}
+
+function sendTextMessageButon(sender, text) {
+   
+    if (text != 'null') {
+       let messageData = {
+            "attachment": {
+                "type": "template",
+                "payload": {
+                    "template_type": "button",
+                    "text": text,
+                    "buttons": [
+                        {
+                            "type": "web_url",
+                            "url": "https://www.messenger.com",
+                            "title": "acept"
+                        }
+                    ]
+                }
+            }
+        }
+
+        request({
+            url: 'https://graph.facebook.com/v2.6/me/messages',
+            qs: {access_token: token},
+            method: 'POST',
+            json: {
+                recipient: {id: sender},
+                message: messageData,
+
+            }
+        }, function (error, response, body) {
+            if (error) {
+                console.log('Error sending messages: ', error);
+            } else if (response.body.error) {
+                console.log('Error: ', response.body.error);
             }
         })
     }
