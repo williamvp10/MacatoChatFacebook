@@ -73,8 +73,7 @@ app.post('/webhook/', function (req, res) {
                             let botOut = JSON.parse(body);
 
                             if (botOut.botUtterance != null) {
-                                 alert(botOut.botUtterance+" "+botOut.button0+" "+botOut.button1+" "
-                                         +botOut.button2+" ");
+                                 
                                 sendTextMessage(sender, botOut.botUtterance);
                                 sendTextMessageButon(sender, botOut.button0);
                             }
