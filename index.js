@@ -75,7 +75,9 @@ app.post('/webhook/', function (req, res) {
                             if (botOut.botUtterance != null) {
                                  
                                 sendTextMessage(sender, botOut.botUtterance);
-                                sendTextMessage(sender, botOut.button0);
+                                if(botOut.buttons!=null || botOut.buttons.length!=0){
+                                  sendTextMessageButon(sender, botOut);
+                                }
                             }
                         } else {
                             sendTextMessage(sender, 'Error!');
@@ -112,15 +114,15 @@ function sendTextMessage(sender, text) {
     }
 }
 
-function sendTextMessageButon(sender, text) {
+function sendTextMessageButon(sender, bot) {
    
     if (text != 'null') {
        let messageData = {
             "attachment": {
-                "type": "template",
+                "type": bot.botUtterance,
                 "payload": {
                     "template_type": "button",
-                    "text": text,
+                    "text": bot.buttons[0],
                     "buttons": [
                         {
                             "type": "web_url",
