@@ -75,7 +75,7 @@ app.post('/webhook/', function (req, res) {
                             if (botOut.botUtterance != null) {
                                  
                                 sendTextMessage(sender, botOut.botUtterance);
-                                sendTextMessageButon(sender, botOut.button0);
+                                sendTextMessage(sender, botOut.button0);
                             }
                         } else {
                             sendTextMessage(sender, 'Error!');
