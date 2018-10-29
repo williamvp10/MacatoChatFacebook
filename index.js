@@ -1,59 +1,59 @@
 'use strict';
 
-const express = require('express')
-const bodyParser = require('body-parser')
-const request = require('request')
+const express = require('express');
+const bodyParser = require('body-parser');
+const request = require('request');
 
-const app = express()
+const app = express();
 
 // bot fb page
 const token = "EAADiQpmWQRgBAPVQFJqPNXoVYZAPU24wI7tF9eY6P3hZAcZBD4OkwRck76ZARhfs8iZBcAEP1o3oh0a9JkkfLPUx9tC6UM3KCUk6bI5EBzdYZBAg2b3mG50Hi1enhg1dUqDjYDfnQemPLJx8AnKsPkR8ZBoRlDnZBjrrDQ8wFGqU1AZDZD";
 const msngerServerUrl = 'https://mecatobot.herokuapp.com/bot';
 
-app.set('port', (process.env.PORT || 5000))
+app.set('port', (process.env.PORT || 8000));
 
 // Process application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({extended: false}));
 
 // Process application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
-app.use(express.static('public'))
+app.use(express.static('public'));
 
 // Index route
 app.get('/', function (req, res) {
-    res.send('Hello world, I am Mecato Bot!.')
-})
+    res.send('Hello world, I am Mecato Bot!.');
+});
 
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] === 'Mecato-Bot') {
-        res.send(req.query['hub.challenge'])
+        res.send(req.query['hub.challenge']);
     }
-    res.send('Error, wrong token')
-})
+    res.send('Error, wrong token');
+});
 
 // Spin up the server
 app.listen(app.get('port'), function () {
-    console.log('running on port', app.get('port'))
-})
+    console.log('running on port', app.get('port'));
+});
 
 
 //FBM webhook
 app.post('/webhook/', function (req, res) {
     console.log(JSON.stringify(req.body));
-    let messaging_events = req.body.entry[0].messaging
+    let messaging_events = req.body.entry[0].messaging;
     for (let i = 0; i < messaging_events.length; i++) {
 
-        let event = req.body.entry[0].messaging[i]
-        let sender = event.sender.id
+        let event = req.body.entry[0].messaging[i];
+        let sender = event.sender.id;
 
-        let recipient = event.recipient.id
-        let time = req.body.entry[0].time
+        let recipient = event.recipient.id;
+        let time = req.body.entry[0].time;
 
         // we call the MessengerBot here..
         if (event.message && event.message.text) {
-            let text = event.message.text
+            let text = event.message.text;
             //send it to the bot
             request({
                 url: msngerServerUrl,
@@ -86,14 +86,13 @@ app.post('/webhook/', function (req, res) {
         }
     }
 
-
-    res.sendStatus(200)
-})
+    res.sendStatus(200);
+});
 
 function sendTextMessage(sender, text) {
-    if (text != 'null') {
+    if (text !== 'null') {
         let messageData = {'text':text
-        }
+        };
 
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages',
@@ -101,7 +100,7 @@ function sendTextMessage(sender, text) {
             method: 'POST',
             json: {
                 recipient: {id: sender},
-                message: messageData,
+                message: messageData
 
             }
         }, function (error, response, body) {
@@ -110,13 +109,13 @@ function sendTextMessage(sender, text) {
             } else if (response.body.error) {
                 console.log('Error: ', response.body.error);
             }
-        })
+        });
     }
 }
 
 function sendTextMessageButton(sender, bot) {
    
-    if (text != 'null') {
+    if (bot !== 'null') {
        let messageData = {
             "attachment": {
                 "type": bot.botUtterance,
@@ -132,7 +131,7 @@ function sendTextMessageButton(sender, bot) {
                     ]
                 }
             }
-        }
+        };
 
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages',
@@ -140,7 +139,7 @@ function sendTextMessageButton(sender, bot) {
             method: 'POST',
             json: {
                 recipient: {id: sender},
-                message: messageData,
+                message: messageData
 
             }
         }, function (error, response, body) {
@@ -149,7 +148,7 @@ function sendTextMessageButton(sender, bot) {
             } else if (response.body.error) {
                 console.log('Error: ', response.body.error);
             }
-        })
+        });
     }
 }
 
