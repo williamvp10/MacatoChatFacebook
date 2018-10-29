@@ -64,7 +64,7 @@ app.post('/webhook/', function (req, res) {
             },
                     function (error, response, body) {
                         //response is from the bot
-                        if (!error && response.statusCode == 200) {
+                        if (!error && response.statusCode === 200) {
                             // Print out the response body
                             //console.log(body)
                             body = body.substring(1, body.length - 1);
@@ -72,10 +72,10 @@ app.post('/webhook/', function (req, res) {
                             console.log(body);
                             let botOut = JSON.parse(body);
 
-                            if (botOut.botUtterance != null) {
+                            if (botOut.botUtterance !== null) {
                                  
                                 sendTextMessage(sender, botOut.botUtterance);
-                                if(botOut.buttons!=null && botOut.buttons.length!=0){
+                                if(botOut.buttons!==null && botOut.buttons.length!==0){
                                   sendTextMessage(sender, botOut.buttons);
                                 }
                             }
