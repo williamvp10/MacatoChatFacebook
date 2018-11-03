@@ -10,7 +10,7 @@ const app = express();
 const token = "EAADiQpmWQRgBAPVQFJqPNXoVYZAPU24wI7tF9eY6P3hZAcZBD4OkwRck76ZARhfs8iZBcAEP1o3oh0a9JkkfLPUx9tC6UM3KCUk6bI5EBzdYZBAg2b3mG50Hi1enhg1dUqDjYDfnQemPLJx8AnKsPkR8ZBoRlDnZBjrrDQ8wFGqU1AZDZD";
 const msngerServerUrl = 'https://mecatobot.herokuapp.com/bot';
 
-app.set('port', (process.env.PORT || 8000));
+app.set('port', (process.env.PORT || 5000));
 
 // Process application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}));
@@ -22,7 +22,7 @@ app.use(express.static('public'));
 
 // Index route
 app.get('/', function (req, res) {
-    res.send('Hello world, I am Mecato Bot!.');
+    res.send('Hello world, I am Weatherman!.');
 });
 
 // for Facebook verification
@@ -76,8 +76,8 @@ app.post('/webhook/', function (req, res) {
                                  
                                 sendTextMessage(sender, botOut.botUtterance);
                                 if(botOut.buttons!==null && botOut.buttons.length!==0){
-                                    for (var i = 0; i < botOut.buttons.length; i++) {
-                                        sendTextMessage(sender, botOut.buttons[i]);
+                                    for (var j = 0; j < botOut.buttons.length; j++) {
+                                        sendTextMessageButton(sender, botOut.buttons[j]);
                                     }
                                  
                                }
