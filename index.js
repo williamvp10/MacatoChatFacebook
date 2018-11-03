@@ -125,14 +125,15 @@ function sendTextMessageButton(sender, buttons) {
             button += '{"type": "web_url","url": "https://www.google.com","title": ' +
                     buttons[i] + '}';
         }
-        console.log(JSON.parse('buttons:[' + button + ']'));
+        let o=JSON.parse('buttons:[' + button + ']');
+        console.log(o);
         let messageData = {
             "attachment": {
                 "type": "template",
                 "payload": {
                     "template_type": "button",
                     "text": "",
-                    JSON.parse("buttons:[" + button + "]")
+                    o
                 }
             }
         };
