@@ -1,30 +1,21 @@
 'use strict';
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
-
 const app = express();
-
 // bot fb page
 const token = "EAADiQpmWQRgBAPVQFJqPNXoVYZAPU24wI7tF9eY6P3hZAcZBD4OkwRck76ZARhfs8iZBcAEP1o3oh0a9JkkfLPUx9tC6UM3KCUk6bI5EBzdYZBAg2b3mG50Hi1enhg1dUqDjYDfnQemPLJx8AnKsPkR8ZBoRlDnZBjrrDQ8wFGqU1AZDZD";
 const msngerServerUrl = 'https://mecatobot.herokuapp.com/bot';
-
 app.set('port', (process.env.PORT || 5000));
-
 // Process application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}));
-
 // Process application/json
 app.use(bodyParser.json());
-
 app.use(express.static('public'));
-
 // Index route
 app.get('/', function (req, res) {
     res.send('Hello world, I am Weatherman!.');
 });
-
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] === 'Mecato-Bot') {
@@ -32,13 +23,10 @@ app.get('/webhook/', function (req, res) {
     }
     res.send('Error, wrong token');
 });
-
 // Spin up the server
 app.listen(app.get('port'), function () {
     console.log('running on port', app.get('port'));
 });
-
-
 //FBM webhook
 app.post('/webhook/', function (req, res) {
     console.log(JSON.stringify(req.body));
@@ -47,10 +35,8 @@ app.post('/webhook/', function (req, res) {
 
         let event = req.body.entry[0].messaging[i];
         let sender = event.sender.id;
-
         let recipient = event.recipient.id;
         let time = req.body.entry[0].time;
-
         // we call the MessengerBot here..
         if (event.message && event.message.text) {
             let text = event.message.text;
@@ -69,16 +55,16 @@ app.post('/webhook/', function (req, res) {
                             console.log(body);
                             body = body.substring(1, body.length - 1);
                             body = body.replace(/\\/g, '');
-
                             let botOut = JSON.parse(body);
-
                             if (botOut.botUtterance !== null) {
                                 console.log(botOut.botUtterance);
                                 sendTextMessage(sender, botOut.botUtterance);
-
                             }
                             if (botOut.buttons !== null && botOut.buttons.length !== 0) {
-                                sendTextMessageButton(sender, botOut.buttons);
+                                for (var j = 0; j < botOut.buttons.length; j++) {
+                                    console.log(botOut.buttons[j]);
+                                    sendTextMessageButton(sender, botOut.buttons[j]);
+                                }
                             }
                         } else {
                             sendTextMessage(sender, 'Error!');
@@ -89,12 +75,10 @@ app.post('/webhook/', function (req, res) {
 
     res.sendStatus(200);
 });
-
 function sendTextMessage(sender, text) {
     if (text !== 'null') {
         let messageData = {'text': text
         };
-
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages',
             qs: {access_token: token},
@@ -114,30 +98,25 @@ function sendTextMessage(sender, text) {
     }
 }
 
-function sendTextMessageButton(sender, buttons) {
-    var button = '';
+function sendTextMessageButton(sender, text) {
 
-    if (buttons !== 'null') {
-        for (var i = 0; i < buttons.length; i++) {
-            if (i !== 0) {
-                button += ',';
-            }
-            button += '{"type": "web_url","url": "https://www.google.com","title": ' +
-                    buttons[i] + '}';
-        }
-        let o=JSON.parse('buttons:[' + button + ']');
-        console.log(o);
+    if (text !== 'null') {
         let messageData = {
             "attachment": {
                 "type": "template",
                 "payload": {
                     "template_type": "button",
-                    "text": "",
-                    o
+                    "text": text,
+                    "buttons": [
+                        {
+                            "type": "web_url",
+                            "url": "https://www.google.com",
+                            "title": "acept"
+                        }
+                    ]
                 }
             }
         };
-
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages',
             qs: {access_token: token},
@@ -156,7 +135,6 @@ function sendTextMessageButton(sender, buttons) {
         });
     }
 }
-
 
 
 //                              envio de una imagen 
