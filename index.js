@@ -75,9 +75,12 @@ app.post('/webhook/', function (req, res) {
                             if (botOut.botUtterance !== null) {
                                  
                                 sendTextMessage(sender, botOut.botUtterance);
-//                                if(botOut.buttons!==null && botOut.buttons.length!==0){
-//                                  sendTextMessage(sender, botOut.buttons);
-//                                }
+                                if(botOut.buttons!==null && botOut.buttons.length!==0){
+                                    for (var i = 0; i < botOut.buttons.length; i++) {
+                                        sendTextMessageButton(sender, botOut.buttons[i]);
+                                    }
+                                 
+                               }
                             }
                         } else {
                             sendTextMessage(sender, 'Error!');
@@ -113,19 +116,19 @@ function sendTextMessage(sender, text) {
     }
 }
 
-function sendTextMessageButton(sender, bot) {
+function sendTextMessageButton(sender, text) {
    
     if (bot !== 'null') {
        let messageData = {
             "attachment": {
-                "type": bot.botUtterance,
+                "type": "template",
                 "payload": {
                     "template_type": "button",
-                    "text": bot.buttons[0],
+                    "text": text,
                     "buttons": [
                         {
                             "type": "web_url",
-                            "url": "https://www.messenger.com",
+                            "url": "https://www.google.com",
                             "title": "acept"
                         }
                     ]
