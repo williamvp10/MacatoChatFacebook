@@ -119,7 +119,7 @@ function sendTextMessage(sender, text) {
 
 function sendTextMessageButton(sender, text) {
 
-    if (bot !== 'null') {
+    if (text !== 'null') {
         let messageData = {
             "attachment": {
                 "type": "template",
