@@ -79,8 +79,8 @@ app.post('/webhook/', function (req, res) {
                             }
                             if (botOut.buttons !== null && botOut.buttons.length !== 0) {
                                 for (var j = 0; j < botOut.buttons.length; j++) {
-                                    console.log(botOut.buttons[j].button);
-                                    sendTextMessageButton(sender, botOut.buttons[j].button);
+                                    console.log(botOut.buttons[j]);
+                                    sendTextMessageButton(sender, botOut.buttons[j]);
                                 }
                             }
                         } else {
