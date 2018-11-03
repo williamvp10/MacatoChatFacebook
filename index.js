@@ -69,7 +69,7 @@ app.post('/webhook/', function (req, res) {
                             console.log(body);
                             body = body.substring(1, body.length - 1);
                             body = body.replace(/\\/g, '');
-                           
+
                             let botOut = JSON.parse(body);
 
                             if (botOut.botUtterance !== null) {
@@ -78,10 +78,7 @@ app.post('/webhook/', function (req, res) {
 
                             }
                             if (botOut.buttons !== null && botOut.buttons.length !== 0) {
-                                for (var j = 0; j < botOut.buttons.length; j++) {
-                                    console.log(botOut.buttons[j]);
-                                    sendTextMessageButton(sender, botOut.buttons[j]);
-                                }
+                                sendTextMessageButton(sender, botOut.buttons);
                             }
                         } else {
                             sendTextMessage(sender, 'Error!');
@@ -117,21 +114,25 @@ function sendTextMessage(sender, text) {
     }
 }
 
-function sendTextMessageButton(sender, text) {
+function sendTextMessageButton(sender, buttons) {
+    var button = '';
 
-    if (text !== 'null') {
+    if (buttons !== 'null') {
+        for (var i = 0; i < buttons.length; i++) {
+            if (i !== 0) {
+                button += ',';
+            }
+            button += '{"type": "web_url","url": "https://www.google.com","title": ' +
+                    buttons[i] + '}';
+        }
+        console.log(JSON.parse('buttons:[' + button + ']'));
         let messageData = {
             "attachment": {
                 "type": "template",
                 "payload": {
                     "template_type": "button",
-                    "buttons": [
-                        {
-                            "type": "web_url",
-                            "url": "https://www.google.com",
-                            "title": text
-                        }
-                    ]
+                    "text": "",
+                    JSON.parse("buttons:[" + button + "]")
                 }
             }
         };
@@ -154,6 +155,7 @@ function sendTextMessageButton(sender, text) {
         });
     }
 }
+
 
 
 //                              envio de una imagen 
