@@ -125,12 +125,11 @@ function sendTextMessageButton(sender, text) {
                 "type": "template",
                 "payload": {
                     "template_type": "button",
-                    "text": text,
                     "buttons": [
                         {
                             "type": "web_url",
                             "url": "https://www.google.com",
-                            "title": "acept"
+                            "title": text
                         }
                     ]
                 }
