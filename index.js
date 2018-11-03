@@ -73,10 +73,11 @@ app.post('/webhook/', function (req, res) {
                             let botOut = JSON.parse(body);
 
                             if (botOut.botUtterance !== null) {
-                                 
+                                 console.log(botOut.botUtterance);
                                 sendTextMessage(sender, botOut.botUtterance);
                                 if(botOut.buttons!==null && botOut.buttons.length!==0){
                                     for (var j = 0; j < botOut.buttons.length; j++) {
+                                        console.log(botOut.buttons[j]);
                                         sendTextMessageButton(sender, botOut.buttons[j]);
                                     }
                                  
