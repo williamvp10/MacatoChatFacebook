@@ -131,35 +131,6 @@ function sendTextMessageButton(sender, text) {
                 console.log('Error sending messages: ', error);
             } else if (response.body.error) {
                 console.log('Error: ', response.body.error);
-            } else {
-                request({
-                    url: msngerServerUrl,
-                    method: 'POST',
-                    form: {
-                        'userUtterance': body
-                    }
-                }, function (error, response, body) {
-                    //response is from the bot
-                    if (!error && response.statusCode === 200) {
-                        // Print out the response body
-                        console.log(body);
-                        body = body.substring(1, body.length - 1);
-                        body = body.replace(/\\/g, '');
-                        let botOut = JSON.parse(body);
-                        if (botOut.botUtterance !== null) {
-                            console.log(botOut.botUtterance);
-                            sendTextMessage(sender, botOut.botUtterance);
-                        }
-                        if (botOut.buttons !== null && botOut.buttons.length !== 0) {
-                            for (var j = 0; j < botOut.buttons.length; j++) {
-                                console.log(botOut.buttons[j]);
-                                sendTextMessageButton(sender, botOut.buttons[j]);
-                            }
-                        }
-                    } else {
-                        sendTextMessage(sender, 'Error!');
-                    }
-                });
             }
         });
     }
