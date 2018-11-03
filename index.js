@@ -66,22 +66,22 @@ app.post('/webhook/', function (req, res) {
                         //response is from the bot
                         if (!error && response.statusCode === 200) {
                             // Print out the response body
-                            //console.log(body)
+                            console.log(body);
                             body = body.substring(1, body.length - 1);
                             body = body.replace(/\\/g, '');
-                            console.log(body);
+                           
                             let botOut = JSON.parse(body);
 
                             if (botOut.botUtterance !== null) {
-                                 console.log(botOut.botUtterance);
+                                console.log(botOut.botUtterance);
                                 sendTextMessage(sender, botOut.botUtterance);
-                                if(botOut.buttons!==null && botOut.buttons.length!==0){
-                                    for (var j = 0; j < botOut.buttons.length; j++) {
-                                        console.log(botOut.buttons[j]);
-                                        sendTextMessageButton(sender, botOut.buttons[j]);
-                                    }
-                                 
-                               }
+
+                            }
+                            if (botOut.buttons !== null && botOut.buttons.length !== 0) {
+                                for (var j = 0; j < botOut.buttons.length; j++) {
+                                    console.log(botOut.buttons[j]);
+                                    sendTextMessageButton(sender, botOut.buttons[j]);
+                                }
                             }
                         } else {
                             sendTextMessage(sender, 'Error!');
@@ -95,7 +95,7 @@ app.post('/webhook/', function (req, res) {
 
 function sendTextMessage(sender, text) {
     if (text !== 'null') {
-        let messageData = {'text':text
+        let messageData = {'text': text
         };
 
         request({
@@ -118,9 +118,9 @@ function sendTextMessage(sender, text) {
 }
 
 function sendTextMessageButton(sender, text) {
-   
+
     if (bot !== 'null') {
-       let messageData = {
+        let messageData = {
             "attachment": {
                 "type": "template",
                 "payload": {
