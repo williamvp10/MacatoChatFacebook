@@ -121,6 +121,43 @@ public class productoDAO {
 
         return respuesta;
     }
+    
+    
+    public ArrayList<Producto> leerProductoporTipo(String tipo) {
+        //1.Consulta
+        ArrayList<Producto> respuesta = new ArrayList();
+        String consulta = "SELECT * FROM Producto where tipo = '"+tipo+"'";
+        try {
+            //----------------------------
+            //Statement
+            Statement statement
+                    = this.conexion.createStatement();
+            //Ejecucion
+            ResultSet resultado
+                    = statement.executeQuery(consulta);
+            //----------------------------
+            //Recorrido sobre el resultado
+            
+            while (resultado.next()) {
+                Producto prod = new Producto();
+                Tienda tienda = new Tienda();
+
+                prod.setId(resultado.getString(1));
+                prod.setNombre(resultado.getString(2));
+                prod.setTipo(resultado.getString(3));
+                prod.setIngredientes(resultado.getString(4));
+                tienda.setId(resultado.getString(5));
+                prod.setIdTienda(tienda);
+                prod.setPrecio(resultado.getInt(6));
+                respuesta.add(prod);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return respuesta;
+    }
 
     public ArrayList<String> obtenerTipos(ArrayList<Producto> productos) {
         ArrayList<String> tipos = new ArrayList();
@@ -142,6 +179,32 @@ public class productoDAO {
         return tipos;
     }
 
+    
+    public ArrayList<Producto> sugerenciasProductos(ArrayList<Producto> productos, ArrayList<String> ingredientes){
+        ArrayList<Producto> sugerencia = new ArrayList();
+       
+        for (int i = 0; i < productos.size(); i++) {
+            
+            String cadena = productos.get(i).getIngredientes();
+            String[] parts = cadena.split(",");
+            int c=0;
+            for (int j = 0; j < ingredientes.size(); j++) {
+                for (int k = 0; k < parts.length; k++) {
+                    if (parts[k].equals(ingredientes.get(j))) {
+                        c=c+1;
+                    }
+                }
+            }
+            
+            if (c==ingredientes.size()-3) {
+                sugerencia.add(productos.get(i));
+            }
+        }
+        
+        
+        return sugerencia;
+    }
+    
     public ArrayList<String> obtenerIngredientes(ArrayList<Producto> productos) {
         ArrayList<String> ingredientes = new ArrayList();
 

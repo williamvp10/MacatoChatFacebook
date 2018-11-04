@@ -15,6 +15,7 @@ public class Tienda {
     String nombre;
     String direccion;
     String telefono;
+    String url;
 
     public String getId() {
         return id;
@@ -46,6 +47,14 @@ public class Tienda {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
     
     
