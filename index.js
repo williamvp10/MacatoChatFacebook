@@ -1,139 +1,191 @@
 'use strict';
-const express = require('express');
-const bodyParser = require('body-parser');
-const request = require('request');
-const app = express();
+        const express = require('express');
+        const bodyParser = require('body-parser');
+        const request = require('request');
+        const app = express();
 // bot fb page
-const token = "EAADiQpmWQRgBAPVQFJqPNXoVYZAPU24wI7tF9eY6P3hZAcZBD4OkwRck76ZARhfs8iZBcAEP1o3oh0a9JkkfLPUx9tC6UM3KCUk6bI5EBzdYZBAg2b3mG50Hi1enhg1dUqDjYDfnQemPLJx8AnKsPkR8ZBoRlDnZBjrrDQ8wFGqU1AZDZD";
-const msngerServerUrl = 'https://mecatobot.herokuapp.com/bot';
-app.set('port', (process.env.PORT || 5000));
+        const token = "EAADiQpmWQRgBAPVQFJqPNXoVYZAPU24wI7tF9eY6P3hZAcZBD4OkwRck76ZARhfs8iZBcAEP1o3oh0a9JkkfLPUx9tC6UM3KCUk6bI5EBzdYZBAg2b3mG50Hi1enhg1dUqDjYDfnQemPLJx8AnKsPkR8ZBoRlDnZBjrrDQ8wFGqU1AZDZD";
+        const msngerServerUrl = 'https://mecatobot.herokuapp.com/bot';
+        app.set('port', (process.env.PORT || 5000));
 // Process application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({extended: false}));
+        app.use(bodyParser.urlencoded({extended: false}));
 // Process application/json
-app.use(bodyParser.json());
-app.use(express.static('public'));
+        app.use(bodyParser.json());
+        app.use(express.static('public'));
 // Index route
-app.get('/', function (req, res) {
-    res.send('Hello world, I am Weatherman!.');
-});
+        app.get('/', function (req, res) {
+        res.send('Hello world, I am Weatherman!.');
+                });
 // for Facebook verification
-app.get('/webhook/', function (req, res) {
-    if (req.query['hub.verify_token'] === 'Mecato-Bot') {
+        app.get('/webhook/', function (req, res) {
+        if (req.query['hub.verify_token'] === 'Mecato-Bot') {
         res.send(req.query['hub.challenge']);
-    }
-    res.send('Error, wrong token');
-});
+        }
+        res.send('Error, wrong token');
+                });
 // Spin up the server
-app.listen(app.get('port'), function () {
-    console.log('running on port', app.get('port'));
-});
+        app.listen(app.get('port'), function () {
+        console.log('running on port', app.get('port'));
+                });
 //FBM webhook
-app.post('/webhook/', function (req, res) {
-    console.log(JSON.stringify(req.body));
-    let messaging_events = req.body.entry[0].messaging;
-    for (let i = 0; i < messaging_events.length; i++) {
+        app.post('/webhook/', function (req, res) {
+        console.log(JSON.stringify(req.body));
+                let messaging_events = req.body.entry[0].messaging;
+                for (let i = 0; i < messaging_events.length; i++) {
 
         let event = req.body.entry[0].messaging[i];
-        let sender = event.sender.id;
-        let recipient = event.recipient.id;
-        let time = req.body.entry[0].time;
-        // we call the MessengerBot here..
-        if (event.message && event.message.text) {
-            let text = event.message.text;
-            //send it to the bot
-            request({
+                let sender = event.sender.id;
+                let recipient = event.recipient.id;
+                let time = req.body.entry[0].time;
+                // we call the MessengerBot here..
+                if (event.message && event.message.text) {
+        let text = event.message.text;
+                //send it to the bot
+                request({
                 url: msngerServerUrl,
-                method: 'POST',
-                form: {
-                    'userUtterance': text
-                }
-            },
-                    function (error, response, body) {
+                        method: 'POST',
+                        form: {
+                        'userUtterance': text
+                        }
+                },
+                        function (error, response, body) {
                         //response is from the bot
                         if (!error && response.statusCode === 200) {
-                            // Print out the response body
-                            console.log(body);
-                            body = body.substring(1, body.length - 1);
-                            body = body.replace(/\\/g, '');
-                            let botOut = JSON.parse(body);
-                            if (botOut.botUtterance !== null) {
-                                console.log(botOut.botUtterance);
+                        // Print out the response body
+                        console.log(body);
+                                body = body.substring(1, body.length - 1);
+                                body = body.replace(/\\/g, '');
+                                let botOut = JSON.parse(body);
+                                if (botOut.botUtterance !== null) {
+                        console.log(botOut.botUtterance);
                                 sendTextMessage(sender, botOut.botUtterance);
-                            }
-                            if (botOut.buttons !== null && botOut.buttons.length !== 0) {
-                                for (var j = 0; j < botOut.buttons.length; j++) {
-                                    console.log(botOut.buttons[j]);
-                                    sendTextMessageButton(sender, botOut.buttons[j]);
-                                }
-                            }
-                        } else {
-                            sendTextMessage(sender, 'Error!');
                         }
-                    });
+                        if (botOut.buttons !== null && botOut.buttons.length !== 0) {
+                        for (var j = 0; j < botOut.buttons.length; j++) {
+                        console.log(botOut.buttons[j]);
+                                sendTextMessageEvent(sender, botOut.buttons[j]);
+                        }
+                        }
+                        } else {
+                        sendTextMessage(sender, 'Error!');
+                        }
+                        });
         }
-    }
+        }
 
-    res.sendStatus(200);
-});
-function sendTextMessage(sender, text) {
-    if (text !== 'null') {
+        res.sendStatus(200);
+                });
+        function sendTextMessage(sender, text) {
+        if (text !== 'null') {
         let messageData = {'text': text
         };
-        request({
-            url: 'https://graph.facebook.com/v2.6/me/messages',
-            qs: {access_token: token},
-            method: 'POST',
-            json: {
-                recipient: {id: sender},
-                message: messageData
+                request({
+                url: 'https://graph.facebook.com/v2.6/me/messages',
+                        qs: {access_token: token},
+                        method: 'POST',
+                        json: {
+                        recipient: {id: sender},
+                                message: messageData
 
-            }
-        }, function (error, response, body) {
-            if (error) {
+                        }
+                }, function (error, response, body) {
+                if (error) {
                 console.log('Error sending messages: ', error);
-            } else if (response.body.error) {
+                } else if (response.body.error) {
                 console.log('Error: ', response.body.error);
-            }
-        });
-    }
-}
+                }
+                });
+        }
+        }
 
 function sendTextMessageButton(sender, text) {
 
-    if (text !== 'null') {
-        let messageData = {
-            "attachment": {
-                "type": "template",
-                "payload": {
-                    "template_type": "button",
-                    "text": text,
-                    "buttons": [
-                        {
-                            "type": "web_url",
-                            "url": "https://www.google.com",
-                            "title": "acept"
-                        }
-                    ]
+if (text !== 'null') {
+let messageData = {
+"attachment": {
+"type": "template",
+        "payload": {
+        "template_type": "button",
+                "text": text,
+                "buttons": [
+                {
+                "type": "web_url",
+                        "url": "https://www.google.com",
+                        "title": "acept"
                 }
-            }
-        };
+                ]
+        }
+}
+};
         request({
-            url: 'https://graph.facebook.com/v2.6/me/messages',
-            qs: {access_token: token},
-            method: 'POST',
-            json: {
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+                qs: {access_token: token},
+                method: 'POST',
+                json: {
                 recipient: {id: sender},
-                message: messageData
+                        message: messageData
 
-            }
+                }
         }, function (error, response, body) {
-            if (error) {
-                console.log('Error sending messages: ', error);
-            } else if (response.body.error) {
-                console.log('Error: ', response.body.error);
-            }
+        if (error) {
+        console.log('Error sending messages: ', error);
+        } else if (response.body.error) {
+        console.log('Error: ', response.body.error);
+        }
         });
-    }
+}
+
+
+function sendTextMessageEvent(sender, text) {
+
+if (text !== 'null') {
+let messageData = {
+"object":"page",
+        "entry":[
+        {
+        "id":id,
+                "time":1458692752478,
+                "messaging":[
+                {
+                {
+                "sender":{
+                "id":id
+                },
+                        "recipient":{id: sender},
+                        "timestamp":1458692752478,
+                        "postback":{
+                        "title": "<TITLE_FOR_THE_CTA>",
+                                "payload": text,
+                                "referral": {
+                                "ref": "<USER_DEFINED_REFERRAL_PARAM>",
+                                        "source": "MESSENGER_CODE",
+                                        "type": "OPEN_THREAD",
+                                }
+                        }
+                }
+                }
+                ];
+        }
+        ];
+}
+;
+        request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+                qs: {access_token: token},
+                method: 'POST',
+                json: {
+                recipient: {id: sender},
+                        message: messageData
+
+                }
+        }, function (error, response, body) {
+        if (error) {
+        console.log('Error sending messages: ', error);
+        } else if (response.body.error) {
+        console.log('Error: ', response.body.error);
+        }
+        });
+}
 }
 
 
