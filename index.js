@@ -133,42 +133,35 @@ let messageData = {
         console.log('Error: ', response.body.error);
         }
         });
-}
+        }
 
 
 function sendTextMessageEvent(sender, text) {
 
 if (text !== 'null') {
-let messageData = {
-"object":"page",
-        "entry":[
+      let messageData={
+"type": "interactive_message",
+        "actions": [
         {
-        "id":id,
-                "time":1458692752478,
-                "messaging":[
-                {
-                {
-                "sender":{
-                "id":id
-                },
-                        "recipient":{id: sender},
-                        "timestamp":1458692752478,
-                        "postback":{
-                        "title": "<TITLE_FOR_THE_CTA>",
-                                "payload": text,
-                                "referral": {
-                                "ref": "<USER_DEFINED_REFERRAL_PARAM>",
-                                        "source": "MESSENGER_CODE",
-                                        "type": "OPEN_THREAD",
-                                }
-                        }
-                }
-                }
-                ];
+        "name": text,
+                "value": text,
+                "type": "button"
         }
-        ];
-}
-;
+        ],
+        "callback_id": "comic_1234_xyz",
+        "user": {
+        "id": id,
+                "name": "brautigan"
+        },
+        "action_ts": "1458170917.164398",
+        "message_ts": "1458170866.000004",
+        "attachment_id": "1",
+        "token": token,
+        "original_message": {"text":"New comic book alert!"},
+        "response_url": msngerServerUrl,
+        "trigger_id": "13345224609.738474920.8088930838d88f008e0"
+        };
+        
         request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
                 qs: {access_token: token},
