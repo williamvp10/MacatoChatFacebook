@@ -61,12 +61,12 @@ app.post('/webhook/', function (req, res) {
                                 sendTextMessage(sender, botOut.botUtterance);
                                 sendTextMessageEvent(sender, botOut);
                             }
-                            if (botOut.buttons !== null && botOut.buttons.length !== 0) {
-                                for (var j = 0; j < botOut.buttons.length; j++) {
-                                    console.log(botOut.buttons[j]);
-                                    sendTextMessage(sender, botOut.buttons[j]);
-                                }
-                            }
+//                            if (botOut.buttons !== null && botOut.buttons.length !== 0) {
+//                                for (var j = 0; j < botOut.buttons.length; j++) {
+//                                    console.log(botOut.buttons[j]);
+//                                    sendTextMessage(sender, botOut.buttons[j]);
+//                                }
+//                            }
                         } else {
                             sendTextMessage(sender, 'Error!');
                         }
