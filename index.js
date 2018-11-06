@@ -63,7 +63,7 @@
                         if (botOut.buttons !== null && botOut.buttons.length !== 0) {
                         for (var j = 0; j < botOut.buttons.length; j++) {
                         console.log(botOut.buttons[j]);
-                                sendTextMessageEvent(sender, botOut.buttons[j]);
+                                sendTextMessage(sender, botOut.buttons[j]);
                         }
                         }
                         } else {
