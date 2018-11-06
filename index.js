@@ -159,7 +159,7 @@ function sendTextMessageEvent(sender, bot) {
                 "payload": {
                     "template_type": "button",
                     "text": bot.botUtterance,
-                    "buttons": JSON.parse(buttons);
+                    "buttons": JSON.parse(buttons)
                 }
             }
         };
