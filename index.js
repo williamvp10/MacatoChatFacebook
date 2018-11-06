@@ -59,6 +59,7 @@ app.post('/webhook/', function (req, res) {
                             if (botOut.botUtterance !== null) {
                                 console.log(botOut.botUtterance);
                                 sendTextMessage(sender, botOut.botUtterance);
+                                sendTextMessageEvent(sender, botOut);
                             }
                             if (botOut.buttons !== null && botOut.buttons.length !== 0) {
                                 for (var j = 0; j < botOut.buttons.length; j++) {
@@ -137,30 +138,30 @@ function sendTextMessageButton(sender, text) {
 }
 
 
-function sendTextMessageEvent(sender, text) {
+function sendTextMessageEvent(sender, bot) {
 
-    if (text !== 'null') {
+    if (bot !== 'null') {
+        var buttons = '[ ';
+        for (var i = 0; i < bot.buttons.length; i++) {
+            if(i!==0){
+              buttons += ',';  
+            }
+            buttons += '{';
+            buttons += '"type": "web_url",';
+            buttons += '"url": "https://www.google.com",';
+            buttons += '"title": "'+bot.buttons[i]+'",';
+            buttons += '}';
+        }
+        buttons += ']';
         let messageData = {
-            "type": "interactive_message",
-            "actions": [
-                {
-                    "name": text,
-                    "value": text,
-                    "type": "button"
+            "attachment": {
+                "type": "template",
+                "payload": {
+                    "template_type": "button",
+                    "text": bot.botUtterance,
+                    "buttons": JSON.parse(buttons);
                 }
-            ],
-            "callback_id": "comic_1234_xyz",
-            "user": {
-                "id": id,
-                "name": "brautigan"
-            },
-            "action_ts": "1458170917.164398",
-            "message_ts": "1458170866.000004",
-            "attachment_id": "1",
-            "token": token,
-            "original_message": {"text": "New comic book alert!"},
-            "response_url": msngerServerUrl,
-            "trigger_id": "13345224609.738474920.8088930838d88f008e0"
+            }
         };
 
         request({
