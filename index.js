@@ -111,6 +111,7 @@ function sendTextMessageType(sender, bot) {
         buttons += '}';
     }
     buttons += ']';
+    console.log(buttons);
     if (bot !== 'null') {
         let messageData = {
             "attachment": {
@@ -122,7 +123,7 @@ function sendTextMessageType(sender, bot) {
                 }
             }
         };
-        //console.log(messageData);
+        console.log(messageData);
         // Start the request
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages?access_token='+token,
