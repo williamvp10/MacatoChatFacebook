@@ -100,7 +100,7 @@ function selectTypeBotMessage(sender, body) {
 }
 
 function sendTextMessageType(sender, bot) {
-    if (text !== 'null') {
+    if (bot !== 'null') {
         var messageData = {
             "get_started": [
                 {
@@ -122,10 +122,10 @@ function sendTextMessageType(sender, bot) {
                 function (error, response, body) {
                     if (!error && response.statusCode == 200) {
                         // Print out the response body
-                        res.send(body);
+                         console.log('Error sending messages: ', error);
                     } else {
                         // TODO: Handle errors
-                        res.send(body);
+                        console.log('Error: ', response.body.error);
                     }
                 });
 
