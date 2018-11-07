@@ -107,7 +107,7 @@ function sendTextMessageType(sender, bot) {
         buttons += '{';
         buttons += '"type": "postback",';
         buttons += '"title": "' + bot.buttons.product[i].tipo + '",';
-        buttons += ' "payload":"' + bot.buttons.product[i].tipo + '" ';
+        buttons += ' "payload":" tipo ' + bot.buttons.product[i].tipo + '" ';
         buttons += '}';
     }
     buttons += ']';
