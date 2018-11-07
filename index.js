@@ -105,9 +105,9 @@ function sendTextMessageType(sender, bot) {
             buttons += ',';
         }
         buttons += '{';
-        buttons += '"type": "web_url",';
-        buttons += '"url": "https://www.google.com",';
-        buttons += '"title": "' + bot.buttons.product[i].tipo + '"';
+        buttons += '"type": "postback",';
+        buttons += '"title": "' + bot.buttons.product[i].tipo + '",';
+        buttons += ' "payload":"' + bot.buttons.product[i].tipo + '" ';
         buttons += '}';
     }
     buttons += ']';
@@ -134,16 +134,15 @@ function sendTextMessageType(sender, bot) {
                 message: messageData
 
             }
-        },
-                function (error, response, body) {
-                    if (!error && response.statusCode == 200) {
-                        // Print out the response body
-                        console.log('Error sending messages: ', error);
-                    } else {
-                        // TODO: Handle errors
-                        console.log('Error: ', response.body.error);
-                    }
-                });
+        }, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                // Print out the response body
+                console.log('Error sending messages: ', error);
+            } else {
+                // TODO: Handle errors
+                console.log('Error: ', response.body.error);
+            }
+        });
     }
 }
 
