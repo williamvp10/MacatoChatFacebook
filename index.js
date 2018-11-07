@@ -61,7 +61,6 @@ app.post('/webhook/', function (req, res) {
 
     res.sendStatus(200);
 });
-
 function selectTypeBotMessage(sender, body) {
     // Print out the response body
     console.log(body);
@@ -100,13 +99,29 @@ function selectTypeBotMessage(sender, body) {
 }
 
 function sendTextMessageType(sender, bot) {
+    var buttons = '[ ';
+    for (var i = 0; i < bot.buttons.length; i++) {
+        if (i !== 0) {
+            buttons += ',';
+        }
+        buttons += '{';
+        buttons += '"type": "web_url",';
+        buttons += '"url": "https://www.google.com",';
+        buttons += '"title": "' + bot.buttons[i].tipo + '",';
+        buttons += '}';
+    }
+    buttons += ']';
     if (bot !== 'null') {
         var messageData = {
-            "get_started": [
-                {
-                    "payload": "holaaaaaaa"
+            "attachment": {
+                "type": "template",
+                "payload": {
+                    "template_type": "button",
+                    "text": bot.botUtterance,
+                    "buttons": buttons
                 }
-            ]
+            }
+
         };
         // Start the request
         request({
@@ -122,13 +137,12 @@ function sendTextMessageType(sender, bot) {
                 function (error, response, body) {
                     if (!error && response.statusCode == 200) {
                         // Print out the response body
-                         console.log('Error sending messages: ', error);
+                        console.log('Error sending messages: ', error);
                     } else {
                         // TODO: Handle errors
                         console.log('Error: ', response.body.error);
                     }
                 });
-
     }
 }
 
@@ -220,7 +234,6 @@ function sendTextMessageEvent(sender, bot) {
                 }
             }
         };
-
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages',
             qs: {access_token: token},
