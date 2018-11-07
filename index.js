@@ -107,14 +107,11 @@ function sendTextMessageType(sender, bot) {
         buttons += '{';
         buttons += '"type": "postback",';
         buttons += '"title": "' + bot.buttons.product[i].tipo + '",';
-        buttons += '"payload": {';
-        buttons += '"userUtterance":"' + bot.buttons.product[i].tipo + '",';
-        buttons += '"userType":"requestIngredientes"';
-        buttons += '}';
+        buttons += ' "payload": "requestIngredientes '+ bot.buttons.product[i].tipo +'"';
         buttons += '}';
     }
     buttons += ']';
-    console.log(encode_utf8(buttons));
+    console.log(unescape(encodeURIComponent(buttons)));
     if (bot !== 'null') {
         var messageData = {
             "attachment": {
@@ -122,7 +119,7 @@ function sendTextMessageType(sender, bot) {
                 "payload": {
                     "template_type": "button",
                     "text": bot.botUtterance,
-                    "buttons": encode_utf8(JSON.parse(buttons))
+                    "buttons": JSON.parse(buttons)
                 }
             }
 
@@ -366,9 +363,9 @@ function sendTextMessageEvent(sender, bot) {
 
 
 function encode_utf8(s) {
-    return unescape(encodeURIComponent(s));
+  return unescape(encodeURIComponent(s));
 }
 
 function decode_utf8(s) {
-    return decodeURIComponent(escape(s));
+  return decodeURIComponent(escape(s));
 }
