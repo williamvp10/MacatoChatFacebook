@@ -129,7 +129,7 @@ function sendTextMessageType(sender, bot) {
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages',
             qs: {access_token: token},
-            method: 'GET',
+            method: 'POST',
             json: {
                 recipient: {id: sender},
                 message: messageData
