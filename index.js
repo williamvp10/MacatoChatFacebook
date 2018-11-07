@@ -127,6 +127,7 @@ function sendTextMessageType(sender, bot) {
         console.log(messageData);
         // Start the request
         request({
+            Content-Type:"application/json"
             url: 'https://graph.facebook.com/v2.6/me/messages',
             qs: {access_token: token},
             method: 'POST',
