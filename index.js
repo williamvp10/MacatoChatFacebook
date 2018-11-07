@@ -107,7 +107,7 @@ function sendTextMessageType(sender, bot) {
         buttons += '{';
         buttons += '"type": "postback",';
         buttons += '"title": "' + bot.buttons.product[i].tipo + '",';
-        buttons += ' "payload": "PAYLOAD_CURRENT_WEATHER_LONDON';
+        buttons += ' "payload": "PAYLOAD_CURRENT_WEATHER_LONDON"';
         buttons += '}';
     }
     buttons += ']';
@@ -360,3 +360,12 @@ function sendTextMessageEvent(sender, bot) {
 //                }
 //            }
 //        } 
+
+
+function encode_utf8(s) {
+  return unescape(encodeURIComponent(s));
+}
+
+function decode_utf8(s) {
+  return decodeURIComponent(escape(s));
+}
