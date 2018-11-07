@@ -99,20 +99,20 @@ function selectTypeBotMessage(sender, body) {
 }
 
 function sendTextMessageType(sender, bot) {
-//    let buttons = '[ ';
-//    for (var i = 0; i < bot.buttons.product.length; i++) {
-//        if (i !== 0) {
-//            buttons += ',';
-//        }
-//        buttons += '{';
-//        buttons += '"type": "postback",';
-//        buttons += '"title": "' + bot.buttons.product[i].tipo + '",';
-//        buttons += ' "payload": "requestIngredientes '+ bot.buttons.product[i].tipo +'"';
-//        buttons += '}';
-//    }
-//    buttons += ']';
-//    console.log(buttons);
-//    let b=JSON.parse(buttons);
+    let buttons = '[ ';
+    for (var i = 0; i < bot.buttons.product.length; i++) {
+        if (i !== 0) {
+            buttons += ',';
+        }
+        buttons += '{';
+        buttons += '"type": "postback",';
+        buttons += '"title": "' + bot.buttons.product[i].tipo + '",';
+        buttons += ' "payload": "requestIngredientes '+ bot.buttons.product[i].tipo +'"';
+        buttons += '}';
+    }
+    buttons += ']';
+    console.log(buttons);
+    let b=JSON.parse(buttons);
     if (bot !== 'null') {
         let messageData = {
             "attachment": {
@@ -120,13 +120,7 @@ function sendTextMessageType(sender, bot) {
                 "payload": {
                     "template_type": "button",
                     "text": bot.botUtterance,
-                    "buttons": [
-                        {
-                            "type": "postback",
-                            "title": bot.buttons.product[0].tipo,
-                            "payload": "requestIngredientes "
-                        }
-                    ]
+                    "buttons": b
                 }
             }
         };
@@ -135,7 +129,7 @@ function sendTextMessageType(sender, bot) {
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages',
             qs: {access_token: token},
-            method: 'POST',
+            method: 'GET',
             json: {
                 recipient: {id: sender},
                 message: messageData
