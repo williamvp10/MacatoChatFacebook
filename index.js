@@ -122,10 +122,7 @@ function sendTextMessageType(sender, bot) {
                         {
                             "type": "postback",
                             "title": encode_utf8(bot.buttons.product[0].tipo),
-                            "payload": {
-                              "userUtterance": encode_utf8(bot.buttons.product[0].tipo),
-                              "userType": "requestIngredientes"
-                            }
+                            "payload": "PAYLOAD_WEEKEND_LONDON"
                         }
                     ]
                 }
