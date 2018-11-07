@@ -190,7 +190,7 @@ function sendTextMessageIngredients(sender, bot) {
                 "type": "template",
                 "payload": {
                     "template_type": "button",
-                    "text": bot.botUtterance,
+                    "text": "gracias",
                     "buttons": b
                 }
             }
