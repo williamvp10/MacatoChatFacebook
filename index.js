@@ -99,19 +99,18 @@ function selectTypeBotMessage(sender, body) {
 }
 
 function sendTextMessageType(sender, bot) {
-    var buttons = '[ ';
-    for (var i = 0; i < 1; i++) {
-        if (i !== 0) {
-            buttons += ',';
-        }
-        buttons += '{';
-        buttons += '"type": "postback",';
-        buttons += '"title": "' + encode_utf8(bot.buttons.product[i].tipo) + '",';
-        buttons += ' "payload": "requestIngredientes '+ encode_utf8(bot.buttons.product[i].tipo) +'"';
-        buttons += '}';
-    }
-    buttons += ']';
-    console.log(unescape(encodeURIComponent(buttons)));
+//    var buttons = '[ ';
+//    for (var i = 0; i < 1; i++) {
+//        if (i !== 0) {
+//            buttons += ',';
+//        }
+//        buttons += '{';
+//        buttons += '"type": "postback",';
+//        buttons += '"title": "' + encode_utf8(bot.buttons.product[i].tipo) + '",';
+//        buttons += ' "payload": "requestIngredientes '+ encode_utf8(bot.buttons.product[i].tipo) +'"';
+//        buttons += '}';
+//    }
+//    buttons += ']';
     if (bot !== 'null') {
         var messageData = {
             "attachment": {
