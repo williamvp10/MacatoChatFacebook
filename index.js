@@ -121,9 +121,9 @@ function sendTextMessageType(sender, bot) {
                     "buttons": [
                         {
                             "type": "postback",
-                            "title": bot.buttons.product[0].tipo,
+                            "title": encode_utf8(bot.buttons.product[0].tipo),
                             "payload": {
-                              "userUtterance": bot.buttons.product[0].tipo,
+                              "userUtterance": encode_utf8(bot.buttons.product[0].tipo),
                               "userType": "requestIngredientes"
                             }
                         }
