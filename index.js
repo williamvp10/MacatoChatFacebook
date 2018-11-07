@@ -107,7 +107,7 @@ function sendTextMessageType(sender, bot) {
         buttons += '{';
         buttons += '"type": "postback",';
         buttons += '"title": "' + bot.buttons.product[i].tipo + '",';
-        buttons += ' "payload": "requestIngredientes-' + bot.buttons.product[i].tipo + '"';
+        buttons += ' "payload": "PAYLOAD_CURRENT_WEATHER_LONDON';
         buttons += '}';
     }
     buttons += ']';
