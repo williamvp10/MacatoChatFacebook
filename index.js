@@ -135,11 +135,9 @@ function sendTextMessageType(sender, bot) {
 
             }
         }, function (error, response, body) {
-            if (!error && response.statusCode == 200) {
-                // Print out the response body
+            if (error) {
                 console.log('Error sending messages: ', error);
-            } else {
-                // TODO: Handle errors
+            } else if (response.body.error) {
                 console.log('Error: ', response.body.error);
             }
         });
