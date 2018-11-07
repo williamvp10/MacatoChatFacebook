@@ -106,8 +106,8 @@ function sendTextMessageType(sender, bot) {
         }
         buttons += '{';
         buttons += '"type": "postback",';
-        buttons += '"title": "' + bot.buttons.product[i].tipo + '",';
-        buttons += ' "payload": "requestIngredientes '+ bot.buttons.product[i].tipo +'"';
+        buttons += '"title": "' + encode_utf8(bot.buttons.product[i].tipo) + '",';
+        buttons += ' "payload": "requestIngredientes '+ encode_utf8(bot.buttons.product[i].tipo) +'"';
         buttons += '}';
     }
     buttons += ']';
@@ -119,7 +119,7 @@ function sendTextMessageType(sender, bot) {
                 "payload": {
                     "template_type": "button",
                     "text": bot.botUtterance,
-                    "buttons": JSON.parse(buttons)
+                    "buttons": JSON.parse(encode_utf8(buttons))
                 }
             }
 
