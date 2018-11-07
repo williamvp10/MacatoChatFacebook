@@ -100,7 +100,7 @@ function selectTypeBotMessage(sender, body) {
 
 function sendTextMessageType(sender, bot) {
     var buttons = '[ ';
-    for (var i = 0; i < bot.buttons.length; i++) {
+    for (var i = 0; i < bot.buttons.product.length; i++) {
         if (i !== 0) {
             buttons += ',';
         }
