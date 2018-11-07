@@ -112,6 +112,7 @@ function sendTextMessageType(sender, bot) {
     }
     buttons += ']';
     console.log(buttons);
+    let b=JSON.parse(buttons);
     if (bot !== 'null') {
         let messageData = {
             "attachment": {
@@ -119,7 +120,7 @@ function sendTextMessageType(sender, bot) {
                 "payload": {
                     "template_type": "button",
                     "text": bot.botUtterance,
-                    "buttons": buttons
+                    "buttons": b
                 }
             }
         };
