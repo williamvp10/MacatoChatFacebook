@@ -107,7 +107,7 @@ function sendTextMessageType(sender, bot) {
         buttons += '{';
         buttons += '"type": "web_url",';
         buttons += '"url": "https://www.google.com",';
-        buttons += '"title": "' + bot.buttons[i].tipo + '"';
+        buttons += '"title": "' + bot.buttons.product[i].tipo + '"';
         buttons += '}';
     }
     buttons += ']';
