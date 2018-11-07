@@ -99,35 +99,28 @@ function selectTypeBotMessage(sender, body) {
 }
 
 function sendTextMessageType(sender, bot) {
-//    var buttons = '[ ';
-//    for (var i = 0; i < 1; i++) {
-//        if (i !== 0) {
-//            buttons += ',';
-//        }
-//        buttons += '{';
-//        buttons += '"type": "postback",';
-//        buttons += '"title": "' + encode_utf8(bot.buttons.product[i].tipo) + '",';
-//        buttons += ' "payload": "requestIngredientes '+ encode_utf8(bot.buttons.product[i].tipo) +'"';
-//        buttons += '}';
-//    }
-//    buttons += ']';
+    let buttons = '[ ';
+    for (var i = 0; i < bot.buttons.product.length; i++) {
+        if (i !== 0) {
+            buttons += ',';
+        }
+        buttons += '{';
+        buttons += '"type": "postback",';
+        buttons += '"title": "' + bot.buttons.product[i].tipo + '",';
+        buttons += ' "payload": "requestIngredientes '+ bot.buttons.product[i].tipo +'"';
+        buttons += '}';
+    }
+    buttons += ']';
     if (bot !== 'null') {
-        var messageData = {
+        let messageData = {
             "attachment": {
                 "type": "template",
                 "payload": {
                     "template_type": "button",
                     "text": bot.botUtterance,
-                    "buttons": [
-                        {
-                            "type": "postback",
-                            "title": encode_utf8(bot.buttons.product[0].tipo),
-                            "payload": "PAYLOAD_WEEKEND_LONDON"
-                        }
-                    ]
+                    "buttons": buttons
                 }
             }
-
         };
         //console.log(messageData);
         // Start the request
@@ -136,7 +129,7 @@ function sendTextMessageType(sender, bot) {
             method: 'POST',
             json: {
                 recipient: {id: sender},
-                message: encode_utf8(messageData)
+                message: messageData
 
             }
         }, function (error, response, body) {
