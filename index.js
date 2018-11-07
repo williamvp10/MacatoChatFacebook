@@ -107,7 +107,10 @@ function sendTextMessageType(sender, bot) {
         buttons += '{';
         buttons += '"type": "postback",';
         buttons += '"title": "' + bot.buttons.product[i].tipo + '",';
-        buttons += ' "payload": "requestIngredientes '+ bot.buttons.product[i].tipo + '"';
+        buttons += ' "payload":{ ';
+        buttons += '  "userUtterance":"'+ bot.buttons.product[i].tipo + '",';
+        buttons += '  "userType":"requestIngredientes"';
+        buttons += ' }';
         buttons += '}';
     }
     buttons += ']';
@@ -119,7 +122,7 @@ function sendTextMessageType(sender, bot) {
                 "payload": {
                     "template_type": "button",
                     "text": bot.botUtterance,
-                    "buttons": encodeURI(buttons)
+                    "buttons": JSON.parse(buttons)
                 }
             }
 
