@@ -122,7 +122,7 @@ function sendTextMessageType(sender, bot) {
                 "payload": {
                     "template_type": "button",
                     "text": bot.botUtterance,
-                    "buttons": utf8_encode(buttons);
+                    "buttons": utf8_encode(buttons)
                 }
             }
 
