@@ -111,7 +111,7 @@ function sendTextMessageType(sender, bot) {
         buttons += '}';
     }
     buttons += ']';
-    console.log(unescape(encodeURIComponent(buttons)));
+    console.log(encode_utf8(buttons));
     if (bot !== 'null') {
         var messageData = {
             "attachment": {
@@ -119,7 +119,7 @@ function sendTextMessageType(sender, bot) {
                 "payload": {
                     "template_type": "button",
                     "text": bot.botUtterance,
-                    "buttons": JSON.parse(buttons)
+                    "buttons": encode_utf8(buttons)
                 }
             }
 
