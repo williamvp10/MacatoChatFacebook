@@ -51,22 +51,7 @@ app.post('/webhook/', function (req, res) {
                     function (error, response, body) {
                         //response is from the bot
                         if (!error && response.statusCode === 200) {
-                            // Print out the response body
-                            console.log(body);
-                            body = body.substring(1, body.length - 1);
-                            body = body.replace(/\\/g, '');
-                            let botOut = JSON.parse(body);
-                            if (botOut.botUtterance !== null) {
-                                console.log(botOut.botUtterance);
-                                sendTextMessage(sender, botOut.botUtterance);
-                              //  sendTextMessageEvent(sender, botOut);
-                            }
-//                            if (botOut.buttons !== null && botOut.buttons.length !== 0) {
-//                                for (var j = 0; j < botOut.buttons.length; j++) {
-//                                    console.log(botOut.buttons[j]);
-//                                    sendTextMessage(sender, botOut.buttons[j]);
-//                                }
-//                            }
+                            selectTypeBotMessage(sender, body);
                         } else {
                             sendTextMessage(sender, 'Error!');
                         }
@@ -76,8 +61,82 @@ app.post('/webhook/', function (req, res) {
 
     res.sendStatus(200);
 });
+
+function selectTypeBotMessage(sender, body) {
+    // Print out the response body
+    console.log(body);
+    body = body.substring(1, body.length - 1);
+    body = body.replace(/\\/g, '');
+    let botOut = JSON.parse(body);
+    if (botOut.botUtterance !== null) {
+        if (botOut.type !== null) {
+            var ty = botOut.type;
+            var t1 = "ofrecerTipo";
+            var t2 = "ofrecerIngredientes";
+            var t3 = "ofrecerTiendas";
+            var t4 = "saludar";
+            var t5 = "agradecer";
+            var n1 = ty.localeCompare(t1);
+            var n2 = ty.localeCompare(t2);
+            var n3 = ty.localeCompare(t3);
+            var n4 = ty.localeCompare(t4);
+            var n5 = ty.localeCompare(t5);
+            if (n1 === 0) {
+                sendTextMessageType(sender, botOut);
+            } else if (n2 === 0) {
+                sendTextMessageIngredients(sender, botOut);
+            } else if (n3 === 0) {
+                sendTextMessageTiendas(sender, botOut);
+            } else if (n4 === 0) {
+                sendTextMessageType(sender, botOut);
+            } else if (n5 === 0) {
+                sendTextMessage(sender, botOut.botUtterance);
+            } else {
+                sendTextMessage(sender, "disculpa no entendi, mejor callate viejo lesviano ");
+            }
+        }
+        console.log(botOut.botUtterance);
+    }
+}
+
+function sendTextMessageType(sender, bot) {
+    if (text !== 'null') {
+        var messageData = {
+            "get_started": [
+                {
+                    "payload": "holaaaaaaa"
+                }
+            ]
+        };
+        // Start the request
+        request({
+            url: 'https://graph.facebook.com/v2.6/me/messages',
+            qs: {access_token: token},
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            form: messageData
+            json: {
+                recipient: {id: sender},
+                message: messageData
+
+            }
+        },
+                function (error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                        // Print out the response body
+                        res.send(body);
+                    } else {
+                        // TODO: Handle errors
+                        res.send(body);
+                    }
+                });
+
+    }
+}
+
 function sendTextMessage(sender, text) {
     if (text !== 'null') {
+
         let messageData = {'text': text
         };
         request({
@@ -143,13 +202,13 @@ function sendTextMessageEvent(sender, bot) {
     if (bot !== 'null') {
         var buttons = '[ ';
         for (var i = 0; i < bot.buttons.length; i++) {
-            if(i!==0){
-              buttons += ',';  
+            if (i !== 0) {
+                buttons += ',';
             }
             buttons += '{';
             buttons += '"type": "web_url",';
             buttons += '"url": "https://www.google.com",';
-            buttons += '"title": "'+bot.buttons[i]+'",';
+            buttons += '"title": "' + bot.buttons[i] + '",';
             buttons += '}';
         }
         buttons += ']';
@@ -288,4 +347,4 @@ function sendTextMessageEvent(sender, bot) {
 //                    ]
 //                }
 //            }
-//        }
+//        } 
