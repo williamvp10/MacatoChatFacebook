@@ -119,7 +119,16 @@ function sendTextMessageType(sender, bot) {
                 "payload": {
                     "template_type": "button",
                     "text": bot.botUtterance,
-                    "buttons": JSON.parse(encode_utf8(buttons))
+                    "buttons": [
+                        {
+                            "type": "postback",
+                            "title": bot.buttons.product[0].tipo,
+                            "payload": {
+                              "userUtterance": bot.buttons.product[0].tipo,
+                              "userType": "requestIngredientes"
+                            }
+                        }
+                    ]
                 }
             }
 
