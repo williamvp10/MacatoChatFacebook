@@ -129,14 +129,14 @@ function sendTextMessageType(sender, bot) {
             }
 
         };
-        console.log(messageData);
+        //console.log(messageData);
         // Start the request
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages?access_token='+token,
             method: 'POST',
             json: {
                 recipient: {id: sender},
-                message: messageData
+                message: encode_utf8(messageData)
 
             }
         }, function (error, response, body) {
