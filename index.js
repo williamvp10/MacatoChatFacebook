@@ -33,7 +33,7 @@ app.post('/webhook/', function (req, res) {
     let messaging_events = req.body.entry[0].messaging;
     for (let i = 0; i < messaging_events.length; i++) {
         console.log("postback"+req.body.entry[0].messaging[i].postback);
-        if (req.body.entry[0].messaging[i].postback===null){
+        if (req.body.entry[0].messaging[i].postback==="undefined"){
             let event = req.body.entry[0].messaging[i];
             let sender = event.sender.id;
             let recipient = event.recipient.id;
