@@ -38,7 +38,7 @@ app.post('/webhook/', function (req, res) {
         var m = "mensaje";
         var n5 = m.localeCompare(t1);
         var n2 = m.localeCompare("undefined");
-        if (n5===0||n2){
+        if (n5===0||n2===0){
             let event = req.body.entry[0].messaging[i];
             let sender = event.sender.id;
             let recipient = event.recipient.id;
@@ -68,6 +68,7 @@ app.post('/webhook/', function (req, res) {
             let event = req.body.entry[0].messaging[i]  ;
             let sender = event.sender.id;
             let postback = event.postback;
+            console.log("boton: "postback);
             // we call the MessengerBot here..
             if (event.message && event.message.text) {
                 //send it to the bot
