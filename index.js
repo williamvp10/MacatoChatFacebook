@@ -32,7 +32,8 @@ app.post('/webhook/', function (req, res) {
     console.log("peticion: " + JSON.stringify(req.body));
     let messaging_events = req.body.entry[0].messaging;
     for (let i = 0; i < messaging_events.length; i++) {
-        if (req.body.entry[0].messaging[i].text!==null){
+        console.log("postback"+req.body.entry[0].messaging[i].postback);
+        if (req.body.entry[0].messaging[i].postback===null){
             let event = req.body.entry[0].messaging[i];
             let sender = event.sender.id;
             let recipient = event.recipient.id;
