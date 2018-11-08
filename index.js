@@ -116,7 +116,7 @@ function selectTypeBotMessage(sender, botOut) {
             var n4 = ty.localeCompare(t4);
             var n5 = ty.localeCompare(t5);
             sendTextMessage(sender, botOut.botUtterance);
-            
+            console.log(JSON.stringify(botOut.buttons));
             if (n1 === 0) {
                 sendTextMessage(sender, JSON.stringify(botOut.buttons));
             } else if (n2 === 0) {
