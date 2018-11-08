@@ -100,12 +100,8 @@ function sendTextMessage(sender, text) {
     }
 }
 
-function selectTypeBotMessage(sender, body) {
-    // Print out the response body
-    console.log(body);
-    body = body.substring(1, body.length - 1);
-    body = body.replace(/\\/g, '');
-    let botOut = JSON.parse(body);
+function selectTypeBotMessage(sender, botOut) {
+    
     if (botOut.botUtterance !== null) {
         if (botOut.type !== null) {
             var ty = botOut.type;
