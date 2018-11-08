@@ -136,7 +136,7 @@ function selectTypeBotMessage(sender, botOut) {
 //
 function sendTextMessageType(sender, bot) {
      console.log(bot);
-     console.log(bot.buttons[0]);
+     console.log(bot.buttons);
      console.log(bot.buttons.product);
      var but="";
     for (var i = 0; i < bot.buttons[0].length; i++) {
