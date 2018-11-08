@@ -116,18 +116,13 @@ function selectTypeBotMessage(sender, botOut) {
             var n4 = ty.localeCompare(t4);
             var n5 = ty.localeCompare(t5);
             sendTextMessage(sender, botOut.botUtterance);
-            console.log("bot--"+botOut);
-            console.log(botOut.botOut.buttons);
+            
             if (n1 === 0) {
-                var but = "";
-                for (var i = 0; i < botOut.buttons.product[i].length; i++) {
-                    but += '' + botOut.buttons.product[i].tipo + '  ';
-                }
-                sendTextMessage(sender, but);
+                sendTextMessage(sender, JSON.stringify(botOut.botUtterance.buttons));
             } else if (n2 === 0) {
-                sendTextMessageIngredients(sender, botOut);
+                sendTextMessageIngredients(sender, JSON.stringify(botOut.botUtterance.buttons));
             } else if (n3 === 0) {
-                sendTextMessageTiendas(sender, botOut);
+                sendTextMessageTiendas(sender, JSON.stringify(botOut.botUtterance.buttons));
             } else if (n4 === 0) {
                 sendTextMessageType(sender, botOut.botUtterance);
             } else if (n5 === 0) {
