@@ -32,63 +32,29 @@ app.post('/webhook/', function (req, res) {
     console.log("peticion: " + JSON.stringify(req.body));
     let messaging_events = req.body.entry[0].messaging;
     for (let i = 0; i < messaging_events.length; i++) {
-        
-        var t1 =req.body.entry[0].messaging[i].message.type;
-         console.log("type "+t1);
-        var m = "mensaje";
-        var n5 = m.localeCompare(t1);
-        var n2 = m.localeCompare("undefined");
-        if (n5===0||n2===0){
-            let event = req.body.entry[0].messaging[i];
-            let sender = event.sender.id;
-            let recipient = event.recipient.id;
-            let time = req.body.entry[0].time;
-            // we call the MessengerBot here..
-            if (event.message && event.message.text) {
-                let text = event.message.text;
-                //send it to the bot
-                request({
-                    url: msngerServerUrl,
-                    method: 'POST',
-                    form: {
-                        'userUtterance': text
-                    }
-                },
-                        function (error, response, body) {
-                            //response is from the bot
-                            if (!error && response.statusCode === 200) {
-                                selectTypeBotMessage(sender, body);
-                            } else {
-                                sendTextMessage(sender, 'Error!');
-                            }
-                        });
-            }
-        }else{
-            console.log(" boton:   " +req.body.entry[0].messaging[i]);
-            let event = req.body.entry[0].messaging[i]  ;
-            let sender = event.sender.id;
-            let postback = event.postback;
-            console.log("boton: "postback);
-            // we call the MessengerBot here..
-            if (event.message && event.message.text) {
-                //send it to the bot
-                request({
-                    url: msngerServerUrl,
-                    method: 'POST',
-                    form: {
-                        'userUtterance': postback.title,
-                        'userIntent': postback.payload
-                    }
-                },
-                        function (error, response, body) {
-                            //response is from the bot
-                            if (!error && response.statusCode === 200) {
-                                selectTypeBotMessage(sender, body);
-                            } else {
-                                sendTextMessage(sender, 'Error!');
-                            }
-                        });
-            }
+        let event = req.body.entry[0].messaging[i];
+        let sender = event.sender.id;
+        let recipient = event.recipient.id;
+        let time = req.body.entry[0].time;
+        // we call the MessengerBot here..
+        if (event.message && event.message.text) {
+            let text = event.message.text;
+            //send it to the bot
+            request({
+                url: msngerServerUrl,
+                method: 'POST',
+                form: {
+                    'userUtterance': text
+                }
+            },
+                    function (error, response, body) {
+                        //response is from the bot
+                        if (!error && response.statusCode === 200) {
+                            selectTypeBotMessage(sender, body);
+                        } else {
+                            sendTextMessage(sender, 'Error!');
+                        }
+                    });
         }
     }
 
@@ -114,13 +80,13 @@ function selectTypeBotMessage(sender, body) {
             var n4 = ty.localeCompare(t4);
             var n5 = ty.localeCompare(t5);
             if (n1 === 0) {
-                sendTextMessageType(sender, botOut);
+                sendTextMessageType(sender, botOut.botUtterance);
             } else if (n2 === 0) {
-                sendTextMessageIngredients(sender, botOut);
+                sendTextMessage(sender, botOut.botUtterance);
             } else if (n3 === 0) {
-                sendTextMessageTiendas(sender, botOut);
+                sendTextMessage(sender, botOut.botUtterance);
             } else if (n4 === 0) {
-                sendTextMessageType(sender, botOut);
+                sendTextMessageType(sender, botOut.botUtterance);
             } else if (n5 === 0) {
                 sendTextMessage(sender, botOut.botUtterance);
             } else {
@@ -148,7 +114,7 @@ function sendTextMessageType(sender, bot) {
     let b = JSON.parse(buttons);
     if (bot !== 'null') {
         let messageData = {
-            
+
             "attachment": {
                 "type": "template",
                 "payload": {
@@ -156,9 +122,7 @@ function sendTextMessageType(sender, bot) {
                     "text": bot.botUtterance,
                     "buttons": b
                 }
-            },
-            "type":"boton"
-            
+            }
         };
         console.log(messageData);
         // Start the request
@@ -185,15 +149,14 @@ function sendTextMessage(sender, text) {
     if (text !== 'null') {
 
         let messageData = {
-            'text': text,
-            "type":"mensaje"
+            'text': text
         };
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages',
             qs: {access_token: token},
             method: 'POST',
             json: {
-                type:"mensaje",
+                type: "mensaje",
                 recipient: {id: sender},
                 message: messageData
 
