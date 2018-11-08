@@ -33,10 +33,10 @@ app.post('/webhook/', function (req, res) {
     let messaging_events = req.body.entry[0].messaging;
     for (let i = 0; i < messaging_events.length; i++) {
         
-        //var t1 =req.body.entry[0].messaging[i].message.text;
-        //var n5 = t1.localeCompare("undefined");
+        var t1 =req.body.entry[0].messaging[i].message.text;
+        var n5 = t1.localeCompare("button");
         //console.log("postbackt "+t1);
-        if (req.body.entry[0].messaging[i].message.text){
+        if (n5!==0){
             let event = req.body.entry[0].messaging[i];
             let sender = event.sender.id;
             let recipient = event.recipient.id;
@@ -145,6 +145,7 @@ function sendTextMessageType(sender, bot) {
     let b = JSON.parse(buttons);
     if (bot !== 'null') {
         let messageData = {
+            
             "attachment": {
                 "type": "template",
                 "payload": {
@@ -161,6 +162,7 @@ function sendTextMessageType(sender, bot) {
             qs: {access_token: token},
             method: 'POST',
             json: {
+                "text":"button",
                 recipient: {id: sender},
                 message: messageData
 
