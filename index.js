@@ -51,11 +51,11 @@ app.post('/webhook/', function (req, res) {
                 }
             },
                     function (error, response, body) {
-                         console.log("body "+body);
+                        console.log("body " + body);
                         //response is from the bot
                         if (!error && response.statusCode === 200) {
                             // Print out the response body
-                           
+
                             body = body.substring(1, body.length - 1);
                             body = body.replace(/\\/g, '');
                             console.log(body);
@@ -101,7 +101,7 @@ function sendTextMessage(sender, text) {
 }
 
 function selectTypeBotMessage(sender, botOut) {
-    
+
     if (botOut.botUtterance !== null) {
         if (botOut.type !== null) {
             var ty = botOut.type;
@@ -117,7 +117,11 @@ function selectTypeBotMessage(sender, botOut) {
             var n5 = ty.localeCompare(t5);
             sendTextMessage(sender, botOut.botUtterance);
             if (n1 === 0) {
-                sendTextMessageType(sender, botOut);
+                var but = "";
+                for (var i = 0; i < botOut.buttons.product[i].length; i++) {
+                    but += '' + botOut.buttons.product[i].tipo + '  ';
+                }
+                sendTextMessage(sender, but);
             } else if (n2 === 0) {
                 sendTextMessageIngredients(sender, botOut);
             } else if (n3 === 0) {
@@ -132,15 +136,15 @@ function selectTypeBotMessage(sender, botOut) {
         }
         console.log(botOut.botUtterance);
     }
-}   
+}
 //
 function sendTextMessageType(sender, bot) {
-     console.log(bot);
-     console.log(bot.buttons);
-     console.log(bot.buttons.product);
-     var but="";
+    console.log(bot);
+    console.log(bot.buttons);
+    console.log(bot.buttons.product);
+    var but = "";
     for (var i = 0; i < bot.buttons[0].length; i++) {
-        but+= '' + bot.buttons[0].product[i].tipo + '  ';
+        but += '' + bot.buttons[0].product[i].tipo + '  ';
     }
     console.log(but);
     if (bot !== 'null') {
@@ -167,9 +171,9 @@ function sendTextMessageType(sender, bot) {
     }
 }
 function sendTextMessageIngredients(sender, bot) {
-      var but="";
+    var but = "";
     for (var i = 0; i < bot.buttons.product.length; i++) {
-        but+= '' + bot.buttons.product[i].ingredientes + '  ';
+        but += '' + bot.buttons.product[i].ingredientes + '  ';
     }
     console.log(but);
     if (bot !== 'null') {
@@ -197,27 +201,27 @@ function sendTextMessageIngredients(sender, bot) {
 }
 
 function sendTextMessageTiendas(sender, bot) {
-    var but="";
+    var but = "";
     for (var i = 0; i < bot.buttons.product.length; i++) {
-        but+= '' + bot.buttons.tienda[i].nombre + ':'+bot.buttons.tienda[i].url+'  ';
+        but += '' + bot.buttons.tienda[i].nombre + ':' + bot.buttons.tienda[i].url + '  ';
     }
     console.log(but);
     if (bot !== 'null') {
         let messageData = {
             'text': but
         };
-    let buttons = '[ ';
-    for (var i = 0; i < bot.buttons.tienda.length; i++) {
-        if (i !== 0) {
-            buttons += ',';
+        let buttons = '[ ';
+        for (var i = 0; i < bot.buttons.tienda.length; i++) {
+            if (i !== 0) {
+                buttons += ',';
+            }
+            buttons += '{';
+            buttons += ' "type":"web_url",';
+            buttons += ' "title": "' + bot.buttons.tienda[i].nombre + '",';
+            buttons += ' "url":"' + bot.buttons.tienda[i].url + '"';
+            buttons += '}';
         }
-        buttons += '{';
-        buttons += ' "type":"web_url",';
-        buttons += ' "title": "' + bot.buttons.tienda[i].nombre + '",';
-        buttons += ' "url":"' + bot.buttons.tienda[i].url + '"';
-        buttons += '}';
-    }
-    
+
         // Start the request
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages',
