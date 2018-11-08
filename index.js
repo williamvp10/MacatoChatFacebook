@@ -118,19 +118,20 @@ function selectTypeBotMessage(sender, botOut) {
             sendTextMessage(sender, botOut.botUtterance);
             console.log(JSON.stringify(botOut));
             console.log(JSON.stringify(botOut.buttons));
-            if (n1 === 0) {
-                sendTextMessage(sender, JSON.stringify(botOut.buttons));
-            } else if (n2 === 0) {
-                sendTextMessage(sender, JSON.stringify(botOut.buttons));
-            } else if (n3 === 0) {
-                sendTextMessage(sender, JSON.stringify(botOut.buttons));
-            } else if (n4 === 0) {
-                sendTextMessage(sender, botOut.botUtterance);
-            } else if (n5 === 0) {
-                sendTextMessage(sender, botOut.botUtterance);
-            } else {
-                sendTextMessage(sender, "disculpa no entendi");
-            }
+            sendTextMessage(sender, JSON.stringify(botOut.buttons));
+//            if (n1 === 0) {
+//                sendTextMessage(sender, JSON.stringify(botOut.buttons));
+//            } else if (n2 === 0) {
+//                sendTextMessage(sender, JSON.stringify(botOut.buttons));
+//            } else if (n3 === 0) {
+//                sendTextMessage(sender, JSON.stringify(botOut.buttons));
+//            } else if (n4 === 0) {
+//                sendTextMessage(sender, botOut.botUtterance);
+//            } else if (n5 === 0) {
+//                sendTextMessage(sender, botOut.botUtterance);
+//            } else {
+//                sendTextMessage(sender, "disculpa no entendi");
+//            }
         }
         console.log(botOut.botUtterance);
     }
