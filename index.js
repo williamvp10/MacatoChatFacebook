@@ -120,11 +120,11 @@ function selectTypeBotMessage(sender, botOut) {
             if (n1 === 0) {
                 sendTextMessage(sender, JSON.stringify(botOut.botUtterance.buttons));
             } else if (n2 === 0) {
-                sendTextMessageIngredients(sender, JSON.stringify(botOut.botUtterance.buttons));
+                sendTextMessage(sender, JSON.stringify(botOut.botUtterance.buttons));
             } else if (n3 === 0) {
-                sendTextMessageTiendas(sender, JSON.stringify(botOut.botUtterance.buttons));
+                sendTextMessage(sender, JSON.stringify(botOut.botUtterance.buttons));
             } else if (n4 === 0) {
-                sendTextMessageType(sender, botOut.botUtterance);
+                sendTextMessage(sender, botOut.botUtterance);
             } else if (n5 === 0) {
                 sendTextMessage(sender, botOut.botUtterance);
             } else {
