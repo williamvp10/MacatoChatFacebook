@@ -49,7 +49,6 @@ app.post('/webhook/', function (req, res) {
                 }
             },
                     function (error, response, body) {
-                        console.log(response);
                         //response is from the bot
                         if (!error && response.statusCode === 200) {
                             selectTypeBotMessage(sender, body);
