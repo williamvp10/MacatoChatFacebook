@@ -51,7 +51,7 @@ app.post('/webhook/', function (req, res) {
                 }
             },
                     function (error, response, body) {
-                         console.log("body "+body)
+                         console.log("body "+body);
                         //response is from the bot
                         if (!error && response.statusCode === 200) {
                             // Print out the response body
@@ -75,91 +75,6 @@ app.post('/webhook/', function (req, res) {
     res.sendStatus(200)
 
 });
-function selectTypeBotMessage(sender, body) {
-    // Print out the response body
-    console.log(body);
-    body = body.substring(1, body.length - 1);
-    body = body.replace(/\\/g, '');
-    let botOut = JSON.parse(body);
-    if (botOut.botUtterance !== null) {
-        if (botOut.type !== null) {
-            var ty = botOut.type;
-            var t1 = "ofrecerTipo";
-            var t2 = "ofrecerIngredientes";
-            var t3 = "ofrecerTiendas";
-            var t4 = "saludar";
-            var t5 = "agradecer";
-            var n1 = ty.localeCompare(t1);
-            var n2 = ty.localeCompare(t2);
-            var n3 = ty.localeCompare(t3);
-            var n4 = ty.localeCompare(t4);
-            var n5 = ty.localeCompare(t5);
-            if (n1 === 0) {
-                sendTextMessageType(sender, botOut.botUtterance);
-            } else if (n2 === 0) {
-                sendTextMessage(sender, botOut.botUtterance);
-            } else if (n3 === 0) {
-                sendTextMessage(sender, botOut.botUtterance);
-            } else if (n4 === 0) {
-                sendTextMessageType(sender, botOut.botUtterance);
-            } else if (n5 === 0) {
-                sendTextMessage(sender, botOut.botUtterance);
-            } else {
-                sendTextMessage(sender, "disculpa no entendi");
-            }
-        }
-        console.log(botOut.botUtterance);
-    }
-}
-
-function sendTextMessageType(sender, bot) {
-    let buttons = '[ ';
-    for (var i = 0; i < bot.buttons.product.length; i++) {
-        if (i !== 0) {
-            buttons += ',';
-        }
-        buttons += '{';
-        buttons += '"type": "postback",';
-        buttons += '"title": "' + bot.buttons.product[i].tipo + '",';
-        buttons += ' "payload": "requestIngredientes"';
-        buttons += '}';
-    }
-    buttons += ']';
-    console.log(buttons);
-    let b = JSON.parse(buttons);
-    if (bot !== 'null') {
-        let messageData = {
-
-            "attachment": {
-                "type": "template",
-                "payload": {
-                    "template_type": "button",
-                    "text": bot.botUtterance,
-                    "buttons": b
-                }
-            }
-        };
-        console.log(messageData);
-        // Start the request
-        request({
-            url: 'https://graph.facebook.com/v2.6/me/messages',
-            qs: {access_token: token},
-            method: 'POST',
-            json: {
-                recipient: {id: sender},
-                message: messageData
-
-            }
-        }, function (error, response, body) {
-            if (error) {
-                console.log('Error sending messages: ', error);
-            } else if (response.body.error) {
-                console.log('Error: ', response.body.error);
-            }
-        });
-    }
-}
-
 function sendTextMessage(sender, text) {
     if (text !== 'null') {
 
@@ -186,99 +101,183 @@ function sendTextMessage(sender, text) {
     }
 }
 
-function sendTextMessageIngredients(sender, bot) {
-    let buttons = '[ ';
-    for (var i = 0; i < bot.buttons.product.length; i++) {
-        if (i !== 0) {
-            buttons += ',';
-        }
-        buttons += '{';
-        buttons += ' "type": "postback",';
-        buttons += ' "title": "' + bot.buttons.product[i].ingredientes + '",';
-        buttons += ' "payload": "requestIngredientes ' + bot.buttons.product[i].ingredientes + '"';
-        buttons += '}';
-    }
-    buttons += ']';
-    console.log(buttons);
-    let b = JSON.parse(buttons);
-    if (bot !== 'null') {
-        let messageData = {
-            "attachment": {
-                "type": "template",
-                "payload": {
-                    "template_type": "button",
-                    "text": "gracias",
-                    "buttons": b
-                }
-            }
-        };
-        console.log(messageData);
-        // Start the request
-        request({
-            url: 'https://graph.facebook.com/v2.6/me/messages',
-            qs: {access_token: token},
-            method: 'POST',
-            json: {
-                recipient: {id: sender},
-                message: messageData
-
-            }
-        }, function (error, response, body) {
-            if (error) {
-                console.log('Error sending messages: ', error);
-            } else if (response.body.error) {
-                console.log('Error: ', response.body.error);
-            }
-        });
-    }
-}
-
-function sendTextMessageTiendas(sender, bot) {
-    let buttons = '[ ';
-    for (var i = 0; i < bot.buttons.tienda.length; i++) {
-        if (i !== 0) {
-            buttons += ',';
-        }
-        buttons += '{';
-        buttons += ' "type":"web_url",';
-        buttons += ' "title": "' + bot.buttons.tienda[i].nombre + '",';
-        buttons += ' "url":"' + bot.buttons.tienda[i].url + '"';
-        buttons += '}';
-    }
-    buttons += ']';
-    console.log(buttons);
-    let b = JSON.parse(buttons);
-    if (bot !== 'null') {
-        let messageData = {
-            "attachment": {
-                "type": "template",
-                "payload": {
-                    "template_type": "button",
-                    "text": bot.botUtterance,
-                    "buttons": b
-                }
-            }
-        };
-        console.log(messageData);
-        // Start the request
-        request({
-            url: 'https://graph.facebook.com/v2.6/me/messages',
-            qs: {access_token: token},
-            method: 'POST',
-            json: {
-                recipient: {id: sender},
-                message: messageData
-
-            }
-        }, function (error, response, body) {
-            if (error) {
-                console.log('Error sending messages: ', error);
-            } else if (response.body.error) {
-                console.log('Error: ', response.body.error);
-            }
-        });
-    }
-}
+//function selectTypeBotMessage(sender, body) {
+//    // Print out the response body
+//    console.log(body);
+//    body = body.substring(1, body.length - 1);
+//    body = body.replace(/\\/g, '');
+//    let botOut = JSON.parse(body);
+//    if (botOut.botUtterance !== null) {
+//        if (botOut.type !== null) {
+//            var ty = botOut.type;
+//            var t1 = "ofrecerTipo";
+//            var t2 = "ofrecerIngredientes";
+//            var t3 = "ofrecerTiendas";
+//            var t4 = "saludar";
+//            var t5 = "agradecer";
+//            var n1 = ty.localeCompare(t1);
+//            var n2 = ty.localeCompare(t2);
+//            var n3 = ty.localeCompare(t3);
+//            var n4 = ty.localeCompare(t4);
+//            var n5 = ty.localeCompare(t5);
+//            if (n1 === 0) {
+//                sendTextMessageType(sender, botOut.botUtterance);
+//            } else if (n2 === 0) {
+//                sendTextMessage(sender, botOut.botUtterance);
+//            } else if (n3 === 0) {
+//                sendTextMessage(sender, botOut.botUtterance);
+//            } else if (n4 === 0) {
+//                sendTextMessageType(sender, botOut.botUtterance);
+//            } else if (n5 === 0) {
+//                sendTextMessage(sender, botOut.botUtterance);
+//            } else {
+//                sendTextMessage(sender, "disculpa no entendi");
+//            }
+//        }
+//        console.log(botOut.botUtterance);
+//    }
+//}
+//
+//function sendTextMessageType(sender, bot) {
+//    let buttons = '[ ';
+//    for (var i = 0; i < bot.buttons.product.length; i++) {
+//        if (i !== 0) {
+//            buttons += ',';
+//        }
+//        buttons += '{';
+//        buttons += '"type": "postback",';
+//        buttons += '"title": "' + bot.buttons.product[i].tipo + '",';
+//        buttons += ' "payload": "requestIngredientes"';
+//        buttons += '}';
+//    }
+//    buttons += ']';
+//    console.log(buttons);
+//    let b = JSON.parse(buttons);
+//    if (bot !== 'null') {
+//        let messageData = {
+//
+//            "attachment": {
+//                "type": "template",
+//                "payload": {
+//                    "template_type": "button",
+//                    "text": bot.botUtterance,
+//                    "buttons": b
+//                }
+//            }
+//        };
+//        console.log(messageData);
+//        // Start the request
+//        request({
+//            url: 'https://graph.facebook.com/v2.6/me/messages',
+//            qs: {access_token: token},
+//            method: 'POST',
+//            json: {
+//                recipient: {id: sender},
+//                message: messageData
+//
+//            }
+//        }, function (error, response, body) {
+//            if (error) {
+//                console.log('Error sending messages: ', error);
+//            } else if (response.body.error) {
+//                console.log('Error: ', response.body.error);
+//            }
+//        });
+//    }
+//}
+//function sendTextMessageIngredients(sender, bot) {
+//    let buttons = '[ ';
+//    for (var i = 0; i < bot.buttons.product.length; i++) {
+//        if (i !== 0) {
+//            buttons += ',';
+//        }
+//        buttons += '{';
+//        buttons += ' "type": "postback",';
+//        buttons += ' "title": "' + bot.buttons.product[i].ingredientes + '",';
+//        buttons += ' "payload": "requestIngredientes ' + bot.buttons.product[i].ingredientes + '"';
+//        buttons += '}';
+//    }
+//    buttons += ']';
+//    console.log(buttons);
+//    let b = JSON.parse(buttons);
+//    if (bot !== 'null') {
+//        let messageData = {
+//            "attachment": {
+//                "type": "template",
+//                "payload": {
+//                    "template_type": "button",
+//                    "text": "gracias",
+//                    "buttons": b
+//                }
+//            }
+//        };
+//        console.log(messageData);
+//        // Start the request
+//        request({
+//            url: 'https://graph.facebook.com/v2.6/me/messages',
+//            qs: {access_token: token},
+//            method: 'POST',
+//            json: {
+//                recipient: {id: sender},
+//                message: messageData
+//
+//            }
+//        }, function (error, response, body) {
+//            if (error) {
+//                console.log('Error sending messages: ', error);
+//            } else if (response.body.error) {
+//                console.log('Error: ', response.body.error);
+//            }
+//        });
+//    }
+//}
+//
+//function sendTextMessageTiendas(sender, bot) {
+//    let buttons = '[ ';
+//    for (var i = 0; i < bot.buttons.tienda.length; i++) {
+//        if (i !== 0) {
+//            buttons += ',';
+//        }
+//        buttons += '{';
+//        buttons += ' "type":"web_url",';
+//        buttons += ' "title": "' + bot.buttons.tienda[i].nombre + '",';
+//        buttons += ' "url":"' + bot.buttons.tienda[i].url + '"';
+//        buttons += '}';
+//    }
+//    buttons += ']';
+//    console.log(buttons);
+//    let b = JSON.parse(buttons);
+//    if (bot !== 'null') {
+//        let messageData = {
+//            "attachment": {
+//                "type": "template",
+//                "payload": {
+//                    "template_type": "button",
+//                    "text": bot.botUtterance,
+//                    "buttons": b
+//                }
+//            }
+//        };
+//        console.log(messageData);
+//        // Start the request
+//        request({
+//            url: 'https://graph.facebook.com/v2.6/me/messages',
+//            qs: {access_token: token},
+//            method: 'POST',
+//            json: {
+//                recipient: {id: sender},
+//                message: messageData
+//
+//            }
+//        }, function (error, response, body) {
+//            if (error) {
+//                console.log('Error sending messages: ', error);
+//            } else if (response.body.error) {
+//                console.log('Error: ', response.body.error);
+//            }
+//        });
+//    }
+//}
 
 
 //                              envio de una imagen 
