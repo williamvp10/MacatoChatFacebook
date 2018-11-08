@@ -33,7 +33,7 @@ app.post('/webhook/', function (req, res) {
     let messaging_events = req.body.entry[0].messaging;
     for (let i = 0; i < messaging_events.length; i++) {
         
-        var t1 =req.body.entry[0].messaging[i].type;
+        var t1 =req.body.entry[0].messaging[i].message.type;
         var n5 = t1.localeCompare("mensaje");
         //console.log("postbackt "+t1);
         if (n5===0){
@@ -153,7 +153,9 @@ function sendTextMessageType(sender, bot) {
                     "text": bot.botUtterance,
                     "buttons": b
                 }
-            }
+            },
+            "type":"boton"
+            
         };
         console.log(messageData);
         // Start the request
@@ -162,7 +164,6 @@ function sendTextMessageType(sender, bot) {
             qs: {access_token: token},
             method: 'POST',
             json: {
-                type:"mensaje",
                 recipient: {id: sender},
                 message: messageData
 
@@ -180,7 +181,9 @@ function sendTextMessageType(sender, bot) {
 function sendTextMessage(sender, text) {
     if (text !== 'null') {
 
-        let messageData = {'text': text
+        let messageData = {
+            'text': text,
+            "type":"mensaje"
         };
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages',
