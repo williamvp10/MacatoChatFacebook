@@ -107,15 +107,12 @@ function sendTextMessageType(sender, bot) {
         buttons += '{';
         buttons += '"type": "postback",';
         buttons += '"title": "' + bot.buttons.product[i].tipo + '",';
-        buttons += '"payload": {';
-        buttons += '"userType": "requestIngredientes",';
-        buttons += '"userUtterance": "'+ bot.buttons.product[i].tipo +'"';
-        buttons += '}';
+        buttons += ' "payload": "requestIngredientes"';
         buttons += '}';
     }
     buttons += ']';
     console.log(buttons);
-    let b = JSON.parse(encode_utf8(buttons));
+    let b=JSON.parse(buttons);
     if (bot !== 'null') {
         let messageData = {
             "attachment": {
@@ -181,12 +178,12 @@ function sendTextMessageIngredients(sender, bot) {
         buttons += '{';
         buttons += ' "type": "postback",';
         buttons += ' "title": "' + bot.buttons.product[i].ingredientes + '",';
-        buttons += ' "payload": "requestIngredientes ' + bot.buttons.product[i].ingredientes + '"';
+        buttons += ' "payload": "requestIngredientes '+ bot.buttons.product[i].ingredientes +'"';
         buttons += '}';
     }
     buttons += ']';
     console.log(buttons);
-    let b = JSON.parse(buttons);
+    let b=JSON.parse(buttons);
     if (bot !== 'null') {
         let messageData = {
             "attachment": {
@@ -233,7 +230,7 @@ function sendTextMessageTiendas(sender, bot) {
     }
     buttons += ']';
     console.log(buttons);
-    let b = JSON.parse(buttons);
+    let b=JSON.parse(buttons);
     if (bot !== 'null') {
         let messageData = {
             "attachment": {
@@ -375,9 +372,9 @@ function sendTextMessageTiendas(sender, bot) {
 
 
 function encode_utf8(s) {
-    return unescape(encodeURIComponent(s));
+  return unescape(encodeURIComponent(s));
 }
 
 function decode_utf8(s) {
-    return decodeURIComponent(escape(s));
+  return decodeURIComponent(escape(s));
 }
