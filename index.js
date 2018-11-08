@@ -48,9 +48,13 @@ app.post('/webhook/', function (req, res) {
                 }
             },
                     function (error, response, body) {
+                        console.log(body);
+                        body = body.substring(1, body.length - 1);
+                        body = body.replace(/\\/g, '');
+                        let botOut = JSON.parse(body);
                         //response is from the bot
                         if (!error && response.statusCode === 200) {
-                            selectTypeBotMessage(sender, body);
+                            sendTextMessage(sender, botOut.botUtterance);
                         } else {
                             sendTextMessage(sender, 'Error!');
                         }
