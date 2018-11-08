@@ -29,7 +29,7 @@ app.listen(app.get('port'), function () {
 });
 //FBM webhook
 app.post('/webhook/', function (req, res) {
-    console.log(JSON.stringify(req.body));
+    console.log("peticion: "+JSON.stringify(req.body));
     let messaging_events = req.body.entry[0].messaging;
     for (let i = 0; i < messaging_events.length; i++) {
 
@@ -91,7 +91,7 @@ function selectTypeBotMessage(sender, body) {
             } else if (n5 === 0) {
                 sendTextMessage(sender, botOut.botUtterance);
             } else {
-                sendTextMessage(sender, "disculpa no entendi, mejor callate viejo lesviano ");
+                sendTextMessage(sender, "disculpa no entendi");
             }
         }
         console.log(botOut.botUtterance);
