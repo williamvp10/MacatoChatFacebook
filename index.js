@@ -37,8 +37,8 @@ app.post('/webhook/', function (req, res) {
          console.log("type "+t1);
         var m = "mensaje";
         var n5 = m.localeCompare(t1);
-       
-        if (n5===0){
+        var n2 = m.localeCompare("undefined");
+        if (n5===0||n2){
             let event = req.body.entry[0].messaging[i];
             let sender = event.sender.id;
             let recipient = event.recipient.id;
