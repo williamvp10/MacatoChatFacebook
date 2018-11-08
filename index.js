@@ -34,7 +34,8 @@ app.post('/webhook/', function (req, res) {
     for (let i = 0; i < messaging_events.length; i++) {
         
         var t1 =req.body.entry[0].messaging[i].message.type;
-        var n5 = t1.localeCompare("mensaje");
+        var m = "mensaje";
+        var n5 = t1.localeCompare(m);
         //console.log("postbackt "+t1);
         if (n5===0){
             let event = req.body.entry[0].messaging[i];
