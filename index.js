@@ -61,7 +61,7 @@ app.post('/webhook/', function (req, res) {
                             console.log(body);
                             let botOut = JSON.parse(body);
                             if (botOut.botUtterance !== null) {
-                                sendTextMessage(sender, botOut.botUtterance);
+                                selectTypeBotMessage(sender, botOut);
                             }
                         } else {
                             sendTextMessage(sender, 'Error!');
@@ -119,12 +119,13 @@ function selectTypeBotMessage(sender, body) {
             var n3 = ty.localeCompare(t3);
             var n4 = ty.localeCompare(t4);
             var n5 = ty.localeCompare(t5);
+            sendTextMessage(sender, botOut.botUtterance);
             if (n1 === 0) {
-                sendTextMessageType(sender, botOut.botUtterance);
+                sendTextMessageType(sender, botOut);
             } else if (n2 === 0) {
-                sendTextMessage(sender, botOut.botUtterance);
+                sendTextMessageIngredients(sender, botOut);
             } else if (n3 === 0) {
-                sendTextMessage(sender, botOut.botUtterance);
+                sendTextMessageTiendas(sender, botOut);
             } else if (n4 === 0) {
                 sendTextMessageType(sender, botOut.botUtterance);
             } else if (n5 === 0) {
