@@ -32,8 +32,10 @@ app.post('/webhook/', function (req, res) {
     console.log("peticion: " + JSON.stringify(req.body));
     let messaging_events = req.body.entry[0].messaging;
     for (let i = 0; i < messaging_events.length; i++) {
-        console.log("postback"+req.body.entry[0].messaging[i].postback);
-        if (req.body.entry[0].messaging[i].postback==="undefined"){
+        console.log("postback "+req.body.entry[0].messaging[i].postback);
+        var t1 = ""+req.body.entry[0].messaging[i].postback;
+        var n5 = t1.localeCompare("undefined");
+        if (req.body.entry[0].messaging[i].postback===0){
             let event = req.body.entry[0].messaging[i];
             let sender = event.sender.id;
             let recipient = event.recipient.id;
@@ -62,7 +64,6 @@ app.post('/webhook/', function (req, res) {
             console.log(" boton:   " +req.body.entry[0].messaging[i]);
             let event = req.body.entry[0].messaging[i]  ;
             let sender = event.sender.id;
-            let time = req.body.entry[0].time;
             let postback = event.postback;
             // we call the MessengerBot here..
             if (event.message && event.message.text) {
