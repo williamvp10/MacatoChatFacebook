@@ -58,13 +58,13 @@ app.post('/webhook/', function (req, res) {
                         });
             }
         }else{
+            console.log(" boton:   " +req.body.entry[0].messaging[i]);
             let event = req.body.entry[0].messaging[i]  ;
             let sender = event.sender.id;
             let time = req.body.entry[0].time;
             let postback = event.postback;
             // we call the MessengerBot here..
             if (event.message && event.message.text) {
-                let text = event.message.text;
                 //send it to the bot
                 request({
                     url: msngerServerUrl,
