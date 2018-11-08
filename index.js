@@ -51,10 +51,11 @@ app.post('/webhook/', function (req, res) {
                 }
             },
                     function (error, response, body) {
+                         console.log("body "+body)
                         //response is from the bot
                         if (!error && response.statusCode === 200) {
                             // Print out the response body
-                            //console.log(body)
+                           
                             body = body.substring(1, body.length - 1);
                             body = body.replace(/\\/g, '');
                             console.log(body);
