@@ -34,9 +34,10 @@ app.post('/webhook/', function (req, res) {
     for (let i = 0; i < messaging_events.length; i++) {
         
         var t1 =req.body.entry[0].messaging[i].message.type;
+         console.log("type "+t1);
         var m = "mensaje";
-        var n5 = t1.localeCompare(m);
-        //console.log("postbackt "+t1);
+        var n5 = m.localeCompare(t1);
+       
         if (n5===0){
             let event = req.body.entry[0].messaging[i];
             let sender = event.sender.id;
