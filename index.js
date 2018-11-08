@@ -29,13 +29,16 @@ app.listen(app.get('port'), function () {
 });
 //FBM webhook
 app.post('/webhook/', function (req, res) {
-    console.log("peticion: " + JSON.stringify(req.body));
+    console.log(JSON.stringify(req.body));
     let messaging_events = req.body.entry[0].messaging;
     for (let i = 0; i < messaging_events.length; i++) {
+
         let event = req.body.entry[0].messaging[i];
         let sender = event.sender.id;
+
         let recipient = event.recipient.id;
         let time = req.body.entry[0].time;
+
         // we call the MessengerBot here..
         if (event.message && event.message.text) {
             let text = event.message.text;
@@ -48,13 +51,18 @@ app.post('/webhook/', function (req, res) {
                 }
             },
                     function (error, response, body) {
-                        console.log(body);
-                        body = body.substring(1, body.length - 1);
-                        body = body.replace(/\\/g, '');
-                        let botOut = JSON.parse(body);
                         //response is from the bot
                         if (!error && response.statusCode === 200) {
-                            sendTextMessage(sender, botOut.botUtterance);
+                            // Print out the response body
+                            //console.log(body)
+                            body = body.substring(1, body.length - 1);
+                            body = body.replace(/\\/g, '');
+                            console.log(body)
+                            let botOut = JSON.parse(body);
+
+                            if (botOut.botUtterance != null) {
+                                sendTextMessage(sender, botOut.botUtterance);
+                            }
                         } else {
                             sendTextMessage(sender, 'Error!');
                         }
@@ -62,7 +70,9 @@ app.post('/webhook/', function (req, res) {
         }
     }
 
-    res.sendStatus(200);
+
+    res.sendStatus(200)
+
 });
 function selectTypeBotMessage(sender, body) {
     // Print out the response body
