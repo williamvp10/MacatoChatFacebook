@@ -60,7 +60,6 @@ app.post('/webhook/', function (req, res) {
                             body = body.replace(/\\/g, '');
                             console.log(body);
                             let botOut = JSON.parse(body);
-
                             if (botOut.botUtterance !== null) {
                                 sendTextMessage(sender, botOut.botUtterance);
                             }
