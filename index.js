@@ -115,7 +115,7 @@ function sendTextMessageType(sender, bot) {
     }
     buttons += ']';
     console.log(buttons);
-    let b = JSON.parse(buttons);
+    let b = JSON.parse(encode_utf8(buttons));
     if (bot !== 'null') {
         let messageData = {
             "attachment": {
