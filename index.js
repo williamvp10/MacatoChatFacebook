@@ -29,33 +29,60 @@ app.listen(app.get('port'), function () {
 });
 //FBM webhook
 app.post('/webhook/', function (req, res) {
-    console.log("peticion: "+JSON.stringify(req.body));
+    console.log("peticion: " + JSON.stringify(req.body));
     let messaging_events = req.body.entry[0].messaging;
     for (let i = 0; i < messaging_events.length; i++) {
-
-        let event = req.body.entry[0].messaging[i];
-        let sender = event.sender.id;
-        let recipient = event.recipient.id;
-        let time = req.body.entry[0].time;
-        // we call the MessengerBot here..
-        if (event.message && event.message.text) {
-            let text = event.message.text;
-            //send it to the bot
-            request({
-                url: msngerServerUrl,
-                method: 'POST',
-                form: {
-                    'userUtterance': text
-                }
-            },
-                    function (error, response, body) {
-                        //response is from the bot
-                        if (!error && response.statusCode === 200) {
-                            selectTypeBotMessage(sender, body);
-                        } else {
-                            sendTextMessage(sender, 'Error!');
-                        }
-                    });
+        if (req.body.entry[0].messaging[i].text!==null){
+            let event = req.body.entry[0].messaging[i];
+            let sender = event.sender.id;
+            let recipient = event.recipient.id;
+            let time = req.body.entry[0].time;
+            // we call the MessengerBot here..
+            if (event.message && event.message.text) {
+                let text = event.message.text;
+                //send it to the bot
+                request({
+                    url: msngerServerUrl,
+                    method: 'POST',
+                    form: {
+                        'userUtterance': text
+                    }
+                },
+                        function (error, response, body) {
+                            //response is from the bot
+                            if (!error && response.statusCode === 200) {
+                                selectTypeBotMessage(sender, body);
+                            } else {
+                                sendTextMessage(sender, 'Error!');
+                            }
+                        });
+            }
+        }else{
+            let event = req.body.entry[0].messaging[i]  ;
+            let sender = event.sender.id;
+            let time = req.body.entry[0].time;
+            let postback = event.postback;
+            // we call the MessengerBot here..
+            if (event.message && event.message.text) {
+                let text = event.message.text;
+                //send it to the bot
+                request({
+                    url: msngerServerUrl,
+                    method: 'POST',
+                    form: {
+                        'userUtterance': postback.title,
+                        'userIntent': postback.payload
+                    }
+                },
+                        function (error, response, body) {
+                            //response is from the bot
+                            if (!error && response.statusCode === 200) {
+                                selectTypeBotMessage(sender, body);
+                            } else {
+                                sendTextMessage(sender, 'Error!');
+                            }
+                        });
+            }
         }
     }
 
@@ -112,7 +139,7 @@ function sendTextMessageType(sender, bot) {
     }
     buttons += ']';
     console.log(buttons);
-    let b=JSON.parse(buttons);
+    let b = JSON.parse(buttons);
     if (bot !== 'null') {
         let messageData = {
             "attachment": {
@@ -178,12 +205,12 @@ function sendTextMessageIngredients(sender, bot) {
         buttons += '{';
         buttons += ' "type": "postback",';
         buttons += ' "title": "' + bot.buttons.product[i].ingredientes + '",';
-        buttons += ' "payload": "requestIngredientes '+ bot.buttons.product[i].ingredientes +'"';
+        buttons += ' "payload": "requestIngredientes ' + bot.buttons.product[i].ingredientes + '"';
         buttons += '}';
     }
     buttons += ']';
     console.log(buttons);
-    let b=JSON.parse(buttons);
+    let b = JSON.parse(buttons);
     if (bot !== 'null') {
         let messageData = {
             "attachment": {
@@ -230,7 +257,7 @@ function sendTextMessageTiendas(sender, bot) {
     }
     buttons += ']';
     console.log(buttons);
-    let b=JSON.parse(buttons);
+    let b = JSON.parse(buttons);
     if (bot !== 'null') {
         let messageData = {
             "attachment": {
@@ -372,9 +399,9 @@ function sendTextMessageTiendas(sender, bot) {
 
 
 function encode_utf8(s) {
-  return unescape(encodeURIComponent(s));
+    return unescape(encodeURIComponent(s));
 }
 
 function decode_utf8(s) {
-  return decodeURIComponent(escape(s));
+    return decodeURIComponent(escape(s));
 }
