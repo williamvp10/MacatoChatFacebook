@@ -135,6 +135,7 @@ function selectTypeBotMessage(sender, botOut) {
 }
 //
 function sendTextMessageType(sender, bot) {
+     console.log(bot);
      var but="";
     for (var i = 0; i < bot.buttons.product.length; i++) {
         but+= '' + bot.buttons.product[i].tipo + '  ';
