@@ -150,8 +150,8 @@ function selectTypeBotMessage(sender, botOut) {
 
             console.log(JSON.stringify(botOut));
             console.log(JSON.stringify(botOut.buttons));
-            sendTextMessage(sender, botOut.botUtterance);
-            sendTextMessage(sender, JSON.stringify(botOut.buttons));
+            sendTextMessagebutton(sender, botOut.botUtterance);
+            //sendTextMessage(sender, JSON.stringify(botOut.buttons));
 //            if (n1 === 0) {
 //                sendTextMessage(sender, JSON.stringify(botOut.buttons));
 //            } else if (n2 === 0) {
