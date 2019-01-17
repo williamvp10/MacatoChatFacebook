@@ -100,6 +100,38 @@ function sendTextMessage(sender, text) {
     }
 }
 
+function sendTextMessagebutton(sender, bot) {
+    console.log(bot);
+    console.log(bot.buttons);
+    console.log(bot.buttons.product);
+    var but = "";
+    for (var i = 0; i < bot.buttons[0].length; i++) {
+        but += '' + bot.buttons[0].product[i].tipo + '  ';
+    }
+    console.log(but);
+    if (bot !== 'null') {
+        let messageData = {
+            'text': but
+        };
+        // Start the request
+        request({
+            url: 'https://graph.facebook.com/v2.6/me/messages',
+            qs: {access_token: token},
+            method: 'POST',
+            json: {
+                recipient: {id: sender},
+                message: messageData
+            }
+        }, function (error, response, body) {
+            if (error) {
+                console.log('Error sending messages: ', error);
+            } else if (response.body.error) {
+                console.log('Error: ', response.body.error);
+            }
+        });
+    }
+}
+
 function selectTypeBotMessage(sender, botOut) {
 
     if (botOut.botUtterance !== null) {
@@ -115,9 +147,10 @@ function selectTypeBotMessage(sender, botOut) {
             var n3 = ty.localeCompare(t3);
             var n4 = ty.localeCompare(t4);
             var n5 = ty.localeCompare(t5);
-            sendTextMessage(sender, botOut.botUtterance);
+
             console.log(JSON.stringify(botOut));
             console.log(JSON.stringify(botOut.buttons));
+            sendTextMessage(sender, botOut.botUtterance);
             sendTextMessage(sender, JSON.stringify(botOut.buttons));
 //            if (n1 === 0) {
 //                sendTextMessage(sender, JSON.stringify(botOut.buttons));
