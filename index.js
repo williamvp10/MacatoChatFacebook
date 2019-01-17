@@ -103,7 +103,7 @@ function sendTextMessage(sender, text) {
 function sendTextMessagebutton(sender, bot) {
     console.log(bot);
     console.log(bot.buttons);
-    console.log(bot.buttons.product);
+    console.log(bot.buttons[0].product);
     var but = "";
     for (var i = 0; i < bot.buttons[0].length; i++) {
         but += '' + bot.buttons[0].product[i].tipo + '  ';
@@ -151,7 +151,7 @@ function selectTypeBotMessage(sender, botOut) {
             console.log(JSON.stringify(botOut));
             console.log(JSON.stringify(botOut.buttons));
             sendTextMessagebutton(sender, botOut.botUtterance);
-            //sendTextMessage(sender, JSON.stringify(botOut.buttons));
+           //sendTextMessage(sender, JSON.stringify(botOut.buttons));
 //            if (n1 === 0) {
 //                sendTextMessage(sender, JSON.stringify(botOut.buttons));
 //            } else if (n2 === 0) {
