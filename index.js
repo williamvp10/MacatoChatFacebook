@@ -41,7 +41,7 @@ app.post('/webhook/', function (req, res) {
         try {
             text = req.body.entry[0].messaging[i].postback.title;
             let type= req.body.entry[0].messaging[i].postback.payload;
-            console.log(text);
+            console.log(type);
             request({
                 url: msngerServerUrl,
                 method: 'POST',
