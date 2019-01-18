@@ -37,10 +37,11 @@ app.post('/webhook/', function (req, res) {
         let sender = event.sender.id;
         let recipient = event.recipient.id;
         let time = req.body.entry[0].time;
-        // we call the MessengerBot here..
-        if (event.message && event.message.text) {
-            let text = event.message.text;
-            //send it to the bot
+        let text = "";
+        try {
+            console.log("postback---------");
+            text = req.body.postback.title;
+            console.log(text);
             request({
                 url: msngerServerUrl,
                 method: 'POST',
@@ -56,7 +57,30 @@ app.post('/webhook/', function (req, res) {
                             sendTextMessage(sender, 'Error!');
                         }
                     });
+        } catch (err) {
+             console.log("error postback---------");
+            if (event.message && event.message.text) {
+                text = event.message.text;
+                //send it to the bot
+                request({
+                    url: msngerServerUrl,
+                    method: 'POST',
+                    form: {
+                        'userUtterance': text
+                    }
+                },
+                        function (error, response, body) {
+                            //response is from the bot
+                            if (!error && response.statusCode === 200) {
+                                selectTypeBotMessage(sender, body);
+                            } else {
+                                sendTextMessage(sender, 'Error!');
+                            }
+                        });
+            }
         }
+        // we call the MessengerBot here..
+
     }
 
     res.sendStatus(200);
@@ -107,12 +131,12 @@ function sendTextMessageType(sender, bot) {
         buttons += '{';
         buttons += '"type": "postback",';
         buttons += '"title": "' + bot.buttons.product[i].tipo + '",';
-        buttons += ' "payload": "requestIngredientes '+ bot.buttons.product[i].tipo +'"';
+        buttons += ' "payload": "requestIngredientes ' + bot.buttons.product[i].tipo + '"';
         buttons += '}';
     }
     buttons += ']';
     console.log(buttons);
-    let b=JSON.parse(buttons);
+    let b = JSON.parse(buttons);
     if (bot !== 'null') {
         let messageData = {
             "attachment": {
@@ -178,12 +202,12 @@ function sendTextMessageIngredients(sender, bot) {
         buttons += '{';
         buttons += ' "type": "postback",';
         buttons += ' "title": "' + bot.buttons.product[i].ingredientes + '",';
-        buttons += ' "payload": "requestIngredientes '+ bot.buttons.product[i].ingredientes +'"';
+        buttons += ' "payload": "requestIngredientes ' + bot.buttons.product[i].ingredientes + '"';
         buttons += '}';
     }
     buttons += ']';
     console.log(buttons);
-    let b=JSON.parse(buttons);
+    let b = JSON.parse(buttons);
     if (bot !== 'null') {
         let messageData = {
             "attachment": {
@@ -230,7 +254,7 @@ function sendTextMessageTiendas(sender, bot) {
     }
     buttons += ']';
     console.log(buttons);
-    let b=JSON.parse(buttons);
+    let b = JSON.parse(buttons);
     if (bot !== 'null') {
         let messageData = {
             "attachment": {
