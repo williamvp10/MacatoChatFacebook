@@ -102,9 +102,8 @@ function sendTextMessage(sender, text) {
 
 function sendTextMessagebutton(sender, bot1) {
     var bot = JSON.stringify(bot1);
-    console.log(bot);
-    console.log(bot.buttons);
-    console.log(bot.buttons.product);
+    console.log(JSON.stringify(bot));
+    console.log(JSON.stringify(bot.buttons.product));
     var but = "";
     for (var i = 0; i < bot.buttons.product.length; i++) {
         but += '' + bot.buttons.product[i].tipo + '  ';
