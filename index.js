@@ -196,8 +196,8 @@ function sendTextMessage(sender, text) {
 function sendTextMessageIngredients(sender, bot) {
     let buttons = '[ ';
     let cant=0;
-    if(bot.buttons.product.length>5){
-        cant=5;
+    if(bot.buttons.product.length>3){
+        cant=3;
     }else{
         cant=bot.buttons.product.length;
     }
@@ -249,8 +249,8 @@ function sendTextMessageIngredients(sender, bot) {
 function sendTextMessageTiendas(sender, bot) {
     let buttons = '[ ';
     let cant=0;
-    if(bot.buttons.tienda.length>5){
-        cant=5;
+    if(bot.buttons.tienda.length>3){
+        cant=3;
     }else{
         cant=bot.buttons.tienda.length;
     }
