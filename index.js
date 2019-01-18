@@ -151,7 +151,7 @@ function selectTypeBotMessage(sender, botOut) {
             console.log(JSON.stringify(botOut));
             console.log(JSON.stringify(botOut.buttons));
             sendTextMessagebutton(sender, botOut.botUtterance);
-          //sendTextMessage(sender, JSON.stringify(botOut.buttons));
+            //sendTextMessage(sender, JSON.stringify(botOut.buttons));
             if (n1 === 0) {
                 sendTextMessageType(sender, JSON.stringify(botOut.buttons));
             } else if (n2 === 0) {
@@ -165,13 +165,14 @@ function selectTypeBotMessage(sender, botOut) {
             } else {
                 sendTextMessage(sender, "disculpa no entendi");
 //            }
+            }
+            console.log(botOut.botUtterance);
         }
-        console.log(botOut.botUtterance);
     }
 }
 //
 function sendTextMessageType(sender, bot) {
-     console.log(bot);
+    console.log(bot);
     console.log(bot.buttons);
     console.log(bot.buttons.product[0]);
     var but = "";
@@ -388,4 +389,4 @@ function encode_utf8(s) {
 
 function decode_utf8(s) {
     return decodeURIComponent(escape(s));
-};
+}
