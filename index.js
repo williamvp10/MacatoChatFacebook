@@ -401,8 +401,3 @@ function encode_utf8(s) {
 function decode_utf8(s) {
     return decodeURIComponent(escape(s));
 }
-
-
-{"object":"page",
-    "entry":[{"id":"454358118421164","time":1547781370452,
-            "messaging":[{"recipient":{"id":"454358118421164"},"timestamp":1547781370452,"sender":{"id":"1426414230795657"},"postback":{"payload":"requestIngredientes Hamburgesa","title":"Hamburgesa"}}]}]}
