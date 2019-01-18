@@ -39,13 +39,14 @@ app.post('/webhook/', function (req, res) {
         let time = req.body.entry[0].time;
         let text = "";
         try {
-            console.log("postback---------");
             text = req.body.entry[0].messaging[i].postback.title;
+            let type= req.body.entry[0].messaging[i].postback.payload;
             console.log(text);
             request({
                 url: msngerServerUrl,
                 method: 'POST',
                 form: {
+                    'userType': type,
                     'userUtterance': text
                 }
             },
@@ -58,7 +59,6 @@ app.post('/webhook/', function (req, res) {
                         }
                     });
         } catch (err) {
-             console.log("error postback---------");
             if (event.message && event.message.text) {
                 text = event.message.text;
                 //send it to the bot
@@ -131,7 +131,7 @@ function sendTextMessageType(sender, bot) {
         buttons += '{';
         buttons += '"type": "postback",';
         buttons += '"title": "' + bot.buttons.product[i].tipo + '",';
-        buttons += ' "payload": "requestIngredientes ' + bot.buttons.product[i].tipo + '"';
+        buttons += ' "payload": "requestIngredientes"';
         buttons += '}';
     }
     buttons += ']';
@@ -195,14 +195,20 @@ function sendTextMessage(sender, text) {
 
 function sendTextMessageIngredients(sender, bot) {
     let buttons = '[ ';
-    for (var i = 0; i < bot.buttons.product.length; i++) {
+    let cant=0;
+    if(bot.buttons.product.length>5){
+        cant=5;
+    }else{
+        cant=bot.buttons.product.length;
+    }
+    for (var i = 0; i < cant; i++) {
         if (i !== 0) {
             buttons += ',';
         }
         buttons += '{';
         buttons += ' "type": "postback",';
         buttons += ' "title": "' + bot.buttons.product[i].ingredientes + '",';
-        buttons += ' "payload": "requestIngredientes ' + bot.buttons.product[i].ingredientes + '"';
+        buttons += ' "payload": "requestTiendas"';
         buttons += '}';
     }
     buttons += ']';
@@ -242,7 +248,13 @@ function sendTextMessageIngredients(sender, bot) {
 
 function sendTextMessageTiendas(sender, bot) {
     let buttons = '[ ';
-    for (var i = 0; i < bot.buttons.tienda.length; i++) {
+    let cant=0;
+    if(bot.buttons.tienda.length>5){
+        cant=5;
+    }else{
+        cant=bot.buttons.tienda.length;
+    }
+    for (var i = 0; i < cant; i++) {
         if (i !== 0) {
             buttons += ',';
         }
