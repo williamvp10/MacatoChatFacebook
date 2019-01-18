@@ -100,10 +100,11 @@ function sendTextMessage(sender, text) {
     }
 }
 
-function sendTextMessagebutton(sender, bot) {
+function sendTextMessagebutton(sender, bot1) {
+    bot = JSON.stringify(bot1);
     console.log(bot);
     console.log(bot.buttons);
-    console.log(bot.buttons.product[0]);
+    console.log(bot.buttons.product);
     var but = "";
     for (var i = 0; i < bot.buttons.product.length; i++) {
         but += '' + bot.buttons.product[i].tipo + '  ';
@@ -150,26 +151,26 @@ function selectTypeBotMessage(sender, botOut) {
 
             console.log(JSON.stringify(botOut));
             console.log(JSON.stringify(botOut.buttons));
-            sendTextMessagebutton(sender, JSON.stringify(botOut.buttons));
+            sendTextMessagebutton(sender, botOut.buttons);
             //sendTextMessage(sender, JSON.stringify(botOut.buttons));
-            if (n1 === 0) {
-                sendTextMessageType(sender, JSON.stringify(botOut.buttons));
-            } else if (n2 === 0) {
-                sendTextMessage(sender, JSON.stringify(botOut.buttons));
-            } else if (n3 === 0) {
-                sendTextMessage(sender, JSON.stringify(botOut.buttons));
-            } else if (n4 === 0) {
-                sendTextMessageType(sender, botOut.botUtterance);
-            } else if (n5 === 0) {
-                sendTextMessage(sender, botOut.botUtterance);
-            } else {
-                sendTextMessage(sender, "disculpa no entendi");
+//            if (n1 === 0) {
+//                sendTextMessageType(sender, JSON.stringify(botOut.buttons));
+//            } else if (n2 === 0) {
+//                sendTextMessage(sender, JSON.stringify(botOut.buttons));
+//            } else if (n3 === 0) {
+//                sendTextMessage(sender, JSON.stringify(botOut.buttons));
+//            } else if (n4 === 0) {
+//                sendTextMessageType(sender, botOut.botUtterance);
+//            } else if (n5 === 0) {
+//                sendTextMessage(sender, botOut.botUtterance);
+//            } else {
+//                sendTextMessage(sender, "disculpa no entendi");
 //            }
-            }
-            console.log(botOut.botUtterance);
         }
+        console.log(botOut.botUtterance);
     }
 }
+
 //
 function sendTextMessageType(sender, bot) {
     console.log(bot);
