@@ -40,7 +40,7 @@ app.post('/webhook/', function (req, res) {
         let text = "";
         try {
             console.log("postback---------");
-            text = req.body.postback.title;
+            text = req.body.entry[0].messaging[i].postback.title;
             console.log(text);
             request({
                 url: msngerServerUrl,
@@ -401,3 +401,8 @@ function encode_utf8(s) {
 function decode_utf8(s) {
     return decodeURIComponent(escape(s));
 }
+
+
+{"object":"page",
+    "entry":[{"id":"454358118421164","time":1547781370452,
+            "messaging":[{"recipient":{"id":"454358118421164"},"timestamp":1547781370452,"sender":{"id":"1426414230795657"},"postback":{"payload":"requestIngredientes Hamburgesa","title":"Hamburgesa"}}]}]}
