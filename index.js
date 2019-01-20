@@ -115,7 +115,7 @@ function selectTypeBotMessage(sender, body) {
             } else if (n5 === 0) {
                 sendTextMessage(sender, botOut.botUtterance);
             } else {
-                sendTextMessage(sender, "disculpa no entendi, mejor callate viejo lesviano ");
+                sendTextMessage(sender, "disculpa no puedo responder a tu solicitud");
             }
         }
         console.log(botOut.botUtterance);
