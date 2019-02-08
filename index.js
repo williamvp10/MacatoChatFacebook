@@ -242,7 +242,7 @@ function sendTextMessageIngredients(sender, bot) {
         }
         elements += '{';
         elements += ' "title":"' + bot.buttons.product[i].ingredientes + '",';
-        elements += ' "image_url":false,';
+        elements += ' "image_url":"https://petersfancybrownhats.com/company_image.png",';
         elements += ' "subtitle":"null",';
         elements += ' "default_action": {';
         elements += ' "type": "web_url",';
