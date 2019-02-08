@@ -244,8 +244,15 @@ function sendTextMessageIngredients(sender, bot) {
         elements += ' "title":"' + bot.buttons.product[i].ingredientes + '",';
         elements += ' "image_url":false,';
         elements += ' "subtitle":"null",';
+        elements += ' "default_action": {';
+        elements += ' "type": "web_url",';
+        elements += ' "url": "https://petersfancybrownhats.com/view?item=103",';
+        elements += ' "messenger_extensions": false,';
+        elements += ' "webview_height_ratio": "tall",';
+        elements += ' "fallback_url": "https://petersfancybrownhats.com/"';
+        elements += '  },';
         elements += ' "buttons":[';
-        elements += ' "{ ';
+        elements += ' { ';
         elements += ' "type": "postback",';
         elements += ' "title": "seleccionar",';
         elements += ' "payload": "add ingredient"';
