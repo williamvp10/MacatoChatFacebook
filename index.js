@@ -265,14 +265,16 @@ function sendTextMessageIngredients(sender, bot) {
         elements += ' }  ';
     }
     elements += ']';
-    console.log(elements);
+    
+    let arrayElements = JSON.parse(elements);
+    console.log(arrayElements);
     if (bot !== 'null') {
         let messageData = {
             "attachment": {
                 "type": "template",
                 "payload": {
                     "template_type": "generic",
-                    "elements": elements
+                    "elements": arrayElements
                 }
             }
         };
