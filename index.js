@@ -46,10 +46,12 @@ app.post('/webhook/', function (req, res) {
             let type = req.body.entry[0].messaging[i].postback.payload;
             console.log(type);
             var compare = "add ingredient";
+            var compare2 = "requestTiendas";
             var compareresult = compare.localeCompare(type);
+            var compareresult2 = compare2.localeCompare(type);
             if (compareresult === 0) {
-                ingredientes+=","+text;
-            } else {
+                ingredientes += "," + text;
+            } else if (compareresult2 === 0) {
                 console.log(ingredientes);
                 request({
                     url: msngerServerUrl,
@@ -63,7 +65,24 @@ app.post('/webhook/', function (req, res) {
                             //response is from the bot
                             if (!error && response.statusCode === 200) {
                                 selectTypeBotMessage(sender, body);
-                                ingredientes="";
+                                ingredientes = "";
+                            } else {
+                                sendTextMessage(sender, 'Error!');
+                            }
+                        });
+            }else{
+                request({
+                    url: msngerServerUrl,
+                    method: 'POST',
+                    form: {
+                        'userType': type,
+                        'userUtterance': text
+                    }
+                },
+                        function (error, response, body) {
+                            //response is from the bot
+                            if (!error && response.statusCode === 200) {
+                                selectTypeBotMessage(sender, body);
                             } else {
                                 sendTextMessage(sender, 'Error!');
                             }
