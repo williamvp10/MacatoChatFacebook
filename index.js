@@ -63,9 +63,9 @@ app.post('/webhook/', function (req, res) {
                 },
                         function (error, response, body) {
                             //response is from the bot
+                            ingredientes = "";
                             if (!error && response.statusCode === 200) {
                                 selectTypeBotMessage(sender, body);
-                                ingredientes = "";
                             } else {
                                 sendTextMessage(sender, 'Error!');
                             }
