@@ -6,6 +6,9 @@ const app = express();
 // bot fb page
 const token = "EAADiQpmWQRgBAPglvHwxHZCMaXlZBHHjADrALySMQvlwR4wl5MbnhW5ZA3JDaKqOagA6ZC32lZBoDAv0mYO3rwgJtlihDcGAnfmb3xgj5YTen2ZBPA4a3zsSot4TVB7W0xdjnrmh4ZAt4NVvmBoZAzONDTmWNh119KA1f4YQZA18towZDZD";
 const msngerServerUrl = 'https://mecatobot.herokuapp.com/bot';
+//global var
+var ingredientes = "";
+
 app.set('port', (process.env.PORT || 5000));
 // Process application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}));
@@ -40,44 +43,34 @@ app.post('/webhook/', function (req, res) {
         let text = "";
         try {
             text = req.body.entry[0].messaging[i].postback.title;
-            let type= req.body.entry[0].messaging[i].postback.payload;
+            let type = req.body.entry[0].messaging[i].postback.payload;
             console.log(type);
-            request({
-                url: msngerServerUrl,
-                method: 'POST',
-                form: {
-                    'userType': type,
-                    'userUtterance': text
-                }
-            },
-                    function (error, response, body) {
-                        //response is from the bot
-                        if (!error && response.statusCode === 200) {
-                            selectTypeBotMessage(sender, body);
-                        } else {
-                            sendTextMessage(sender, 'Error!');
-                        }
-                    });
-        } catch (err) {
-            if (event.message && event.message.text) {
-                text = event.message.text;
-                //send it to the bot
+            var compare = "add ingredient";
+            var compareresult = compare.localeCompare(type);
+            if (compareresult === 0) {
+                ingredientes+=","+text;
+            } else {
+                console.log(ingredientes);
                 request({
                     url: msngerServerUrl,
                     method: 'POST',
                     form: {
-                        'userUtterance': text
+                        'userType': type,
+                        'userUtterance': ingredientes
                     }
                 },
                         function (error, response, body) {
                             //response is from the bot
                             if (!error && response.statusCode === 200) {
                                 selectTypeBotMessage(sender, body);
+                                ingredientes="";
                             } else {
                                 sendTextMessage(sender, 'Error!');
                             }
                         });
             }
+        } catch (err) {
+            sendtextbot(event, sender);
         }
         // we call the MessengerBot here..
 
@@ -85,6 +78,29 @@ app.post('/webhook/', function (req, res) {
 
     res.sendStatus(200);
 });
+
+function sendtextbot(event, sender) {
+    if (event.message && event.message.text) {
+        let text = event.message.text;
+        //send it to the bot
+        request({
+            url: msngerServerUrl,
+            method: 'POST',
+            form: {
+                'userUtterance': text
+            }
+        },
+                function (error, response, body) {
+                    //response is from the bot
+                    if (!error && response.statusCode === 200) {
+                        selectTypeBotMessage(sender, body);
+                    } else {
+                        sendTextMessage(sender, 'Error!');
+                    }
+                });
+    }
+}
+
 function selectTypeBotMessage(sender, body) {
     // Print out the response body
     console.log(body);
@@ -194,22 +210,40 @@ function sendTextMessage(sender, text) {
 }
 
 function sendTextMessageIngredients(sender, bot) {
-    let buttons = '[ ';
-    let cant=0;
-    if(bot.buttons.product.length>3){
-        cant=3;
-    }else{
-        cant=bot.buttons.product.length;
+    let elements = '[';
+    let cant = 0;
+    if (bot.buttons.product.length > 10) {
+        cant = 10;
+    } else {
+        cant = bot.buttons.product.length;
     }
     for (var i = 0; i < cant; i++) {
         if (i !== 0) {
-            buttons += ',';
+            elements += ',';
         }
-        buttons += '{';
-        buttons += ' "type": "postback",';
-        buttons += ' "title": "' + bot.buttons.product[i].ingredientes + '",';
-        buttons += ' "payload": "requestTiendas"';
-        buttons += '}';
+        elements += '{';
+        elements += ' "title":"' + bot.buttons.product[i].ingredientes + '",';
+        elements += ' "image_url":false,';
+        elements += ' "subtitle":"null",';
+        elements += ' ""default_action": {';
+        elements += ' "type": "web_url",';
+        elements += ' "url": "https://petersfancybrownhats.com/view?item=103",';
+        elements += ' "messenger_extensions": false,';
+        elements += ' "webview_height_ratio": "tall",';
+        elements += ' "fallback_url": "https://petersfancybrownhats.com/"';
+        elements += '  },';
+        elements += ' "buttons":[';
+        elements += ' "{ ';
+        elements += ' "type": "postback",';
+        elements += ' "title": "seleccionar",';
+        elements += ' "payload": "add ingredient"';
+        elements += '  },{  ';
+        elements += ' "type": "postback",';
+        elements += ' "title": "enviar",';
+        elements += ' "payload": "requestTiendas"';
+        elements += ' }  ';
+        elements += ' ]  ';
+        elements += ' }  ';
     }
     buttons += ']';
     console.log(buttons);
@@ -219,9 +253,8 @@ function sendTextMessageIngredients(sender, bot) {
             "attachment": {
                 "type": "template",
                 "payload": {
-                    "template_type": "button",
-                    "text": bot.botUtterance,
-                    "buttons": b
+                    "template_type": "generic",
+                    "elements": elements
                 }
             }
         };
@@ -248,11 +281,11 @@ function sendTextMessageIngredients(sender, bot) {
 
 function sendTextMessageTiendas(sender, bot) {
     let buttons = '[ ';
-    let cant=0;
-    if(bot.buttons.tienda.length>3){
-        cant=3;
-    }else{
-        cant=bot.buttons.tienda.length;
+    let cant = 0;
+    if (bot.buttons.tienda.length > 3) {
+        cant = 3;
+    } else {
+        cant = bot.buttons.tienda.length;
     }
     for (var i = 0; i < cant; i++) {
         if (i !== 0) {
@@ -298,6 +331,126 @@ function sendTextMessageTiendas(sender, bot) {
         });
     }
 }
+
+//app.post('/webhook/', function (req, res) {
+//    console.log(JSON.stringify(req.body));
+//    let messaging_events = req.body.entry[0].messaging;
+//    for (let i = 0; i < messaging_events.length; i++) {
+//
+//        let event = req.body.entry[0].messaging[i];
+//        let sender = event.sender.id;
+//        let recipient = event.recipient.id;
+//        let time = req.body.entry[0].time;
+//        let text = "";
+//        try {
+//            text = req.body.entry[0].messaging[i].postback.title;
+//            let type= req.body.entry[0].messaging[i].postback.payload;
+//            console.log(type);
+//            request({
+//                url: msngerServerUrl,
+//                method: 'POST',
+//                form: {
+//                    'userType': type,
+//                    'userUtterance': text
+//                }
+//            },
+//                    function (error, response, body) {
+//                        //response is from the bot
+//                        if (!error && response.statusCode === 200) {
+//                            selectTypeBotMessage(sender, body);
+//                        } else {
+//                            sendTextMessage(sender, 'Error!');
+//                        }
+//                    });
+//        } catch (err) {
+//            if (event.message && event.message.text) {
+//                text = event.message.text;
+//                //send it to the bot
+//                request({
+//                    url: msngerServerUrl,
+//                    method: 'POST',
+//                    form: {
+//                        'userUtterance': text
+//                    }
+//                },
+//                        function (error, response, body) {
+//                            //response is from the bot
+//                            if (!error && response.statusCode === 200) {
+//                                selectTypeBotMessage(sender, body);
+//                            } else {
+//                                sendTextMessage(sender, 'Error!');
+//                            }
+//                        });
+//            }
+//        }
+//        // we call the MessengerBot here..
+//
+//    }
+//
+//    res.sendStatus(200);
+//});
+//
+//
+//
+//
+//
+//function sendTextMessageIngredients(sender, bot) {
+//    let buttons = '[ ';
+//    let cant=0;
+//    if(bot.buttons.product.length>3){
+//        cant=3;
+//    }else{
+//        cant=bot.buttons.product.length;
+//    }
+//    for (var i = 0; i < cant; i++) {
+//        if (i !== 0) {
+//            buttons += ',';
+//        }
+//        buttons += '{';
+//        buttons += ' "type": "postback",';
+//        buttons += ' "title": "' + bot.buttons.product[i].ingredientes + '",';
+//        buttons += ' "payload": "requestTiendas"';
+//        buttons += '}';
+//    }
+//    buttons += ']';
+//    console.log(buttons);
+//    let b = JSON.parse(buttons);
+//    if (bot !== 'null') {
+//        let messageData = {
+//            "attachment": {
+//                "type": "template",
+//                "payload": {
+//                    "template_type": "button",
+//                    "text": bot.botUtterance,
+//                    "buttons": b
+//                }
+//            }
+//        };
+//        console.log(messageData);
+//        // Start the request
+//        request({
+//            url: 'https://graph.facebook.com/v2.6/me/messages',
+//            qs: {access_token: token},
+//            method: 'POST',
+//            json: {
+//                recipient: {id: sender},
+//                message: messageData
+//
+//            }
+//        }, function (error, response, body) {
+//            if (error) {
+//                console.log('Error sending messages: ', error);
+//            } else if (response.body.error) {
+//                console.log('Error: ', response.body.error);
+//            }
+//        });
+//    }
+//}
+
+
+
+
+
 
 //                              envio de una imagen 
 // let messageData = {"attachment": {
