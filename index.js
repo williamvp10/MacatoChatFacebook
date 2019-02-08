@@ -253,7 +253,7 @@ function sendTextMessageIngredients(sender, bot) {
         elements += ' "buttons":[';
         elements += ' { ';
         elements += ' "type": "postback",';
-        elements += ' "title": "seleccionar",';
+        elements += ' "title": "' + bot.buttons.product[i].ingredientes + '",';
         elements += ' "payload": "add ingredient"';
         elements += '  },{  ';
         elements += ' "type": "postback",';
