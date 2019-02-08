@@ -264,9 +264,8 @@ function sendTextMessageIngredients(sender, bot) {
         elements += ' ]  ';
         elements += ' }  ';
     }
-    buttons += ']';
-    console.log(buttons);
-    let b = JSON.parse(buttons);
+    elements += ']';
+    console.log(elements);
     if (bot !== 'null') {
         let messageData = {
             "attachment": {
