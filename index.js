@@ -248,8 +248,7 @@ function sendTextMessageIngredients(sender, bot) {
         elements += ' "type": "web_url",';
         elements += ' "url": "https://petersfancybrownhats.com/view?item=103",';
         elements += ' "messenger_extensions": false,';
-        elements += ' "webview_height_ratio": "tall",';
-        elements += ' "fallback_url": "https://petersfancybrownhats.com/"';
+        elements += ' "webview_height_ratio": "tall"';
         elements += '  },';
         elements += ' "buttons":[';
         elements += ' { ';
