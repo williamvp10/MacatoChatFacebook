@@ -47,8 +47,10 @@ app.post('/webhook/', function (req, res) {
             console.log(type);
             var compare = "add ingredient";
             var compare2 = "requestTiendas";
+            var compare3 = "confirmar pedido";
             var compareresult = compare.localeCompare(type);
             var compareresult2 = compare2.localeCompare(type);
+            var compareresult3 = compare3.localeCompare(type);
             if (compareresult === 0) {
                 ingredientes += "," + text;
             } else if (compareresult2 === 0) {
@@ -70,7 +72,25 @@ app.post('/webhook/', function (req, res) {
                                 sendTextMessage(sender, 'Error!');
                             }
                         });
-            }else{
+            } else if (compareresult3 === 0) {
+                request({
+                    url: msngerServerUrl,
+                    method: 'POST',
+                    form: {
+                        'userType': type,
+                        'userUtterance': text
+                    }
+                },
+                        function (error, response, body) {
+                            //response is from the bot
+                            ingredientes = "";
+                            if (!error && response.statusCode === 200) {
+                                selectTypeBotMessage(sender, body);
+                            } else {
+                                sendTextMessage(sender, 'Error!');
+                            }
+                        });
+            } else {
                 request({
                     url: msngerServerUrl,
                     method: 'POST',
@@ -134,11 +154,13 @@ function selectTypeBotMessage(sender, body) {
             var t3 = "ofrecerTiendas";
             var t4 = "saludar";
             var t5 = "agradecer";
+            var t6 = "confirmarPedido";
             var n1 = ty.localeCompare(t1);
             var n2 = ty.localeCompare(t2);
             var n3 = ty.localeCompare(t3);
             var n4 = ty.localeCompare(t4);
             var n5 = ty.localeCompare(t5);
+            var n6 = ty.localeCompare(t6);
             if (n1 === 0) {
                 sendTextMessageType(sender, botOut);
             } else if (n2 === 0) {
@@ -149,6 +171,8 @@ function selectTypeBotMessage(sender, body) {
                 sendTextMessageType(sender, botOut);
             } else if (n5 === 0) {
                 sendTextMessage(sender, botOut.botUtterance);
+            } else if (n6 === 0) {
+                sendTextMessageConfirm(sender, botOut);
             } else {
                 sendTextMessage(sender, "disculpa no puedo responder a tu solicitud");
             }
@@ -242,14 +266,14 @@ function sendTextMessageIngredients(sender, bot) {
         }
         elements += '{';
         elements += ' "title":"' + bot.buttons.product[i].ingredientes + '",';
-        elements += ' "image_url":"https://petersfancybrownhats.com/company_image.png",';
-        elements += ' "subtitle":"null",';
-        elements += ' "default_action": {';
-        elements += ' "type": "web_url",';
-        elements += ' "url": "https://petersfancybrownhats.com/view?item=103",';
-        elements += ' "messenger_extensions": false,';
-        elements += ' "webview_height_ratio": "tall"';
-        elements += '  },';
+        //  elements += ' "image_url":"https://petersfancybrownhats.com/company_image.png",';
+        //  elements += ' "subtitle":"null",';
+        //  elements += ' "default_action": {';
+        //  elements += ' "type": "web_url",';
+        //  elements += ' "url": "https://petersfancybrownhats.com/view?item=103",';
+        //  elements += ' "messenger_extensions": false,';
+        //  elements += ' "webview_height_ratio": "tall"';
+        //  elements += '  },';
         elements += ' "buttons":[';
         elements += ' { ';
         elements += ' "type": "postback",';
@@ -264,7 +288,7 @@ function sendTextMessageIngredients(sender, bot) {
         elements += ' }  ';
     }
     elements += ']';
-    
+
     let arrayElements = JSON.parse(elements);
     console.log(arrayElements);
     if (bot !== 'null') {
@@ -298,6 +322,81 @@ function sendTextMessageIngredients(sender, bot) {
     }
 }
 
+function sendTextMessageConfirm(sender, bot) {
+    let elements = '[';
+    let cant = 0;
+    if (bot.buttons.product.length > 10) {
+        cant = 10;
+    } else {
+        cant = bot.buttons.product.length;
+    }
+    cant=3;
+    for (var i = 0; i < cant; i++) {
+        if (i !== 0 && i !== (cant - 1)) {
+            elements += ',';
+        }
+        elements += '{';
+        elements += ' "title": ingredient"' + i + '",';
+        elements += ' "subtitle":"<ITEM_DESCRIPTION_OR_DETAILS>",';
+        elements += ' "quantity": <QUANTITY>, ';
+        elements += ' "price": <ITEM_PRICE>,';
+        elements += ' "currency": "<CURRENCY_ABBREVIATION",';
+        elements += ' "image_url":"<URL_IMAGE_TO_DISPLAY_FOR_ITEM>"';
+        elements += ' }  ';
+    }
+    elements += ']';
+
+    let arrayElements = JSON.parse(elements);
+    console.log(arrayElements);
+    if (bot !== 'null') {
+        let messageData = {
+            "attachment": {
+                "type": "template",
+                "payload": {
+                    "template_type": "receipt",
+                    "recipient_name": "<CUSTOMER_NAME>",
+                    "order_number": "<ORDER_NUMBER>",
+                    "currency": "<CURRENCY_CODE>",
+                    "payment_method": "efectivo",
+                    "order_url": "<LINK_TO_ORDER_SUMMARY>",
+                    "timestamp": "30 minutos",
+                    "address": {
+                        "street_1": "<SHIPPING_STREET_ADDRESS>",
+                        "city": "<SHIPPING_CITY>",
+                        "postal_code": "<SHIPPING_POSTAL_CODE>",
+                        "state": "<SHIPPING_STATE>",
+                        "country": "<SHIPPING_COUNTRY>"
+                    },
+                    "summary": {
+                        "subtotal": "<SUBTOTAL_AMOUNT>",
+                        "shipping_cost": "<SHIPPING_AMOUNT>",
+                        "total_tax": "<TAX_AMOUNT>",
+                        "total_cost": "<TOTAL_AMOUNT>"
+                    },
+                    "elements": arrayElements
+                }
+            }
+        };
+        console.log(messageData);
+        // Start the request
+        request({
+            url: 'https://graph.facebook.com/v2.6/me/messages',
+            qs: {access_token: token},
+            method: 'POST',
+            json: {
+                recipient: {id: sender},
+                message: messageData
+            }
+        }, function (error, response, body) {
+            if (error) {
+                console.log('Error sending messages: ', error);
+            } else if (response.body.error) {
+                console.log('Error: ', response.body.error);
+            }
+        });
+    }
+}
+
 function sendTextMessageTiendas(sender, bot) {
     let buttons = '[ ';
     let cant = 0;
@@ -311,9 +410,9 @@ function sendTextMessageTiendas(sender, bot) {
             buttons += ',';
         }
         buttons += '{';
-        buttons += ' "type":"web_url",';
+        buttons += ' "type":"postback",';
         buttons += ' "title": "' + bot.buttons.tienda[i].nombre + '",';
-        buttons += ' "url":"' + bot.buttons.tienda[i].url + '"';
+        buttons += ' "payload": "confirmar pedido"';
         buttons += '}';
     }
     buttons += ']';
