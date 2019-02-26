@@ -338,22 +338,22 @@ function sendTextMessageConfirm(sender, bot) {
                     "template_type": "receipt",
                     "recipient_name": "<CUSTOMER_NAME>",
                     "order_number": "<ORDER_NUMBER>",
-                    "currency": "<CURRENCY_CODE>",
+                    "currency": "pesos",
                     "payment_method": "efectivo",
                     "order_url": "<LINK_TO_ORDER_SUMMARY>",
                     "timestamp": "30 minutos",
                     "address": {
                         "street_1": "<SHIPPING_STREET_ADDRESS>",
-                        "city": "<SHIPPING_CITY>",
+                        "city": "Bogota",
                         "postal_code": "<SHIPPING_POSTAL_CODE>",
                         "state": "<SHIPPING_STATE>",
                         "country": "<SHIPPING_COUNTRY>"
                     },
                     "summary": {
-                        "subtotal": "<SUBTOTAL_AMOUNT>",
-                        "shipping_cost": "<SHIPPING_AMOUNT>",
-                        "total_tax": "<TAX_AMOUNT>",
-                        "total_cost": "<TOTAL_AMOUNT>"
+                        "subtotal": "5000",
+                        "shipping_cost": "1800",
+                        "total_tax": "200",
+                        "total_cost": "7000"
                     },
                     "elements": arrayElements
                 }
