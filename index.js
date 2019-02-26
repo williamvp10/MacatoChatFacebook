@@ -339,7 +339,7 @@ function sendTextMessageConfirm(sender, bot) {
                     "recipient_name": "<CUSTOMER_NAME>",
                     "order_number": "<ORDER_NUMBER>",
                     "currency": "COP",
-                    "payment_method": "efectivo",
+                    "payment_type":"FIXED_AMOUNT",
                     //"order_url": "<LINK_TO_ORDER_SUMMARY>",
                     "timestamp": "30",
                     "address": {
