@@ -312,7 +312,6 @@ function sendTextMessageConfirm(sender, bot) {
     } else {
         cant = bot.Pedido.ingredientes.length;
     }
-    cant = 3;
     for (var i = 0; i < cant; i++) {
         if (i !== 0 && i !== cant) {
             elements += ',';
@@ -336,8 +335,8 @@ function sendTextMessageConfirm(sender, bot) {
                 "type": "template",
                 "payload": {
                     "template_type": "receipt",
-                    "recipient_name": "<CUSTOMER_NAME>",
-                    "order_number": "<ORDER_NUMBER>",
+                    "recipient_name": {user-id},
+                    "order_number": bot.Pedido.tipo+" 1 en la tienda "+bot.Pedido.tienda,
                     "currency": "COP",
                     "payment_method": "Visa 2345",
                     "order_url":"http://petersapparel.parseapp.com/order?order_id=123456",
