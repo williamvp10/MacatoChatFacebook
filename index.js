@@ -340,14 +340,14 @@ function sendTextMessageConfirm(sender, bot) {
                     "order_number": "<ORDER_NUMBER>",
                     "currency": "COP",
                     "payment_method": "efectivo",
-                    "order_url": "<LINK_TO_ORDER_SUMMARY>",
+                    //"order_url": "<LINK_TO_ORDER_SUMMARY>",
                     "timestamp": "30 minutos",
                     "address": {
                         "street_1": "<SHIPPING_STREET_ADDRESS>",
                         "city": "Bogota",
                         "postal_code": "<SHIPPING_POSTAL_CODE>",
-                        "state": "<SHIPPING_STATE>",
-                        "country": "<SHIPPING_COUNTRY>"
+                        "state": "Bogota",
+                        "country": "Colombia"
                     },
                     "summary": {
                         "subtotal": "5000",
