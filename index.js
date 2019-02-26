@@ -322,7 +322,7 @@ function sendTextMessageConfirm(sender, bot) {
         elements += ' "subtitle":"<ITEM_DESCRIPTION_OR_DETAILS>",';
         elements += ' "quantity": "1", ';
         elements += ' "price": 5000,';
-        elements += ' "currency": "pesos",';
+        elements += ' "currency": "COP",';
         elements += ' "image_url":"<URL_IMAGE_TO_DISPLAY_FOR_ITEM>"';
         elements += ' }  ';
     }
@@ -338,8 +338,8 @@ function sendTextMessageConfirm(sender, bot) {
                     "template_type": "receipt",
                     "recipient_name": "<CUSTOMER_NAME>",
                     "order_number": "<ORDER_NUMBER>",
-                    //"currency": "USD",
-                    //"payment_type":"FIXED_AMOUNT",
+                    "currency": "COP",
+                    "payment_type":"FIXED_AMOUNT",
                     //"order_url": "<LINK_TO_ORDER_SUMMARY>",
                     "timestamp": "30",
                     "address": {
