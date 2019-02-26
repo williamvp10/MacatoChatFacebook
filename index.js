@@ -323,7 +323,7 @@ function sendTextMessageConfirm(sender, bot) {
         elements += ' "quantity": "1", ';
         elements += ' "price": 5000,';
         elements += ' "currency": "COP",';
-        elements += ' "image_url":"<URL_IMAGE_TO_DISPLAY_FOR_ITEM>"';
+        elements += ' "image_url":"https://goo.gl/images/JJpN9r"';
         elements += ' }  ';
     }
     elements += ']';
