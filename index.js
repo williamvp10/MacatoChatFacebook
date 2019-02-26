@@ -1,11 +1,4 @@
 'use strict';
-(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -47,7 +40,7 @@ app.post('/webhook/', function (req, res) {
 
         let event = req.body.entry[0].messaging[i];
         let sender = event.sender.id;
-        idusuario=sender;
+        idusuario = sender;
         let recipient = event.recipient.id;
         let time = req.body.entry[0].time;
         let text = "";
@@ -103,14 +96,14 @@ app.post('/webhook/', function (req, res) {
             sendtextbot(event, sender);
         }
         if (usuario.length === 0) {
-            FB.api(
-                        "/{"+idusuario+"}/",
-                    function (response) {
-                        if (response && !response.error) {
-                           alert("usurariooooooo "+response);
-                        }
-                    }
-            );
+//            FB.api(
+//                        "/{"+idusuario+"}/",
+//                    function (response) {
+//                        if (response && !response.error) {
+//                           alert("usurariooooooo "+response);
+//                        }
+//                    }
+//            );
         }
 
     }
@@ -158,12 +151,14 @@ function selectTypeBotMessage(sender, body) {
             var t4 = "saludar";
             var t5 = "agradecer";
             var t6 = "confirmarPedido";
+            var t7 = "finalizar";
             var n1 = ty.localeCompare(t1);
             var n2 = ty.localeCompare(t2);
             var n3 = ty.localeCompare(t3);
             var n4 = ty.localeCompare(t4);
             var n5 = ty.localeCompare(t5);
             var n6 = ty.localeCompare(t6);
+            var n7 = ty.localeCompare(t7);
             if (n1 === 0) {
                 sendTextMessageType(sender, botOut);
             } else if (n2 === 0) {
@@ -176,6 +171,9 @@ function selectTypeBotMessage(sender, body) {
                 sendTextMessage(sender, botOut.botUtterance);
             } else if (n6 === 0) {
                 sendTextMessageConfirm(sender, botOut);
+                sendButtonsConfirm(sender);
+            } else if (n7 === 0) {
+                sendTextMessage(sender, botOut.botUtterance);
             } else {
                 sendTextMessage(sender, "disculpa no puedo responder a tu solicitud");
             }
@@ -401,6 +399,54 @@ function sendTextMessageConfirm(sender, bot) {
     }
 }
 
+function sendButtonsConfirm(sender) {
+    let buttons = '[ ';
+    buttons += '{';
+    buttons += '"type": "postback",';
+    buttons += '"title": "Si",';
+    buttons += ' "payload": "confirmandoPedido"';
+    buttons += '}';
+    buttons += ',';
+    buttons += '{';
+    buttons += '"type": "postback",';
+    buttons += '"title": "No",';
+    buttons += ' "payload": "confirmandoPedido"';
+    buttons += '}';
+    buttons += ']';
+    console.log(buttons);
+    let b = JSON.parse(buttons);
+    if (bot !== 'null') {
+        let messageData = {
+            "attachment": {
+                "type": "template",
+                "payload": {
+                    "template_type": "button",
+                    "text": " desea confirmar el pedido?",
+                    "buttons": b
+                }
+            }
+        };
+        console.log(messageData);
+        // Start the request
+        request({
+            url: 'https://graph.facebook.com/v2.6/me/messages',
+            qs: {access_token: token},
+            method: 'POST',
+            json: {
+                recipient: {id: sender},
+                message: messageData
+
+            }
+        }, function (error, response, body) {
+            if (error) {
+                console.log('Error sending messages: ', error);
+            } else if (response.body.error) {
+                console.log('Error: ', response.body.error);
+            }
+        });
+    }
+}
+
 function sendTextMessageTiendas(sender, bot) {
     let buttons = '[ ';
     let cant = 0;
@@ -453,64 +499,6 @@ function sendTextMessageTiendas(sender, bot) {
         });
     }
 }
-
-//app.post('/webhook/', function (req, res) {
-//    console.log(JSON.stringify(req.body));
-//    let messaging_events = req.body.entry[0].messaging;
-//    for (let i = 0; i < messaging_events.length; i++) {
-//
-//        let event = req.body.entry[0].messaging[i];
-//        let sender = event.sender.id;
-//        let recipient = event.recipient.id;
-//        let time = req.body.entry[0].time;
-//        let text = "";
-//        try {
-//            text = req.body.entry[0].messaging[i].postback.title;
-//            let type= req.body.entry[0].messaging[i].postback.payload;
-//            console.log(type);
-//            request({
-//                url: msngerServerUrl,
-//                method: 'POST',
-//                form: {
-//                    'userType': type,
-//                    'userUtterance': text
-//                }
-//            },
-//                    function (error, response, body) {
-//                        //response is from the bot
-//                        if (!error && response.statusCode === 200) {
-//                            selectTypeBotMessage(sender, body);
-//                        } else {
-//                            sendTextMessage(sender, 'Error!');
-//                        }
-//                    });
-//        } catch (err) {
-//            if (event.message && event.message.text) {
-//                text = event.message.text;
-//                //send it to the bot
-//                request({
-//                    url: msngerServerUrl,
-//                    method: 'POST',
-//                    form: {
-//                        'userUtterance': text
-//                    }
-//                },
-//                        function (error, response, body) {
-//                            //response is from the bot
-//                            if (!error && response.statusCode === 200) {
-//                                selectTypeBotMessage(sender, body);
-//                            } else {
-//                                sendTextMessage(sender, 'Error!');
-//                            }
-//                        });
-//            }
-//        }
-//        // we call the MessengerBot here..
-//
-//    }
-//
-//    res.sendStatus(200);
-//});
 //
 //
 //
