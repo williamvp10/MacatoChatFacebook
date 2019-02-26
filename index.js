@@ -415,36 +415,34 @@ function sendButtonsConfirm(sender) {
     buttons += ']';
     console.log(buttons);
     let b = JSON.parse(buttons);
-    if (bot !== 'null') {
-        let messageData = {
-            "attachment": {
-                "type": "template",
-                "payload": {
-                    "template_type": "button",
-                    "text": " desea confirmar el pedido?",
-                    "buttons": b
-                }
+    let messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "button",
+                "text": " desea confirmar el pedido?",
+                "buttons": b
             }
-        };
-        console.log(messageData);
-        // Start the request
-        request({
-            url: 'https://graph.facebook.com/v2.6/me/messages',
-            qs: {access_token: token},
-            method: 'POST',
-            json: {
-                recipient: {id: sender},
-                message: messageData
+        }
+    };
+    console.log(messageData);
+    // Start the request
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token: token},
+        method: 'POST',
+        json: {
+            recipient: {id: sender},
+            message: messageData
 
-            }
-        }, function (error, response, body) {
-            if (error) {
-                console.log('Error sending messages: ', error);
-            } else if (response.body.error) {
-                console.log('Error: ', response.body.error);
-            }
-        });
-    }
+        }
+    }, function (error, response, body) {
+        if (error) {
+            console.log('Error sending messages: ', error);
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error);
+        }
+    });
 }
 
 function sendTextMessageTiendas(sender, bot) {
