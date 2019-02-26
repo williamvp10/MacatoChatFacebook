@@ -19,11 +19,6 @@ app.use(express.static('public'));
 app.get('/', function (req, res) {
     res.send('Hello world, I am Weatherman!.');
 });
-
-FB.getLoginStatus(function(response) {
-    usuario=response.authResponse.userID;
-  alert(response.authResponse.userID);
-});
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] === 'Mecato-Bot') {
