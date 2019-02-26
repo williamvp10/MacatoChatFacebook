@@ -314,7 +314,7 @@ function sendTextMessageConfirm(sender, bot) {
     }
     cant=3;
     for (var i = 0; i < cant; i++) {
-        if (i !== 0 && i !== (cant - 1)) {
+        if (i !== 0 && i !== cant) {
             elements += ',';
         }
         elements += '{';
@@ -323,7 +323,7 @@ function sendTextMessageConfirm(sender, bot) {
         elements += ' "quantity": "1", ';
         elements += ' "price": 5000,';
         elements += ' "currency": "pesos",';
-       //elements += ' "image_url":"<URL_IMAGE_TO_DISPLAY_FOR_ITEM>"';
+        elements += ' "image_url":"<URL_IMAGE_TO_DISPLAY_FOR_ITEM>"';
         elements += ' }  ';
     }
     elements += ']';
