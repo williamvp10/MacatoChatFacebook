@@ -104,7 +104,7 @@ app.post('/webhook/', function (req, res) {
     res.sendStatus(200);
 });
 
-app.getLoginStatus(function(response) {
+FB.getLoginStatus(function(response) {
   alert(response.authResponse.userID);
 });
 
