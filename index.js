@@ -320,7 +320,7 @@ function sendTextMessageConfirm(sender, bot) {
         elements += '{';
         elements += ' "title": "' + bot.Pedido.ingredientes + '",';
         elements += ' "subtitle":"<ITEM_DESCRIPTION_OR_DETAILS>",';
-        elements += ' "quantity": 1, ';
+        elements += ' "quantity": "1", ';
         elements += ' "price": 5000,';
         elements += ' "currency": "pesos",';
        //elements += ' "image_url":"<URL_IMAGE_TO_DISPLAY_FOR_ITEM>"';
