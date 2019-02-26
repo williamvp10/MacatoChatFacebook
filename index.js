@@ -50,7 +50,6 @@ app.post('/webhook/', function (req, res) {
             var compare3 = "confirmar pedido";
             var compareresult = compare.localeCompare(type);
             var compareresult2 = compare2.localeCompare(type);
-            var compareresult3 = compare3.localeCompare(type);
             if (compareresult === 0) {
                 ingredientes += "," + text;
             } else if (compareresult2 === 0) {
@@ -61,24 +60,6 @@ app.post('/webhook/', function (req, res) {
                     form: {
                         'userType': type,
                         'userUtterance': ingredientes
-                    }
-                },
-                        function (error, response, body) {
-                            //response is from the bot
-                            ingredientes = "";
-                            if (!error && response.statusCode === 200) {
-                                selectTypeBotMessage(sender, body);
-                            } else {
-                                sendTextMessage(sender, 'Error!');
-                            }
-                        });
-            } else if (compareresult3 === 0) {
-                request({
-                    url: msngerServerUrl,
-                    method: 'POST',
-                    form: {
-                        'userType': type,
-                        'userUtterance': text
                     }
                 },
                         function (error, response, body) {
