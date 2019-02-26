@@ -20,9 +20,9 @@ app.get('/', function (req, res) {
     res.send('Hello world, I am Weatherman!.');
 });
 
-app.getLoginStatus(function(response) {
+FB.getLoginStatus(function(response) {
     usuario=response.authResponse.userID;
-  alert(response.authResponse.userID);
+  aert(response.authResponse.userID);
 });
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
@@ -104,9 +104,6 @@ app.post('/webhook/', function (req, res) {
     res.sendStatus(200);
 });
 
-FB.getLoginStatus(function(response) {
-  alert(response.authResponse.userID);
-});
 
 function sendtextbot(event, sender) {
     if (event.message && event.message.text) {
