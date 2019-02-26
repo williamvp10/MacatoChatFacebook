@@ -22,7 +22,7 @@ app.get('/', function (req, res) {
 
 FB.getLoginStatus(function(response) {
     usuario=response.authResponse.userID;
-  aert(response.authResponse.userID);
+  alert(response.authResponse.userID);
 });
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
