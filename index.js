@@ -338,8 +338,8 @@ function sendTextMessageConfirm(sender, bot) {
                     "template_type": "receipt",
                     "recipient_name": "<CUSTOMER_NAME>",
                     "order_number": "<ORDER_NUMBER>",
-                    "currency": "COP",
-                    "payment_type":"FIXED_AMOUNT",
+                    "currency": "USD",
+                    //"payment_type":"FIXED_AMOUNT",
                     //"order_url": "<LINK_TO_ORDER_SUMMARY>",
                     "timestamp": "30",
                     "address": {
