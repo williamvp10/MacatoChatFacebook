@@ -341,7 +341,7 @@ function sendTextMessageConfirm(sender, bot) {
                     "currency": "COP",
                     "payment_method": "efectivo",
                     //"order_url": "<LINK_TO_ORDER_SUMMARY>",
-                    "timestamp": "30 minutos",
+                    "timestamp": "30",
                     "address": {
                         "street_1": "<SHIPPING_STREET_ADDRESS>",
                         "city": "Bogota",
