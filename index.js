@@ -8,7 +8,8 @@ const token = "EAADiQpmWQRgBAPglvHwxHZCMaXlZBHHjADrALySMQvlwR4wl5MbnhW5ZA3JDaKqO
 const msngerServerUrl = 'https://mecatobot.herokuapp.com/bot';
 //global var
 var ingredientes = "";
-var usuario="n";
+var idusuario = "";
+var usuario = "";
 app.set('port', (process.env.PORT || 5000));
 // Process application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}));
@@ -38,6 +39,7 @@ app.post('/webhook/', function (req, res) {
 
         let event = req.body.entry[0].messaging[i];
         let sender = event.sender.id;
+        idusuario=sender;
         let recipient = event.recipient.id;
         let time = req.body.entry[0].time;
         let text = "";
@@ -92,7 +94,16 @@ app.post('/webhook/', function (req, res) {
         } catch (err) {
             sendtextbot(event, sender);
         }
-        // we call the MessengerBot here..
+        if (usuario.length === 0) {
+            FB.api(
+                        "/{"+idusuario+"}/",
+                    function (response) {
+                        if (response && !response.error) {
+                           alert("usurariooooooo "+response);
+                        }
+                    }
+            );
+        }
 
     }
 
@@ -337,10 +348,10 @@ function sendTextMessageConfirm(sender, bot) {
                 "payload": {
                     "template_type": "receipt",
                     "recipient_name": usuario,
-                    "order_number": bot.Pedido.tipo+" 1 en la tienda "+bot.Pedido.tienda,
+                    "order_number": bot.Pedido.tipo + " 1 en la tienda " + bot.Pedido.tienda,
                     "currency": "COP",
                     "payment_method": "Visa 2345",
-                    "order_url":"http://petersapparel.parseapp.com/order?order_id=123456",
+                    "order_url": "http://petersapparel.parseapp.com/order?order_id=123456",
                     "timestamp": "1428444852",
                     "address": {
                         "street_1": "1 Hacker Way",
