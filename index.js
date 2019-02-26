@@ -338,7 +338,7 @@ function sendTextMessageConfirm(sender, bot) {
                     "template_type": "receipt",
                     "recipient_name": "<CUSTOMER_NAME>",
                     "order_number": "<ORDER_NUMBER>",
-                    "currency": "pesos",
+                    "currency": "COP",
                     "payment_method": "efectivo",
                     "order_url": "<LINK_TO_ORDER_SUMMARY>",
                     "timestamp": "30 minutos",
