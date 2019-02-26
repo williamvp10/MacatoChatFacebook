@@ -1,4 +1,12 @@
 'use strict';
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
@@ -109,6 +117,8 @@ app.post('/webhook/', function (req, res) {
 
     res.sendStatus(200);
 });
+
+
 
 
 function sendtextbot(event, sender) {
