@@ -8,7 +8,7 @@ const token = "EAADiQpmWQRgBAPglvHwxHZCMaXlZBHHjADrALySMQvlwR4wl5MbnhW5ZA3JDaKqO
 const msngerServerUrl = 'https://mecatobot.herokuapp.com/bot';
 //global var
 var ingredientes = "";
-
+var usuario="n";
 app.set('port', (process.env.PORT || 5000));
 // Process application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}));
@@ -18,6 +18,11 @@ app.use(express.static('public'));
 // Index route
 app.get('/', function (req, res) {
     res.send('Hello world, I am Weatherman!.');
+});
+
+app.getLoginStatus(function(response) {
+    usuario=response.authResponse.userID;
+  alert(response.authResponse.userID);
 });
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
@@ -97,6 +102,10 @@ app.post('/webhook/', function (req, res) {
     }
 
     res.sendStatus(200);
+});
+
+app.getLoginStatus(function(response) {
+  alert(response.authResponse.userID);
 });
 
 function sendtextbot(event, sender) {
@@ -335,7 +344,7 @@ function sendTextMessageConfirm(sender, bot) {
                 "type": "template",
                 "payload": {
                     "template_type": "receipt",
-                    "recipient_name": {user-id},
+                    "recipient_name": usuario,
                     "order_number": bot.Pedido.tipo+" 1 en la tienda "+bot.Pedido.tienda,
                     "currency": "COP",
                     "payment_method": "Visa 2345",
