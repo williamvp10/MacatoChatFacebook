@@ -304,7 +304,7 @@ function sendTextMessageIngredients(sender, bot) {
 }
 
 function sendTextMessageConfirm(sender, bot) {
-    console.log( bot    );
+    console.log(bot);
     let elements = '[';
     let cant = 0;
     if (bot.Pedido.ingredientes.length > 10) {
@@ -312,13 +312,13 @@ function sendTextMessageConfirm(sender, bot) {
     } else {
         cant = bot.Pedido.ingredientes.length;
     }
-    cant=3;
+    cant = 3;
     for (var i = 0; i < cant; i++) {
         if (i !== 0 && i !== cant) {
             elements += ',';
         }
         elements += '{';
-        elements += ' "title": "' + bot.Pedido.ingredientes + '",';
+        elements += ' "title": "' + bot.Pedido.ingredientes[i] + '",';
         elements += ' "subtitle":"<ITEM_DESCRIPTION_OR_DETAILS>",';
         elements += ' "quantity": "1", ';
         elements += ' "price": 5000,';
@@ -339,15 +339,16 @@ function sendTextMessageConfirm(sender, bot) {
                     "recipient_name": "<CUSTOMER_NAME>",
                     "order_number": "<ORDER_NUMBER>",
                     "currency": "COP",
-                    //"payment_type":"FIXED_AMOUNT",
-                    //"order_url": "<LINK_TO_ORDER_SUMMARY>",
-                    "timestamp": "30",
+                    "payment_method": "Visa 2345",
+                    "order_url":"http://petersapparel.parseapp.com/order?order_id=123456",
+                    "timestamp": "1428444852",
                     "address": {
-                        "street_1": "<SHIPPING_STREET_ADDRESS>",
-                        "city": "Bogota",
-                        "postal_code": "<SHIPPING_POSTAL_CODE>",
-                        "state": "Bogota",
-                        "country": "Colombia"
+                        "street_1": "1 Hacker Way",
+                        "street_2": "",
+                        "city": "Menlo Park",
+                        "postal_code": "94025",
+                        "state": "CA",
+                        "country": "US"
                     },
                     "summary": {
                         "subtotal": "5000",
