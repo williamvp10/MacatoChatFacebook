@@ -304,12 +304,13 @@ function sendTextMessageIngredients(sender, bot) {
 }
 
 function sendTextMessageConfirm(sender, bot) {
+    console.log( bot    );
     let elements = '[';
     let cant = 0;
-    if (bot.buttons.product.length > 10) {
+    if (bot.Pedido.ingredientes.length > 10) {
         cant = 10;
     } else {
-        cant = bot.buttons.product.length;
+        cant = bot.Pedido.ingredientes.length;
     }
     cant=3;
     for (var i = 0; i < cant; i++) {
@@ -317,12 +318,12 @@ function sendTextMessageConfirm(sender, bot) {
             elements += ',';
         }
         elements += '{';
-        elements += ' "title": ingredient"' + i + '",';
+        elements += ' "title": "' + bot.Pedido.ingredientes + '",';
         elements += ' "subtitle":"<ITEM_DESCRIPTION_OR_DETAILS>",';
-        elements += ' "quantity": <QUANTITY>, ';
-        elements += ' "price": <ITEM_PRICE>,';
-        elements += ' "currency": "<CURRENCY_ABBREVIATION",';
-        elements += ' "image_url":"<URL_IMAGE_TO_DISPLAY_FOR_ITEM>"';
+        elements += ' "quantity": 1, ';
+        elements += ' "price": 5000,';
+        elements += ' "currency": "pesos",';
+       //elements += ' "image_url":"<URL_IMAGE_TO_DISPLAY_FOR_ITEM>"';
         elements += ' }  ';
     }
     elements += ']';
