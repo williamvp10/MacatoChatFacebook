@@ -282,25 +282,10 @@ function sendTextMessageIngredients(sender, bot) {
         elements += ' "title": "' + bot.buttons.product[i].ingredientes + '",';
         elements += ' "payload": "add ingredient"';
         elements += '  }  ';
-//        elements += ' ,{  ';
-//        elements += ' "type": "postback",';
-//        elements += ' "title": "enviar",';
-//        elements += ' "payload": "requestTiendas"';
-//        elements += ' }  ';
         elements += ' ]  ';
         elements += ' }  ';
     }
     elements += ']';
-
-    let but = '[ ';
-    but += '{';
-    but += '"type": "postback",';
-    but += ' "title": "enviar",';
-    but += ' "payload": "requestTiendas"';
-    but += '}';
-    but += ']';
-    console.log(but);
-    let b = JSON.parse(but);
 
     let arrayElements = JSON.parse(elements);
     console.log(arrayElements);
@@ -311,8 +296,7 @@ function sendTextMessageIngredients(sender, bot) {
                 "payload": {
                     "template_type": "generic",
                     "elements": arrayElements
-                },
-                "buttons":b
+                }
             }
         };
         console.log(messageData);
