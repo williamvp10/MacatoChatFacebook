@@ -163,6 +163,7 @@ function selectTypeBotMessage(sender, body) {
                 sendTextMessageType(sender, botOut);
             } else if (n2 === 0) {
                 sendTextMessageIngredients(sender, botOut);
+                sendTextMessageIngredientsButtons(sender);
             } else if (n3 === 0) {
                 sendTextMessageTiendas(sender, botOut);
             } else if (n4 === 0) {
@@ -309,9 +310,9 @@ function sendTextMessageIngredients(sender, bot) {
                 "type": "template",
                 "payload": {
                     "template_type": "generic",
-                    "elements": arrayElements,
-                    "buttons": b
-                }
+                    "elements": arrayElements
+                },
+                "buttons":b
             }
         };
         console.log(messageData);
@@ -333,6 +334,46 @@ function sendTextMessageIngredients(sender, bot) {
             }
         });
     }
+}
+
+function sendTextMessageIngredientsButtons(sender) {
+    let buttons = '[ ';
+    buttons += '{';
+    buttons += '"type": "postback",';
+    buttons += ' "title": "enviar",';
+    buttons += ' "payload": "requestTiendas"';
+    buttons += '}';
+    buttons += ']';
+    console.log(buttons);
+    let b = JSON.parse(buttons);
+    let messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "button",
+                "text": " Seleccione los ingredientes, al finalizar precione el boton enviar",
+                "buttons": b
+            }
+        }
+    };
+    console.log(messageData);
+    // Start the request
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token: token},
+        method: 'POST',
+        json: {
+            recipient: {id: sender},
+            message: messageData
+
+        }
+    }, function (error, response, body) {
+        if (error) {
+            console.log('Error sending messages: ', error);
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error);
+        }
+    });
 }
 
 function sendTextMessageConfirm(sender, bot) {
