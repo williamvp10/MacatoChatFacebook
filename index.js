@@ -171,7 +171,7 @@ function selectTypeBotMessage(sender, body) {
                 sendTextMessage(sender, botOut.botUtterance);
             } else if (n6 === 0) {
                 sendTextMessageConfirm(sender, botOut);
-                //sendButtonsConfirm(sender);
+                sendButtonsConfirm(sender);
             } else if (n7 === 0) {
                 sendTextMessage(sender, botOut.botUtterance);
             } else {
