@@ -355,7 +355,7 @@ function sendTextMessageConfirm(sender, bot) {
                 "type": "template",
                 "payload": {
                     "template_type": "receipt",
-                    "recipient_name": usuario,
+                    "recipient_name": "n"+usuario,
                     "order_number": bot.Pedido.tipo + " 1 en la tienda " + bot.Pedido.tienda,
                     "currency": "COP",
                     "payment_method": "Visa 2345",
