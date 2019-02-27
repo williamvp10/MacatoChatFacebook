@@ -280,15 +280,26 @@ function sendTextMessageIngredients(sender, bot) {
         elements += ' "type": "postback",';
         elements += ' "title": "' + bot.buttons.product[i].ingredientes + '",';
         elements += ' "payload": "add ingredient"';
-        elements += '  },{  ';
-        elements += ' "type": "postback",';
-        elements += ' "title": "enviar",';
-        elements += ' "payload": "requestTiendas"';
-        elements += ' }  ';
+        elements += '  }  ';
+//        elements += ' ,{  ';
+//        elements += ' "type": "postback",';
+//        elements += ' "title": "enviar",';
+//        elements += ' "payload": "requestTiendas"';
+//        elements += ' }  ';
         elements += ' ]  ';
         elements += ' }  ';
     }
     elements += ']';
+
+    let but = '[ ';
+    but += '{';
+    but += '"type": "postback",';
+    but += ' "title": "enviar",';
+    but += ' "payload": "requestTiendas"';
+    but += '}';
+    but += ']';
+    console.log(but);
+    let b = JSON.parse(but);
 
     let arrayElements = JSON.parse(elements);
     console.log(arrayElements);
@@ -298,7 +309,8 @@ function sendTextMessageIngredients(sender, bot) {
                 "type": "template",
                 "payload": {
                     "template_type": "generic",
-                    "elements": arrayElements
+                    "elements": arrayElements,
+                    "buttons": b
                 }
             }
         };
@@ -355,7 +367,7 @@ function sendTextMessageConfirm(sender, bot) {
                 "type": "template",
                 "payload": {
                     "template_type": "receipt",
-                    "recipient_name": "n"+usuario,
+                    "recipient_name": "n" + usuario,
                     "order_number": bot.Pedido.tipo + " 1 en la tienda " + bot.Pedido.tienda,
                     "currency": "COP",
                     "payment_method": "Visa 2345",
