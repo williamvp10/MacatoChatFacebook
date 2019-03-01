@@ -110,7 +110,7 @@ function selectTypeBotMessage(sender, body) {
             } else if (n2 === 0) {
                 sendTextMessageType(sender, botOut);
             } else {
-                sendTextMessage(sender, botOut);
+                sendTextMessageType(sender, botOut);
             }
 
 
