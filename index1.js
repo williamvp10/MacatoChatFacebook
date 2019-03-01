@@ -110,10 +110,12 @@ function selectTypeBotMessage(sender, body) {
             } else if (n2 === 0) {
                 sendTextMessageType(sender, botOut);
             } else {
-                sendTextMessageType(sender, botOut);
+                if (botOut.buttons.length===0){
+                    sendTextMessage(sender, botOut.botUtterance);
+                }else{
+                    sendTextMessageType(sender, botOut);
+                }
             }
-
-
         }
         console.log(botOut.botUtterance);
     }
@@ -168,7 +170,6 @@ function sendTextMessageType(sender, bot) {
 
 function sendTextMessage(sender, text) {
     if (text !== 'null') {
-
         let messageData = {'text': text
         };
         request({
