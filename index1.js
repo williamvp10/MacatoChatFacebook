@@ -110,7 +110,7 @@ function selectTypeBotMessage(sender, body) {
             } else if (n2 === 0) {
                 sendTextMessageType(sender, botOut);
             } else {
-                sendTextMessage(sender, "disculpa no puedo responder a tu solicitud");
+                sendTextMessage(sender, botOut);
             }
 
 
@@ -189,4 +189,3 @@ function sendTextMessage(sender, text) {
         });
     }
 }
-
