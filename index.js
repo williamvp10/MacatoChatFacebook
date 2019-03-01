@@ -1,5 +1,4 @@
 'use strict';
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
@@ -50,7 +49,6 @@ app.post('/webhook/', function (req, res) {
             console.log(type);
             var compare = "add ingredient";
             var compare2 = "requestTiendas";
-            var compare3 = "confirmar pedido";
             var compareresult = compare.localeCompare(type);
             var compareresult2 = compare2.localeCompare(type);
             if (compareresult === 0) {
@@ -64,16 +62,15 @@ app.post('/webhook/', function (req, res) {
                         'userType': type,
                         'userUtterance': ingredientes
                     }
-                },
-                        function (error, response, body) {
-                            //response is from the bot
-                            ingredientes = "";
-                            if (!error && response.statusCode === 200) {
-                                selectTypeBotMessage(sender, body);
-                            } else {
-                                sendTextMessage(sender, 'Error!');
-                            }
-                        });
+                }, function (error, response, body) {
+                    //response is from the bot
+                    ingredientes = "";
+                    if (!error && response.statusCode === 200) {
+                        selectTypeBotMessage(sender, body);
+                    } else {
+                        sendTextMessage(sender, 'Error!');
+                    }
+                });
             } else {
                 request({
                     url: msngerServerUrl,
@@ -279,7 +276,8 @@ function sendTextMessageIngredients(sender, bot) {
         elements += ' "buttons":[';
         elements += ' { ';
         elements += ' "type": "postback",';
-        elements += ' "title": "' + bot.buttons.product[i].ingredientes + '",';
+        elements += ' "title": "' +
+                +'",';
         elements += ' "payload": "add ingredient"';
         elements += '  }  ';
         elements += ' ]  ';
