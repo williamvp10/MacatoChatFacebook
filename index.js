@@ -288,7 +288,7 @@ function imagenes(ingredientes){
              text += ' "subtitle":" pollo desmenuzado",';
         }else if (n5 === 0) {
              text += ' "image_url":"https://upload.wikimedia.org/wikipedia/commons/6/60/Bocadillo.jpg",';
-             text += ' "subtitle":" bocadillo para el borde",';
+             text += ' "subtitle":" bocadillo dulce",';
         }else if (n6 === 0) {
              text += ' "image_url":"https://comemelapizza.com/wp-content/uploads/2014/09/masa-b%C3%A1sica-de-pizza-5.jpg",';
              text += ' "subtitle":" masa para pizza",';
@@ -299,8 +299,8 @@ function imagenes(ingredientes){
              text += ' "image_url":"https://comemelapizza.com/wp-content/uploads/2014/09/masa-b%C3%A1sica-de-pizza-5.jpg",';
              text += ' "subtitle":" masa para pizza",';
         }else if (n9 === 0) {
-             text += ' "image_url":"https://comemelapizza.com/wp-content/uploads/2014/09/masa-b%C3%A1sica-de-pizza-5.jpg",';
-             text += ' "subtitle":" masa para pizza",';
+             text += ' "image_url":"https://www.chefzeecooks.com/wp-content/uploads/2018/08/Carne_Asada_web.jpg",';
+             text += ' "subtitle":" carne",';
         }else if (n10 === 0) {
              text += ' "image_url":"https://comemelapizza.com/wp-content/uploads/2014/09/masa-b%C3%A1sica-de-pizza-5.jpg",';
              text += ' "subtitle":" masa para pizza",';
