@@ -251,6 +251,63 @@ function sendTextMessage(sender, text) {
     }
 }
 
+function imagenes(ingredientes){
+    var text='';
+    var t1 = "Queso";
+        var t2 = "masa";
+        var t3 = "champiñones";
+        var t4 = "pollo";
+        var t5 = "bocadillo";
+        var t6 = "piña";
+        var t7 = "tomates";
+        var t8 = "oregano";
+        var t9 = "carne";
+        var t10 = "salchichon";
+        var n1 = ingredientes.localeCompare(t1);
+        var n2 = ingredientes.localeCompare(t2);
+        var n3 = ingredientes.localeCompare(t3);
+        var n4 = ingredientes.localeCompare(t4);
+        var n5 = ingredientes.localeCompare(t5);
+        var n6 = ingredientes.localeCompare(t6);
+        var n7 = ingredientes.localeCompare(t7);
+        var n8 = ingredientes.localeCompare(t8);
+        var n9 = ingredientes.localeCompare(t9);
+        var n10 = ingredientes.localeCompare(t10);
+        
+        if (n1 === 0) {
+            text += ' "image_url":"https://previews.123rf.com/images/peterhermesfurian/peterhermesfurian1611/peterhermesfurian161100063/66300148-rallado-queso-para-pizza-de-mozzarella-en-un-taz%C3%B3n-de-madera-sobre-blanco-cheddar-como-el-queso-italian.jpg",';
+            text += ' "subtitle":"delicioso queso rallado",';
+        }else if (n2 === 0) {
+             text += ' "image_url":"https://comemelapizza.com/wp-content/uploads/2014/09/masa-b%C3%A1sica-de-pizza-5.jpg",';
+             text += ' "subtitle":" masa para pizza",';
+        }else if (n3 === 0) {
+             text += ' "image_url":"https://www.hogarmania.com/archivos/201202/champinones-668x400x80xX.jpg",';
+             text += ' "subtitle":" championes frescos ",';
+        }else if (n4 === 0) {
+             text += ' "image_url":"https://previews.123rf.com/images/duplass/duplass0805/duplass080500061/3054741-bowl-de-pechuga-de-pollo-desmenuzado-en-un-taz%C3%B3n-en-la-cocina-o-restaurante-.jpg",';
+             text += ' "subtitle":" pollo desmenuzado",';
+        }else if (n5 === 0) {
+             text += ' "image_url":"https://upload.wikimedia.org/wikipedia/commons/6/60/Bocadillo.jpg",';
+             text += ' "subtitle":" bocadillo para el borde",';
+        }else if (n6 === 0) {
+             text += ' "image_url":"https://comemelapizza.com/wp-content/uploads/2014/09/masa-b%C3%A1sica-de-pizza-5.jpg",';
+             text += ' "subtitle":" masa para pizza",';
+        }else if (n7 === 0) {
+             text += ' "image_url":"https://comemelapizza.com/wp-content/uploads/2014/09/masa-b%C3%A1sica-de-pizza-5.jpg",';
+             text += ' "subtitle":" masa para pizza",';
+        }else if (n8 === 0) {
+             text += ' "image_url":"https://comemelapizza.com/wp-content/uploads/2014/09/masa-b%C3%A1sica-de-pizza-5.jpg",';
+             text += ' "subtitle":" masa para pizza",';
+        }else if (n9 === 0) {
+             text += ' "image_url":"https://comemelapizza.com/wp-content/uploads/2014/09/masa-b%C3%A1sica-de-pizza-5.jpg",';
+             text += ' "subtitle":" masa para pizza",';
+        }else if (n10 === 0) {
+             text += ' "image_url":"https://comemelapizza.com/wp-content/uploads/2014/09/masa-b%C3%A1sica-de-pizza-5.jpg",';
+             text += ' "subtitle":" masa para pizza",';
+        }
+    return text;    
+}
+
 function sendTextMessageIngredients(sender, bot) {
     let elements = '[';
     let cant = 0;
@@ -265,6 +322,7 @@ function sendTextMessageIngredients(sender, bot) {
         }
         elements += '{';
         elements += ' "title":"' + bot.buttons.product[i].ingredientes + '",';
+        elements += imagenes(bot.buttons.product[i].ingredientes);
         //  elements += ' "image_url":"https://petersfancybrownhats.com/company_image.png",';
         //  elements += ' "subtitle":"null",';
         //  elements += ' "default_action": {';
@@ -276,7 +334,7 @@ function sendTextMessageIngredients(sender, bot) {
         elements += ' "buttons":[';
         elements += ' { ';
         elements += ' "type": "postback",';
-        elements += ' "title": "' +bot.buttons.product[i].ingredientes+'",';
+        elements += ' "title": "' + bot.buttons.product[i].ingredientes + '",';
         elements += ' "payload": "add ingredient"';
         elements += '  }  ';
         elements += ' ]  ';
@@ -372,11 +430,12 @@ function sendTextMessageConfirm(sender, bot) {
         }
         elements += '{';
         elements += ' "title": "' + bot.Pedido.ingredientes[i] + '",';
-        elements += ' "subtitle":"<ITEM_DESCRIPTION_OR_DETAILS>",';
+        elements += imagenes(bot.buttons.product[i].ingredientes);
+        //elements += ' "subtitle":"<ITEM_DESCRIPTION_OR_DETAILS>",';
         elements += ' "quantity": "1", ';
         elements += ' "price": 5000,';
         elements += ' "currency": "COP",';
-        elements += ' "image_url":"https://goo.gl/images/JJpN9r"';
+        //elements += ' "image_url":"https://goo.gl/images/JJpN9r"';
         elements += ' }  ';
     }
     elements += ']';
