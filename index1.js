@@ -92,6 +92,8 @@ function sendtextbot(event, sender) {
                 });
     }
 }
+
+
 function selectTypeBotMessage(sender, body) {
     // Print out the response body
     console.log(body);
@@ -105,21 +107,29 @@ function selectTypeBotMessage(sender, body) {
             var n1 = ty.localeCompare(t1);
             var t2 = "bye";
             var n2 = ty.localeCompare(t2);
+            var t3 = "visualizarCarro";
+            var n3 = ty.localeCompare(t3);
             if (n1 === 0) {
                 sendTextMessageType(sender, botOut);
             } else if (n2 === 0) {
                 sendTextMessageType(sender, botOut);
+            } else if (n3 === 0) {
+                sendTextMessageList(sender, botOut)
+                sendTextMessageType(sender, botOut);
             } else {
-                if (botOut.buttons.length===0){
+                if (botOut.buttons.length === 0) {
                     sendTextMessage(sender, botOut.botUtterance);
-                }else{
+                } else {
                     sendTextMessageType(sender, botOut);
                 }
             }
+
+
         }
         console.log(botOut.botUtterance);
     }
 }
+
 function sendTextMessageType(sender, bot) {
     let buttons = '[ ';
     for (var i = 0; i < bot.buttons.length; i++) {
@@ -172,6 +182,80 @@ function sendTextMessage(sender, text) {
     if (text !== 'null') {
         let messageData = {'text': text
         };
+        request({
+            url: 'https://graph.facebook.com/v2.6/me/messages',
+            qs: {access_token: token},
+            method: 'POST',
+            json: {
+                recipient: {id: sender},
+                message: messageData
+
+            }
+        }, function (error, response, body) {
+            if (error) {
+                console.log('Error sending messages: ', error);
+            } else if (response.body.error) {
+                console.log('Error: ', response.body.error);
+            }
+        });
+    }
+}
+
+
+
+
+function sendTextMessageList(sender, bot) {
+    let elements = '[';
+    let cant = 0;
+    if (bot.elements.length > 10) {
+        cant = 10;
+    } else {
+        cant = bot.elements.length;
+    }
+    for (var i = 0; i < cant; i++) {
+        if (i !== 0) {
+            elements += ',';
+        }
+        elements += '{';
+        elements += ' "title":"' + bot.elements[i].titulo + '",';
+        var subtitulo = "";
+        try {
+            var subtitulo = bot.elements[i].titulo;
+            elements += ' "subtitle":"' + subtitulo + '",';
+        } catch (err) {
+        }
+        try {
+            var url = bot.elements.url;
+            elements += ' "image_url":"' + url + '",';
+        } catch (err) {
+        }
+        elements += ' "buttons":[';
+        for (var j = 0; j < bot.elements[i].buttons.length; j++) {
+            elements += ' { ';
+            elements += ' "type": "postback",';
+            elements += ' "title": "' + bot.elements[i].buttons[j].titulo + '",';
+            elements += ' "payload": "' + bot.elements[i].buttons[j].respuesta + '"';
+            elements += '  }  ';
+        }
+        elements += ' ]  ';
+        elements += ' }  ';
+    }
+    elements += ']';
+
+    let arrayElements = JSON.parse(elements);
+    console.log(arrayElements);
+    if (bot !== 'null') {
+        let messageData = {
+            "attachment": {
+                "type": "template",
+                "payload": {
+                    "template_type": "generic",
+                    "elements": arrayElements
+                }
+            }
+        };
+        console.log(messageData);
+        // Start the request
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages',
             qs: {access_token: token},
