@@ -390,7 +390,7 @@ function sendTextMessageIngredientsButtons(sender) {
             "type": "template",
             "payload": {
                 "template_type": "button",
-                "text": " Seleccione los ingredientes, al finalizar precione el boton enviar",
+                "text": " Seleccione los ingredientes, al finalizar presione el boton enviar",
                 "buttons": b
             }
         }
