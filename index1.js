@@ -225,7 +225,7 @@ function sendTextMessageList(sender, bot) {
         } catch (err) {
         }
         try {
-            var url = bot.elements.url;
+            var url = bot.elements[i].url;
             elements += ' "image_url":"' + url + '",';
         } catch (err) {
         }
