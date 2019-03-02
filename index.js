@@ -430,7 +430,7 @@ function sendTextMessageConfirm(sender, bot) {
         }
         elements += '{';
         elements += ' "title": "' + bot.Pedido.ingredientes[i] + '",';
-        elements += imagenes(bot.buttons.product[i].ingredientes);
+        elements += imagenes(bot.Pedido.ingredientes[i]);
         //elements += ' "subtitle":"<ITEM_DESCRIPTION_OR_DETAILS>",';
         elements += ' "quantity": "1", ';
         elements += ' "price": 5000,';
