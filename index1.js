@@ -208,15 +208,19 @@ function sendTextMessageList(sender, bot) {
         }
         elements += '{';
         elements += ' "title":"' + bot.elements[i].titulo + '",';
-        var subtitulo = "";
+        var subtitulo = " ";
         try {
             var subtitulo = bot.elements[i].titulo;
             elements += ' "subtitle":"' + subtitulo + '",';
         } catch (err) {
         }
         try {
-            var url = bot.elements[i].url;
-            elements += ' "image_url":"' + url + '",';
+            var t1 = "undefined";
+            var n1 = bot.elements[i].url.localeCompare(t1);
+            if (n1 !== 0) {
+                var url = bot.elements[i].url;
+                elements += ' "image_url":"' + url + '",';
+            }
         } catch (err) {
         }
         elements += ' "buttons":[';
