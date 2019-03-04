@@ -6,11 +6,7 @@ const app = express();
 // bot fb page
 const token = "EAADiQpmWQRgBAPglvHwxHZCMaXlZBHHjADrALySMQvlwR4wl5MbnhW5ZA3JDaKqOagA6ZC32lZBoDAv0mYO3rwgJtlihDcGAnfmb3xgj5YTen2ZBPA4a3zsSot4TVB7W0xdjnrmh4ZAt4NVvmBoZAzONDTmWNh119KA1f4YQZA18towZDZD";
 const msngerServerUrl = 'https://mecatobot.herokuapp.com/bot';
-//global var
-var ingredientes = "";
-var idusuario = "";
-var usuario = "";
-app.set('port', (process.env.PORT || 5000));
+//global varapp.set('port', (process.env.PORT || 5000));
 // Process application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}));
 // Process application/json
@@ -20,7 +16,6 @@ app.use(express.static('public'));
 app.get('/', function (req, res) {
     res.send('Hello world, I am Weatherman!.');
 });
-
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] === 'Mecato-Bot') {
@@ -61,7 +56,6 @@ app.post('/webhook/', function (req, res) {
                     sendTextMessage(sender, 'Error!');
                 }
             });
-
         } catch (err) {
             sendtextbot(event, sender);
         }
@@ -70,7 +64,6 @@ app.post('/webhook/', function (req, res) {
 
     res.sendStatus(200);
 });
-
 function sendtextbot(event, sender) {
     if (event.message && event.message.text) {
         let text = event.message.text;
@@ -92,8 +85,6 @@ function sendtextbot(event, sender) {
                 });
     }
 }
-
-
 function selectTypeBotMessage(sender, body) {
     // Print out the response body
     console.log(body);
@@ -103,19 +94,15 @@ function selectTypeBotMessage(sender, body) {
     if (botOut.botUtterance !== null) {
         if (botOut.type !== null) {
             var ty = botOut.type;
-            var t1 = "saludo";
+            var t1 = "Producto";
             var n1 = ty.localeCompare(t1);
-            var t2 = "bye";
+            var t2 = "hi";
             var n2 = ty.localeCompare(t2);
-            var t3 = "visualizarCarro";
-            var n3 = ty.localeCompare(t3);
             if (n1 === 0) {
-                sendTextMessageType(sender, botOut);
-            } else if (n2 === 0) {
-                sendTextMessageType(sender, botOut);
-            } else if (n3 === 0) {
                 sendTextMessageList(sender, botOut)
                 sendTextMessageType(sender, botOut);
+            } else if (n2 === 0) {
+                sendTextMessage(sender, botOut.botUtterance);
             } else {
                 if (botOut.buttons.length === 0) {
                     sendTextMessage(sender, botOut.botUtterance);
@@ -129,7 +116,6 @@ function selectTypeBotMessage(sender, body) {
         console.log(botOut.botUtterance);
     }
 }
-
 function sendTextMessageType(sender, bot) {
     let buttons = '[ ';
     for (var i = 0; i < bot.buttons.length; i++) {
@@ -180,6 +166,7 @@ function sendTextMessageType(sender, bot) {
 
 function sendTextMessage(sender, text) {
     if (text !== 'null') {
+
         let messageData = {'text': text
         };
         request({
@@ -200,8 +187,6 @@ function sendTextMessage(sender, text) {
         });
     }
 }
-
-
 
 
 function sendTextMessageList(sender, bot) {
@@ -241,7 +226,6 @@ function sendTextMessageList(sender, bot) {
         elements += ' }  ';
     }
     elements += ']';
-
     let arrayElements = JSON.parse(elements);
     console.log(arrayElements);
     if (bot !== 'null') {
