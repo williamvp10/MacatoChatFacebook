@@ -31,6 +31,7 @@ app.get('/webhook/', function (req, res) {
 app.listen(app.get('port'), function () {
     console.log('running on port', app.get('port'));
 });
+
 app.post('/webhook/', function (req, res) {
     console.log(JSON.stringify(req.body));
     let messaging_events = req.body.entry[0].messaging;
@@ -103,11 +104,16 @@ function selectTypeBotMessage(sender, body) {
             var n1 = ty.localeCompare(t1);
             var t2 = "hi";
             var n2 = ty.localeCompare(t2);
+            var t3 = "Ingredientes";
+            var n3 = ty.localeCompare(t3);
             if (n1 === 0) {
                 sendTextMessageList(sender, botOut)
                 sendTextMessageType(sender, botOut);
             } else if (n2 === 0) {
                 sendTextMessage(sender, botOut.botUtterance);
+            } else if (n3 === 0) {
+                sendTextMessageList(sender, botOut)
+                sendTextMessageType(sender, botOut);
             } else {
                 if (botOut.buttons.length === 0) {
                     sendTextMessage(sender, botOut.botUtterance);
@@ -208,7 +214,7 @@ function sendTextMessageList(sender, bot) {
         }
         elements += '{';
         elements += ' "title":"' + bot.elements[i].titulo + '",';
-        var subtitulo = " ";
+        var subtitulo = "";
         try {
             var subtitulo = bot.elements[i].titulo;
             elements += ' "subtitle":"' + subtitulo + '",';
@@ -223,6 +229,7 @@ function sendTextMessageList(sender, bot) {
             }
         } catch (err) {
         }
+
         elements += ' "buttons":[';
         for (var j = 0; j < bot.elements[i].buttons.length; j++) {
             elements += ' { ';
