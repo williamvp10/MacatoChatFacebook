@@ -6,7 +6,8 @@ const app = express();
 // bot fb page
 const token = "EAADiQpmWQRgBAPglvHwxHZCMaXlZBHHjADrALySMQvlwR4wl5MbnhW5ZA3JDaKqOagA6ZC32lZBoDAv0mYO3rwgJtlihDcGAnfmb3xgj5YTen2ZBPA4a3zsSot4TVB7W0xdjnrmh4ZAt4NVvmBoZAzONDTmWNh119KA1f4YQZA18towZDZD";
 const msngerServerUrl = 'https://mecatobot.herokuapp.com/bot';
-//global var   var varIngredientes = "";
+//global var   
+var varIngredientes = "";
 app.set('port', (process.env.PORT || 5000));
 // Process application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}));
@@ -17,7 +18,6 @@ app.use(express.static('public'));
 app.get('/', function (req, res) {
     res.send('Hello world, I am Weatherman!.');
 });
-
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] === 'Mecato-Bot') {
@@ -132,14 +132,13 @@ function selectTypeBotMessage(sender, body) {
             var n4 = ty.localeCompare(t4);
             if (n1 === 0) {
                 sendTextMessageList(sender, botOut)
-                
-                //sendTextMessageType(sender, botOut);
+                sendTextMessageType(sender, botOut);
             } else if (n2 === 0) {
                 sendTextMessageList(sender, botOut)
-                //sendTextMessageType(sender, botOut);
+                sendTextMessageType(sender, botOut);
             } else if (n3 === 0) {
                 sendTextMessageList(sender, botOut)
-               // sendTextMessageType(sender, botOut);
+                sendTextMessageType(sender, botOut);
             } else if (n4 === 0) {
                 sendTextMessage(sender, botOut.botUtterance);
             } else {
