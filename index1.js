@@ -132,13 +132,14 @@ function selectTypeBotMessage(sender, body) {
             var n4 = ty.localeCompare(t4);
             if (n1 === 0) {
                 sendTextMessageList(sender, botOut)
-                sendTextMessageType(sender, botOut);
+                
+                //sendTextMessageType(sender, botOut);
             } else if (n2 === 0) {
                 sendTextMessageList(sender, botOut)
-                sendTextMessageType(sender, botOut);
+                //sendTextMessageType(sender, botOut);
             } else if (n3 === 0) {
                 sendTextMessageList(sender, botOut)
-                sendTextMessageType(sender, botOut);
+               // sendTextMessageType(sender, botOut);
             } else if (n4 === 0) {
                 sendTextMessage(sender, botOut.botUtterance);
             } else {
