@@ -7,9 +7,7 @@ const app = express();
 const token = "EAADiQpmWQRgBAPglvHwxHZCMaXlZBHHjADrALySMQvlwR4wl5MbnhW5ZA3JDaKqOagA6ZC32lZBoDAv0mYO3rwgJtlihDcGAnfmb3xgj5YTen2ZBPA4a3zsSot4TVB7W0xdjnrmh4ZAt4NVvmBoZAzONDTmWNh119KA1f4YQZA18towZDZD";
 const msngerServerUrl = 'https://mecatobot.herokuapp.com/bot';
 //global var
-var ingredientes = "";
-var idusuario = "";
-var usuario = "";
+var varIngredientes = "";
 app.set('port', (process.env.PORT || 5000));
 // Process application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}));
@@ -46,21 +44,45 @@ app.post('/webhook/', function (req, res) {
             text = req.body.entry[0].messaging[i].postback.title;
             let type = req.body.entry[0].messaging[i].postback.payload;
             console.log(type);
-            request({
-                url: msngerServerUrl,
-                method: 'POST',
-                form: {
-                    'userType': type,
-                    'userUtterance': text
-                }
-            }, function (error, response, body) {
-                //response is from the bot
-                if (!error && response.statusCode === 200) {
-                    selectTypeBotMessage(sender, body);
-                } else {
-                    sendTextMessage(sender, 'Error!');
-                }
-            });
+            var compareIngredientes = "add Ingredientes";
+            var compare2Ingredientes = "requestIngredientes";
+            var compareresultIngredientes = compareIngredientes.localeCompare(type);
+            var compareresult2Ingredientes = compare2Ingredientes.localeCompare(type);
+            if (compareresultIngredientes === 0) {
+                varIngredientes += "," + text;
+            } else if (compareresult2Ingredientes === 0) {
+                request({
+                    url: msngerServerUrl,
+                    method: 'POST',
+                    form: {
+                        'userType': type,
+                        'userUtterance': varIngredientes
+                    }
+                }, function (error, response, body) {
+                    //response is from the bot
+                    varIngredientes = "";
+                    if (!error && response.statusCode === 200) {
+                        selectTypeBotMessage(sender, body);
+                    } else {
+                        sendTextMessage(sender, 'Error!');
+                    }
+                });
+            } else
+                request({
+                    url: msngerServerUrl,
+                    method: 'POST',
+                    form: {
+                        'userType': type,
+                        'userUtterance': text
+                    }
+                }, function (error, response, body) {
+                    //response is from the bot
+                    if (!error && response.statusCode === 200) {
+                        selectTypeBotMessage(sender, body);
+                    } else {
+                        sendTextMessage(sender, 'Error!');
+                    }
+                });
         } catch (err) {
             sendtextbot(event, sender);
         }
@@ -102,18 +124,23 @@ function selectTypeBotMessage(sender, body) {
             var ty = botOut.type;
             var t1 = "Producto";
             var n1 = ty.localeCompare(t1);
-            var t2 = "hi";
+            var t2 = "Ingredientes";
             var n2 = ty.localeCompare(t2);
-            var t3 = "Ingredientes";
+            var t3 = "Tiendas";
             var n3 = ty.localeCompare(t3);
+            var t4 = "finalizar";
+            var n4 = ty.localeCompare(t4);
             if (n1 === 0) {
                 sendTextMessageList(sender, botOut)
                 sendTextMessageType(sender, botOut);
             } else if (n2 === 0) {
-                sendTextMessage(sender, botOut.botUtterance);
+                sendTextMessageList(sender, botOut)
+                sendTextMessageType(sender, botOut);
             } else if (n3 === 0) {
                 sendTextMessageList(sender, botOut)
                 sendTextMessageType(sender, botOut);
+            } else if (n4 === 0) {
+                sendTextMessage(sender, botOut.botUtterance);
             } else {
                 if (botOut.buttons.length === 0) {
                     sendTextMessage(sender, botOut.botUtterance);
