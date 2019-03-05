@@ -44,8 +44,8 @@ app.post('/webhook/', function (req, res) {
             text = req.body.entry[0].messaging[i].postback.title;
             let type = req.body.entry[0].messaging[i].postback.payload;
             console.log(type);
-            var compareIngredientes = "add Ingredientes";
-            var compare2Ingredientes = "requestIngredientes";
+            var compareIngredientes = "add ingredientes";
+            var compare2Ingredientes = "requestTiendas";
             var compareresultIngredientes = compareIngredientes.localeCompare(type);
             var compareresult2Ingredientes = compare2Ingredientes.localeCompare(type);
             if (compareresultIngredientes === 0) {
@@ -132,13 +132,13 @@ function selectTypeBotMessage(sender, body) {
             var n4 = ty.localeCompare(t4);
             if (n1 === 0) {
                 sendTextMessageList(sender, botOut)
-                sendTextMessageType(sender, botOut);
+                //sendTextMessageType(sender, botOut);
             } else if (n2 === 0) {
                 sendTextMessageList(sender, botOut)
                 sendTextMessageType(sender, botOut);
             } else if (n3 === 0) {
                 sendTextMessageList(sender, botOut)
-                sendTextMessageType(sender, botOut);
+                //sendTextMessageType(sender, botOut);
             } else if (n4 === 0) {
                 sendTextMessage(sender, botOut.botUtterance);
             } else {
