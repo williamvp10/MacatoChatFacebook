@@ -6,7 +6,8 @@ const app = express();
 // bot fb page
 const token = "EAADiQpmWQRgBAPglvHwxHZCMaXlZBHHjADrALySMQvlwR4wl5MbnhW5ZA3JDaKqOagA6ZC32lZBoDAv0mYO3rwgJtlihDcGAnfmb3xgj5YTen2ZBPA4a3zsSot4TVB7W0xdjnrmh4ZAt4NVvmBoZAzONDTmWNh119KA1f4YQZA18towZDZD";
 const msngerServerUrl = 'https://mecatobot.herokuapp.com/bot';
-//global var   
+//global var
+
 var varIngredientes = "";
 app.set('port', (process.env.PORT || 5000));
 // Process application/x-www-form-urlencoded
@@ -18,6 +19,7 @@ app.use(express.static('public'));
 app.get('/', function (req, res) {
     res.send('Hello world, I am Weatherman!.');
 });
+
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] === 'Mecato-Bot') {
@@ -41,11 +43,10 @@ app.post('/webhook/', function (req, res) {
         let text = "";
         try {
             text = req.body.entry[0].messaging[i].postback.title;
-            console.log(text);
             let type = req.body.entry[0].messaging[i].postback.payload;
             console.log(type);
             var compareIngredientes = "add Ingredientes";
-            var compare2Ingredientes = "requestIngredientes";
+            var compare2Ingredientes = "requestTiendas";
             var compareresultIngredientes = compareIngredientes.localeCompare(type);
             var compareresult2Ingredientes = compare2Ingredientes.localeCompare(type);
             if (compareresultIngredientes === 0) {
@@ -132,7 +133,7 @@ function selectTypeBotMessage(sender, body) {
             var t4 = "finalizar";
             var n4 = ty.localeCompare(t4);
             if (n1 === 0) {
-                sendTextMessageList(sender, botOut);
+                sendTextMessageList(sender, botOut)
                 if (botOut.buttons.length === 0) {
                     sendTextMessage(sender, botOut.botUtterance);
                 } else {
