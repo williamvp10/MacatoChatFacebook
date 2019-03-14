@@ -43,7 +43,8 @@ app.post('/webhook/', function (req, res) {
         let text = "";
         try {
             text = req.body.entry[0].messaging[i].postback.title;
-            let type = req.body.entry[0].messaging[i].postback.payload;
+            var type1 =""+ req.body.entry[0].messaging[i].postback.payload;
+            var type=type1.split(":")[0];
             console.log(type);
             var compareIngredientes = "add Ingredientes";
             var compare2Ingredientes = "requestTiendas";
