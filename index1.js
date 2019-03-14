@@ -158,8 +158,7 @@ function selectTypeBotMessage(sender, body) {
             } else if (n4 === 0) {
                 sendTextMessage(sender, botOut.botUtterance);
             } else if (n5 === 0) {
-                sendTextMessage(sender, botOut.botUtterance);
-                sendTextMessage(sender, botOut.Producto);
+                sendTextMessage(sender, botOut.InformeProducto.text);
                 if (botOut.buttons.length === 0) {
                     sendTextMessage(sender, botOut.botUtterance);
                 } else {
