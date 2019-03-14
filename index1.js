@@ -132,6 +132,8 @@ function selectTypeBotMessage(sender, body) {
             var n3 = ty.localeCompare(t3);
             var t4 = "finalizar";
             var n4 = ty.localeCompare(t4);
+            var t5 = "Resultados";
+            var n5 = ty.localeCompare(t5);
             if (n1 === 0) {
                 sendTextMessageList(sender, botOut)
                 if (botOut.buttons.length === 0) {
@@ -155,6 +157,14 @@ function selectTypeBotMessage(sender, body) {
                 }
             } else if (n4 === 0) {
                 sendTextMessage(sender, botOut.botUtterance);
+            } else if (n5 === 0) {
+                sendTextMessage(sender, botOut.botUtterance);
+                sendTextMessage(sender, botOut.Producto);
+                if (botOut.buttons.length === 0) {
+                    sendTextMessage(sender, botOut.botUtterance);
+                } else {
+                    sendTextMessageType(sender, botOut);
+                }
             } else {
                 if (botOut.buttons.length === 0) {
                     sendTextMessage(sender, botOut.botUtterance);
