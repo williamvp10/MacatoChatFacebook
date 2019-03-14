@@ -43,13 +43,13 @@ app.post('/webhook/', function (req, res) {
         let text = "";
         try {
             text = req.body.entry[0].messaging[i].postback.title;
-            var type1 =""+ req.body.entry[0].messaging[i].postback.payload;
-            var type=type1.split(":")[0];
+            var type =""+ req.body.entry[0].messaging[i].postback.payload;
+            var type1=type1.split(":")[0];
             console.log(type);
             var compareIngredientes = "add Ingredientes";
             var compare2Ingredientes = "requestTiendas";
-            var compareresultIngredientes = compareIngredientes.localeCompare(type);
-            var compareresult2Ingredientes = compare2Ingredientes.localeCompare(type);
+            var compareresultIngredientes = compareIngredientes.localeCompare(type1);
+            var compareresult2Ingredientes = compare2Ingredientes.localeCompare(type1);
             if (compareresultIngredientes === 0) {
                 varIngredientes += "," + text;
             } else if (compareresult2Ingredientes === 0) {
