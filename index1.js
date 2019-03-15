@@ -51,7 +51,10 @@ app.post('/webhook/', function (req, res) {
             var compareresultIngredientes = compareIngredientes.localeCompare(type1);
             var compareresult2Ingredientes = compare2Ingredientes.localeCompare(type1);
             if (compareresultIngredientes === 0) {
-                varIngredientes += "," + text;
+                if(varIngredientes.length>0){
+                    varIngredientes += ",";
+                }
+                varIngredientes += text;
             } else if (compareresult2Ingredientes === 0) {
                 request({
                     url: msngerServerUrl,
