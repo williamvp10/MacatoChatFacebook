@@ -288,7 +288,7 @@ function sendTextMessageList(sender, bot) {
             elements += ' { ';
             elements += ' "type": "postback",';
             elements += ' "title": "' + bot.elements[i].buttons[j].titulo + '",';
-            elements += ' "payload": "' + bot.elements[i].buttons[j].respuesta + ':'+bot.elements[i].Objeto+'"';
+            elements += ' "payload": "' + bot.elements[i].buttons[j].respuesta + ':'+bot.elements[i].buttons[j].Objeto+'"';
             elements += '  }  ';
         }
         elements += ' ]  ';
