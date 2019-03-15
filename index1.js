@@ -54,7 +54,7 @@ app.post('/webhook/', function (req, res) {
                 if(varIngredientes.length>0){
                     varIngredientes += ",";
                 }
-                varIngredientes += type1[1];
+                varIngredientes += type.split(":")[1];
             } else if (compareresult2Ingredientes === 0) {
                 request({
                     url: msngerServerUrl,
