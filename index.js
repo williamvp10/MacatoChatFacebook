@@ -311,18 +311,18 @@ function imagenes(ingredientes){
 function sendTextMessageIngredients(sender, bot) {
     let elements = '[';
     let cant = 0;
-    if (bot.buttons.product.length > 10) {
+    if (bot.buttons.Ingredient.length > 10) {
         cant = 10;
     } else {
-        cant = bot.buttons.product.length;
+        cant = bot.buttons.Ingredient.length;
     }
     for (var i = 0; i < cant; i++) {
         if (i !== 0) {
             elements += ',';
         }
         elements += '{';
-        elements += ' "title":"' + bot.buttons.product[i].ingredientes + '",';
-        elements += imagenes(bot.buttons.product[i].ingredientes);
+        elements += ' "title":"' + bot.buttons.Ingredient[i].nombre + '",';
+        elements += imagenes(bot.buttons.Ingredient[i].nombre);
         //  elements += ' "image_url":"https://petersfancybrownhats.com/company_image.png",';
         //  elements += ' "subtitle":"null",';
         //  elements += ' "default_action": {';
@@ -334,7 +334,7 @@ function sendTextMessageIngredients(sender, bot) {
         elements += ' "buttons":[';
         elements += ' { ';
         elements += ' "type": "postback",';
-        elements += ' "title": "' + bot.buttons.product[i].ingredientes + '",';
+        elements += ' "title": "' + bot.buttons.Ingredient[i].nombre+ '",';
         elements += ' "payload": "add ingredient"';
         elements += '  }  ';
         elements += ' ]  ';
