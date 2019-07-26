@@ -56,7 +56,7 @@ app.post('/webhook/', function (req, res) {
             text = event.message.text;
         }
         console.log("type" + type);
-        console.log("userr " + user);
+        console.log("userr " + JSON.stringify(user));
         var compare = "add ingredient";
         var compare2 = "requestTiendas";
         var compareresult = compare.localeCompare(type);
