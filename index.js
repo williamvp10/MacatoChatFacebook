@@ -33,6 +33,13 @@ app.listen(app.get('port'), function () {
 //FBM webhook
 app.post('/webhook/', function (req, res) {
     console.log(JSON.stringify(req.body));
+    let u = '{';
+    u += '"first_name": "",';
+    u += '"last_name": "",';
+    u += '"id": "",';
+    u += '"ingredientes": ""';
+    u += '}';
+    user = u;
     let messaging_events = req.body.entry[0].messaging;
     for (let i = 0; i < messaging_events.length; i++) {
 
@@ -54,8 +61,8 @@ app.post('/webhook/', function (req, res) {
         if (type.length == 0) {
             text = event.message.text;
         }
-        console.log("type"+type);
-        console.log("userr "+user);
+        console.log("type" + type);
+        console.log("userr " + user);
         var compare = "add ingredient";
         var compare2 = "requestTiendas";
         var compareresult = compare.localeCompare(type);
@@ -187,7 +194,7 @@ function InfoPersona(sender) {
 //        u += '"id": "' + infou.id + '"';
 //        u += '}';
         findUser(infou)
-        console.log("user: "+JSON.parse(user));
+        console.log("user: " + JSON.parse(user));
     });
 }
 function findUser(infou) {
@@ -283,7 +290,7 @@ function selectTypeBotMessage(sender, body) {
             } else if (n5 === 0) {
                 sendTextMessage(sender, botOut.botUtterance);
             } else if (n6 === 0) {
-                 sendTextMessageType(sender, botOut)
+                sendTextMessageType(sender, botOut)
             } else if (n7 === 0) {
                 sendTextMessage(sender, botOut.botUtterance);
             } else if (n8 === 0) {
