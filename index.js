@@ -44,8 +44,8 @@ app.post('/webhook/', function (req, res) {
         if (typeof user != 'undefined'){
             let recipient = event.recipient.id;
             let time = req.body.entry[0].time;
-            let text = "";
-            let type = "";
+            let text = " ";
+            let type = " ";
             try {
                 text = req.body.entry[0].messaging[i].postback.title;
             } catch (err) {
