@@ -34,19 +34,12 @@ app.listen(app.get('port'), function () {
 app.post('/webhook/', function (req, res) {
     console.log(JSON.stringify(req.body));
 
-    let u = '{';
-    u += '"first_name": "",';
-    u += '"last_name": "",';
-    u += '"id": "",';
-    u += '"ingredientes": ""';
-    u += '}';
-    user = u;
     let messaging_events = req.body.entry[0].messaging;
     for (let i = 0; i < messaging_events.length; i++) {
 
         let event = req.body.entry[0].messaging[i];
         let sender = event.sender.id;
-        user=InfoPersona(sender);
+        InfoPersona(sender);
         let recipient = event.recipient.id;
         let time = req.body.entry[0].time;
         let text = "";
@@ -128,12 +121,11 @@ function InfoPersona(sender) {
 //        u += '}';
         findUser(infou)
         console.log("user: " + JSON.parse(user));
-        us=JSON.parse(user);
     });
-    return us
 }
 function findUser(infou) {
     if (typeof Usuarios.get(infou.id) === 'undefined') {
+        console.log('entro')
         let u = '{';
         u += '"first_name": "' + infou.first_name + '",';
         u += '"last_name": "' + infou.last_name + '",';
@@ -142,10 +134,10 @@ function findUser(infou) {
         u += '}';
         user = u;
         Usuarios.set(infou.id, user);
+        console.log(JSON.parse(user))
     } else {
         user = Usuarios.get(infou.id);
     }
-    
 //    for (var valor of Usuarios.values()) {
 //        console.log(valor);
 //    }
