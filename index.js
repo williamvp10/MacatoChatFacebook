@@ -132,7 +132,7 @@ function findUser(infou) {
         u += '"id": "' + infou.id + '",';
         u += '"ingredientes": ""';
         u += '}';
-        user = u;
+        user = JSON.parse(u);
         Usuarios.set(infou.id, user);
         console.log(JSON.parse(user))
     } else {
