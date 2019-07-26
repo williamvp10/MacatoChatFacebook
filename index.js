@@ -33,7 +33,7 @@ app.listen(app.get('port'), function () {
 //FBM webhook
 app.post('/webhook/', function (req, res) {
     console.log(JSON.stringify(req.body));
-
+    
     let messaging_events = req.body.entry[0].messaging;
     for (let i = 0; i < messaging_events.length; i++) {
 
@@ -120,7 +120,7 @@ function InfoPersona(sender) {
 //        u += '"id": "' + infou.id + '"';
 //        u += '}';
         findUser(infou)
-        console.log("user: " + JSON.parse(user));
+        console.log("user: " + user.id);
     });
 }
 function findUser(infou) {
