@@ -33,6 +33,7 @@ app.listen(app.get('port'), function () {
 //FBM webhook
 app.post('/webhook/', function (req, res) {
     console.log(JSON.stringify(req.body));
+
     let u = '{';
     u += '"first_name": "",';
     u += '"last_name": "",';
@@ -112,7 +113,39 @@ app.post('/webhook/', function (req, res) {
     }
     res.sendStatus(200);
 });
-
+function InfoPersona(sender) {
+    request({
+        url: 'https://graph.facebook.com/' + sender + '?fields=first_name,last_name&access_token=' + token,
+        method: 'GET',
+    }, function (error, response, body) {
+        var infou = JSON.parse(body);
+        console.log(infou);
+//        let u = '{';
+//        u += '"first_name": "' + infou.first_name + '",';
+//        u += '"last_name": "' + infou.last_name + '",';
+//        u += '"id": "' + infou.id + '"';
+//        u += '}';
+        findUser(infou)
+        console.log("user: " + JSON.parse(user));
+    });
+}
+function findUser(infou) {
+    if (typeof Usuarios.get(infou.id) === 'undefined') {
+        let u = '{';
+        u += '"first_name": "' + infou.first_name + '",';
+        u += '"last_name": "' + infou.last_name + '",';
+        u += '"id": "' + infou.id + '",';
+        u += '"ingredientes": ""';
+        u += '}';
+        user = u;
+        Usuarios.set(infou.id, user);
+    } else {
+        user = Usuarios.get(infou.id);
+    }
+    for (var valor of Usuarios.values()) {
+        console.log(valor);
+    }
+}
 //app.post('/webhook/', function (req, res) {
 //    console.log(JSON.stringify(req.body));
 //    let messaging_events = req.body.entry[0].messaging;
@@ -181,39 +214,7 @@ app.post('/webhook/', function (req, res) {
 //    res.sendStatus(200);
 //});
 
-function InfoPersona(sender) {
-    request({
-        url: 'https://graph.facebook.com/' + sender + '?fields=first_name,last_name&access_token=' + token,
-        method: 'GET',
-    }, function (error, response, body) {
-        var infou = JSON.parse(body);
-        console.log(infou);
-//        let u = '{';
-//        u += '"first_name": "' + infou.first_name + '",';
-//        u += '"last_name": "' + infou.last_name + '",';
-//        u += '"id": "' + infou.id + '"';
-//        u += '}';
-        findUser(infou)
-        console.log("user: " + JSON.parse(user));
-    });
-}
-function findUser(infou) {
-    if (typeof Usuarios.get(infou.id) === 'undefined') {
-        let u = '{';
-        u += '"first_name": "' + infou.first_name + '",';
-        u += '"last_name": "' + infou.last_name + '",';
-        u += '"id": "' + infou.id + '",';
-        u += '"ingredientes": ""';
-        u += '}';
-        user = u;
-        Usuarios.set(infou.id, user);
-    } else {
-        user = Usuarios.get(infou.id);
-    }
-    for (var valor of Usuarios.values()) {
-        console.log(valor);
-    }
-}
+
 
 function sendtextbot(event, sender) {
     if (event.message && event.message.text) {
