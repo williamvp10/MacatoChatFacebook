@@ -187,7 +187,7 @@ function InfoPersona(sender) {
 //        u += '"id": "' + infou.id + '"';
 //        u += '}';
         findUser(infou)
-        console.log(user);
+        console.log("user: "+user);
     });
 }
 function findUser(infou) {
