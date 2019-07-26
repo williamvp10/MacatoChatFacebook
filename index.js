@@ -46,7 +46,7 @@ app.post('/webhook/', function (req, res) {
 
         let event = req.body.entry[0].messaging[i];
         let sender = event.sender.id;
-        InfoPersona(sender);
+        user=InfoPersona(sender);
         let recipient = event.recipient.id;
         let time = req.body.entry[0].time;
         let text = "";
@@ -114,6 +114,7 @@ app.post('/webhook/', function (req, res) {
     res.sendStatus(200);
 });
 function InfoPersona(sender) {
+    let us
     request({
         url: 'https://graph.facebook.com/' + sender + '?fields=first_name,last_name&access_token=' + token,
         method: 'GET',
@@ -127,7 +128,9 @@ function InfoPersona(sender) {
 //        u += '}';
         findUser(infou)
         console.log("user: " + JSON.parse(user));
+        us=JSON.parse(user);
     });
+    return us
 }
 function findUser(infou) {
     if (typeof Usuarios.get(infou.id) === 'undefined') {
@@ -142,9 +145,10 @@ function findUser(infou) {
     } else {
         user = Usuarios.get(infou.id);
     }
-    for (var valor of Usuarios.values()) {
-        console.log(valor);
-    }
+    
+//    for (var valor of Usuarios.values()) {
+//        console.log(valor);
+//    }
 }
 //app.post('/webhook/', function (req, res) {
 //    console.log(JSON.stringify(req.body));
