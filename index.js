@@ -201,7 +201,7 @@ function findUser(infou) {
         user = JSON.parse(u);
         Usuarios.set(infou.id, user);
     } else {
-        user = JSON.parse(Usuarios.get(infou.id));
+        user = Usuarios.get(infou.id);
     }
     for (var valor of Usuarios.values()) {
         console.log(valor);
