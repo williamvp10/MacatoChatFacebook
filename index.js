@@ -32,6 +32,82 @@ app.listen(app.get('port'), function () {
 });
 //FBM webhook
 
+app.post('/webhook/', function (req, res) {
+    console.log(JSON.stringify(req.body));
+
+    let messaging_events = req.body.entry[0].messaging;
+    for (let i = 0; i < messaging_events.length; i++) {
+
+        let event = req.body.entry[0].messaging[i];
+        let sender = event.sender.id;
+        InfoPersona(sender);
+        if (typeof user != 'undefined'){
+            let recipient = event.recipient.id;
+            let time = req.body.entry[0].time;
+            let text = "";
+            let type = "";
+            try {
+                text = req.body.entry[0].messaging[i].postback.title;
+            } catch (err) {
+            }
+            try {
+                type = req.body.entry[0].messaging[i].postback.payload;
+            } catch (err) {
+            }
+            if (type.length == 0) {
+                text = event.message.text;
+            }
+            console.log("type" + type);
+            console.log("userr " + user);
+            var compare = "add ingredient";
+            var compare2 = "requestTiendas";
+            var compareresult = compare.localeCompare(type);
+            var compareresult2 = compare2.localeCompare(type);
+            if (compareresult === 0) {
+                user.ingredientes += "," + text;
+            } else if (compareresult2 === 0) {
+                request({
+                    url: msngerServerUrl,
+                    method: 'POST',
+                    form: {
+                        'userId': user.id,
+                        'userName': user.first_name,
+                        'userType': type,
+                        'userUtterance': user.ingredientes
+                    }
+                },
+                        function (error, response, body) {
+                            //response is from the bot
+                            if (!error && response.statusCode === 200) {
+                                selectTypeBotMessage(sender, body);
+                            } else {
+                                sendTextMessage(sender, 'Error!');
+                            }
+                        });
+            } else {
+                request({
+                    url: msngerServerUrl,
+                    method: 'POST',
+                    form: {
+                        'userId': user.id,
+                        'userName': user.first_name,
+                        'userType': type,
+                        'userUtterance': text
+                    }
+                },
+                        function (error, response, body) {
+                            //response is from the bot
+                            if (!error && response.statusCode === 200) {
+                                selectTypeBotMessage(sender, body);
+                            } else {
+                                sendTextMessage(sender, 'Error!');
+                            }
+                        });
+            }
+        }
+    }
+    res.sendStatus(200);
+});
 function InfoPersona(sender) {
     request({
         url: 'https://graph.facebook.com/' + sender + '?fields=first_name,last_name&access_token=' + token,
@@ -67,83 +143,6 @@ function findUser(infou) {
 //        console.log(valor);
 //    }
 }
-
-app.post('/webhook/', function (req, res) {
-    console.log(JSON.stringify(req.body));
-    
-    let messaging_events = req.body.entry[0].messaging;
-    for (let i = 0; i < messaging_events.length; i++) {
-
-        let event = req.body.entry[0].messaging[i];
-        let sender = event.sender.id;
-        InfoPersona(sender);
-        let recipient = event.recipient.id;
-        let time = req.body.entry[0].time;
-        let text = "";
-        let type = "";
-        try {
-            text = req.body.entry[0].messaging[i].postback.title;
-        } catch (err) {
-        }
-        try {
-            type = req.body.entry[0].messaging[i].postback.payload;
-        } catch (err) {
-        }
-        if (type.length == 0) {
-            text = event.message.text;
-        }
-        console.log("type" + type);
-        console.log("userr " + user);
-        var compare = "add ingredient";
-        var compare2 = "requestTiendas";
-        var compareresult = compare.localeCompare(type);
-        var compareresult2 = compare2.localeCompare(type);
-        if (compareresult === 0) {
-            user.ingredientes += "," + text;
-        } else if (compareresult2 === 0) {
-            request({
-                url: msngerServerUrl,
-                method: 'POST',
-                form: {
-                    'userId': user.id,
-                    'userName': user.first_name,
-                    'userType': type,
-                    'userUtterance': user.ingredientes
-                }
-            },
-                    function (error, response, body) {
-                        //response is from the bot
-                        if (!error && response.statusCode === 200) {
-                            selectTypeBotMessage(sender, body);
-                        } else {
-                            sendTextMessage(sender, 'Error!');
-                        }
-                    });
-        } else {
-            request({
-                url: msngerServerUrl,
-                method: 'POST',
-                form: {
-                    'userId': user.id,
-                    'userName': user.first_name,
-                    'userType': type,
-                    'userUtterance': text
-                }
-            },
-                    function (error, response, body) {
-                        //response is from the bot
-                        if (!error && response.statusCode === 200) {
-                            selectTypeBotMessage(sender, body);
-                        } else {
-                            sendTextMessage(sender, 'Error!');
-                        }
-                    });
-        }
-
-    }
-    res.sendStatus(200);
-});
-
 //app.post('/webhook/', function (req, res) {
 //    console.log(JSON.stringify(req.body));
 //    let messaging_events = req.body.entry[0].messaging;
