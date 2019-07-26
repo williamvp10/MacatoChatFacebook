@@ -7,8 +7,8 @@ const app = express();
 const token = "EAADiQpmWQRgBAPglvHwxHZCMaXlZBHHjADrALySMQvlwR4wl5MbnhW5ZA3JDaKqOagA6ZC32lZBoDAv0mYO3rwgJtlihDcGAnfmb3xgj5YTen2ZBPA4a3zsSot4TVB7W0xdjnrmh4ZAt4NVvmBoZAzONDTmWNh119KA1f4YQZA18towZDZD";
 const msngerServerUrl = 'https://mecatobot.herokuapp.com/bot';
 //global var
-
-var varIngredientes = "";
+var Usuarios = new Map();
+var user;
 app.set('port', (process.env.PORT || 5000));
 // Process application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}));
@@ -38,63 +38,70 @@ app.post('/webhook/', function (req, res) {
 
         let event = req.body.entry[0].messaging[i];
         let sender = event.sender.id;
+        InfoPersona(sender);
         let recipient = event.recipient.id;
         let time = req.body.entry[0].time;
         let text = "";
+        let type = "";
         try {
             text = req.body.entry[0].messaging[i].postback.title;
-            var type =""+ req.body.entry[0].messaging[i].postback.payload;
-            var type1=type.split(":")[0];
-            console.log(type);
-            var compareIngredientes = "add Ingredientes";
-            var compare2Ingredientes = "requestTiendas";
-            var compareresultIngredientes = compareIngredientes.localeCompare(type1);
-            var compareresult2Ingredientes = compare2Ingredientes.localeCompare(type1);
-            if (compareresultIngredientes === 0) {
-                if(varIngredientes.length>0){
-                    varIngredientes += ",";
-                }
-                varIngredientes += type.split(":")[1];
-            } else if (compareresult2Ingredientes === 0) {
-                request({
-                    url: msngerServerUrl,
-                    method: 'POST',
-                    form: {
-                        'userType': type,
-                        'userUtterance': varIngredientes
-                    }
-                }, function (error, response, body) {
-                    //response is from the bot
-                    varIngredientes = "";
-                    if (!error && response.statusCode === 200) {
-                        selectTypeBotMessage(sender, body);
-                    } else {
-                        sendTextMessage(sender, 'Error!');
-                    }
-                });
-            } else {
-                request({
-                    url: msngerServerUrl,
-                    method: 'POST',
-                    form: {
-                        'userType': type,
-                        'userUtterance': text
-                    }
-                }, function (error, response, body) {
-                    //response is from the bot
-                    if (!error && response.statusCode === 200) {
-                        selectTypeBotMessage(sender, body);
-                    } else {
-                        sendTextMessage(sender, 'Error!');
-                    }
-                });
-            }
         } catch (err) {
-            sendtextbot(event, sender);
+        }
+        try {
+            type = req.body.entry[0].messaging[i].postback.payload;
+        } catch (err) {
+        }
+        if (type.length == 0) {
+            text = event.message.text;
+        }
+        console.log(type);
+        var compare = "add ingredient";
+        var compare2 = "requestTiendas";
+        var compareresult = compare.localeCompare(type);
+        var compareresult2 = compare2.localeCompare(type);
+        if (compareresult === 0) {
+            user.ingredientes += "," + text;
+        } else if (compareresult2 === 0) {
+            request({
+                url: msngerServerUrl,
+                method: 'POST',
+                form: {
+                    'userId': user.id,
+                    'userName': user.first_name,
+                    'userType': type,
+                    'userUtterance': user.ingredientes
+                }
+            },
+                    function (error, response, body) {
+                        //response is from the bot
+                        if (!error && response.statusCode === 200) {
+                            selectTypeBotMessage(sender, body);
+                        } else {
+                            sendTextMessage(sender, 'Error!');
+                        }
+                    });
+        } else {
+            request({
+                url: msngerServerUrl,
+                method: 'POST',
+                form: {
+                    'userId': user.id,
+                    'userName': user.first_name,
+                    'userType': type,
+                    'userUtterance': text
+                }
+            },
+                    function (error, response, body) {
+                        //response is from the bot
+                        if (!error && response.statusCode === 200) {
+                            selectTypeBotMessage(sender, body);
+                        } else {
+                            sendTextMessage(sender, 'Error!');
+                        }
+                    });
         }
 
     }
-
     res.sendStatus(200);
 });
 
@@ -291,7 +298,7 @@ function sendTextMessageList(sender, bot) {
             elements += ' { ';
             elements += ' "type": "postback",';
             elements += ' "title": "' + bot.elements[i].buttons[j].titulo + '",';
-            elements += ' "payload": "' + bot.elements[i].buttons[j].respuesta+'"';
+            elements += ' "payload": "' + bot.elements[i].buttons[j].respuesta + '"';
             elements += '  }  ';
         }
         elements += ' ]  ';
