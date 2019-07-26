@@ -8,7 +8,7 @@ const token = "EAADiQpmWQRgBAPglvHwxHZCMaXlZBHHjADrALySMQvlwR4wl5MbnhW5ZA3JDaKqO
 const msngerServerUrl = 'https://mecatobot.herokuapp.com/bot';
 //global var
 var Usuarios = new Map();
-var user=new Json();
+var user;
 app.set('port', (process.env.PORT || 5000));
 // Process application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}));
