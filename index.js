@@ -178,7 +178,6 @@ function InfoPersona(sender) {
         url: 'https://graph.facebook.com/' + sender + '?fields=first_name,last_name&access_token=' + token,
         method: 'GET',
     }, function (error, response, body) {
-        console.log(body);
         var infou = JSON.parse(body);
         console.log(infou);
 //        let u = '{';
@@ -187,7 +186,7 @@ function InfoPersona(sender) {
 //        u += '"id": "' + infou.id + '"';
 //        u += '}';
         findUser(infou)
-        console.log("user: "+user);
+        console.log("user: "+JSON.parse(user));
     });
 }
 function findUser(infou) {
@@ -198,7 +197,7 @@ function findUser(infou) {
         u += '"id": "' + infou.id + '",';
         u += '"ingredientes": ""';
         u += '}';
-        user = JSON.parse(u);
+        user = u;
         Usuarios.set(infou.id, user);
     } else {
         user = Usuarios.get(infou.id);
