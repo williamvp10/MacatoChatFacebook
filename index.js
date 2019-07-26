@@ -107,7 +107,6 @@ app.post('/webhook/', function (req, res) {
     res.sendStatus(200);
 });
 function InfoPersona(sender) {
-    let us
     request({
         url: 'https://graph.facebook.com/' + sender + '?fields=first_name,last_name&access_token=' + token,
         method: 'GET',
@@ -134,7 +133,7 @@ function findUser(infou) {
         u += '}';
         user = JSON.parse(u);
         Usuarios.set(infou.id, user);
-        console.log(JSON.parse(user))
+        console.log(user)
     } else {
         user = Usuarios.get(infou.id);
     }
