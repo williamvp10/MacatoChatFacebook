@@ -8,7 +8,7 @@ const token = "EAADiQpmWQRgBAPglvHwxHZCMaXlZBHHjADrALySMQvlwR4wl5MbnhW5ZA3JDaKqO
 const msngerServerUrl = 'https://mecatobot.herokuapp.com/bot';
 //global var
 var Usuarios = new Map();
-var user;
+var user=new Json();
 app.set('port', (process.env.PORT || 5000));
 // Process application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}));
@@ -31,6 +31,43 @@ app.listen(app.get('port'), function () {
     console.log('running on port', app.get('port'));
 });
 //FBM webhook
+
+function InfoPersona(sender) {
+    request({
+        url: 'https://graph.facebook.com/' + sender + '?fields=first_name,last_name&access_token=' + token,
+        method: 'GET',
+    }, function (error, response, body) {
+        var infou = JSON.parse(body);
+        console.log(infou);
+//        let u = '{';
+//        u += '"first_name": "' + infou.first_name + '",';
+//        u += '"last_name": "' + infou.last_name + '",';
+//        u += '"id": "' + infou.id + '"';
+//        u += '}';
+        findUser(infou)
+        console.log("user: " + user.id);
+    });
+}
+function findUser(infou) {
+    if (typeof Usuarios.get(infou.id) === 'undefined') {
+        console.log('entro')
+        let u = '{';
+        u += '"first_name": "' + infou.first_name + '",';
+        u += '"last_name": "' + infou.last_name + '",';
+        u += '"id": "' + infou.id + '",';
+        u += '"ingredientes": ""';
+        u += '}';
+        user = JSON.parse(u);
+        Usuarios.set(infou.id, user);
+        console.log(user)
+    } else {
+        user = Usuarios.get(infou.id);
+    }
+//    for (var valor of Usuarios.values()) {
+//        console.log(valor);
+//    }
+}
+
 app.post('/webhook/', function (req, res) {
     console.log(JSON.stringify(req.body));
     
@@ -56,7 +93,7 @@ app.post('/webhook/', function (req, res) {
             text = event.message.text;
         }
         console.log("type" + type);
-        console.log("userr " + JSON.stringify(user));
+        console.log("userr " + user);
         var compare = "add ingredient";
         var compare2 = "requestTiendas";
         var compareresult = compare.localeCompare(type);
@@ -106,41 +143,7 @@ app.post('/webhook/', function (req, res) {
     }
     res.sendStatus(200);
 });
-function InfoPersona(sender) {
-    request({
-        url: 'https://graph.facebook.com/' + sender + '?fields=first_name,last_name&access_token=' + token,
-        method: 'GET',
-    }, function (error, response, body) {
-        var infou = JSON.parse(body);
-        console.log(infou);
-//        let u = '{';
-//        u += '"first_name": "' + infou.first_name + '",';
-//        u += '"last_name": "' + infou.last_name + '",';
-//        u += '"id": "' + infou.id + '"';
-//        u += '}';
-        findUser(infou)
-        console.log("user: " + user.id);
-    });
-}
-function findUser(infou) {
-    if (typeof Usuarios.get(infou.id) === 'undefined') {
-        console.log('entro')
-        let u = '{';
-        u += '"first_name": "' + infou.first_name + '",';
-        u += '"last_name": "' + infou.last_name + '",';
-        u += '"id": "' + infou.id + '",';
-        u += '"ingredientes": ""';
-        u += '}';
-        user = JSON.parse(u);
-        Usuarios.set(infou.id, user);
-        console.log(user)
-    } else {
-        user = Usuarios.get(infou.id);
-    }
-//    for (var valor of Usuarios.values()) {
-//        console.log(valor);
-//    }
-}
+
 //app.post('/webhook/', function (req, res) {
 //    console.log(JSON.stringify(req.body));
 //    let messaging_events = req.body.entry[0].messaging;
