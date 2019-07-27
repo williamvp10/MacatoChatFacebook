@@ -38,22 +38,21 @@ app.post('/webhook/', function (req, res) {
     let messaging_events = req.body.entry[0].messaging;
     for (let i = 0; i < messaging_events.length; i++) {
 
-        let event = req.body.entry[0].messaging[i];
+        let event = messaging_events[i];
         let sender = event.sender.id;
         InfoPersona(sender);
-        if (typeof user != 'undefined'){
+        if (typeof user != 'undefined') {
             let recipient = event.recipient.id;
             let time = req.body.entry[0].time;
             let text = "";
             let type = "";
-            try {
-                text = req.body.entry[0].messaging[i].postback.title;
-            } catch (err) {
+            if (messaging_events[i].postback.title) {
+                text = messaging_events[i].postback.title;
             }
-            try {
-                type = req.body.entry[0].messaging[i].postback.payload;
-            } catch (err) {
+            if (messaging_events[i].postback.payload) {
+                type = messaging_events[i].postback.payload;
             }
+
             if (type.length == 0) {
                 text = event.message.text;
             }
@@ -85,7 +84,28 @@ app.post('/webhook/', function (req, res) {
                             }
                         });
             } else {
-                sendtextbot(event, sender);
+                if (messaging_events[i].postback.payload) {
+                    request({
+                        url: msngerServerUrl,
+                        method: 'POST',
+                        form: {
+                            'userId': user.id,
+                            'userName': user.first_name,
+                            'userType': type,
+                            'userUtterance': user.ingredientes
+                        }
+                    },
+                            function (error, response, body) {
+                                //response is from the bot
+                                if (!error && response.statusCode === 200) {
+                                    selectTypeBotMessage(sender, body);
+                                } else {
+                                    sendTextMessage(sender, 'Error!');
+                                }
+                            });
+                } else {
+                    sendtextbot(event, sender);
+                }
             }
         }
     }
@@ -271,8 +291,8 @@ function selectTypeBotMessage(sender, body) {
             } else if (n5 === 0) {
                 sendTextMessage(sender, botOut.botUtterance);
             } else if (n6 === 0) {
-                sendTextMessageConfirm(sender, botOut) 
-                sendButtonsConfirm(sender) 
+                sendTextMessageConfirm(sender, botOut)
+                sendButtonsConfirm(sender)
             } else if (n7 === 0) {
                 sendTextMessage(sender, botOut.botUtterance);
             } else if (n8 === 0) {
@@ -654,8 +674,8 @@ function sendTextMessageConfirm(sender, bot) {
                 "type": "template",
                 "payload": {
                     "template_type": "receipt",
-                    "recipient_name": "n" + usuario,
-                    "order_number": bot.Pedido.tipo + " 1 en la tienda " + bot.Pedido.tienda,
+                    "recipient_name": " n" + user.first_name,
+                    "order_number": bot.Pedido.tipo + "  en la tienda " + bot.Pedido.tienda,
                     "currency": "COP",
                     "payment_method": "Visa 2345",
                     "order_url": "http://petersapparel.parseapp.com/order?order_id=123456",
