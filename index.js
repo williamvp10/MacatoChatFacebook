@@ -271,11 +271,12 @@ function selectTypeBotMessage(sender, body) {
             } else if (n5 === 0) {
                 sendTextMessage(sender, botOut.botUtterance);
             } else if (n6 === 0) {
-                sendTextMessageType(sender, botOut)
+                sendTextMessageConfirm(sender, botOut) 
+                sendButtonsConfirm(sender) 
             } else if (n7 === 0) {
                 sendTextMessage(sender, botOut.botUtterance);
             } else if (n8 === 0) {
-                sendTextMessageType(sender, botOut);
+                sendTextMessageList(sender, botOut);
             } else {
                 sendTextMessage(sender, "disculpa no puedo responder a tu solicitud");
             }
