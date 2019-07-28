@@ -41,9 +41,17 @@ app.post('/webhook/', function (req, res) {
         let sender = event.sender.id;
         let recipient = event.recipient.id;
         let time = req.body.entry[0].time;
-        
-        sendServer(event, messaging_events)
         InfoPersona(sender)
+        console.log("before setInterval"); //called first
+        var tid = setInterval(function () {
+            //called 1 times each time after one second  
+            //before getting cleared by below timeout. 
+            sendServer(event, messaging_events)
+        }, 3000); //delay is in milliseconds  second
+        setTimeout(function () {
+            clearInterval(tid); //clear above interval after 5 seconds
+        }, 4000);
+        
     }
     res.sendStatus(200);
 });
