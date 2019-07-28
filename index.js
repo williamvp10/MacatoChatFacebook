@@ -41,17 +41,9 @@ app.post('/webhook/', function (req, res) {
         let sender = event.sender.id;
         let recipient = event.recipient.id;
         let time = req.body.entry[0].time;
-
-        InfoPersona(sender);
-        var start = new Date().getTime();
-        console.log("entro")
-        for (var ti = 0; ti < 1e7; ti++) {
-            if ((new Date().getTime() - start) > 3000) {
-                console.log("salio")
-                break;
-            }
-        }
+        
         sendServer(event, messaging_events)
+        InfoPersona(sender)
     }
     res.sendStatus(200);
 });
