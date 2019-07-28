@@ -34,13 +34,26 @@ app.listen(app.get('port'), function () {
 
 app.post('/webhook/', function (req, res) {
     console.log(JSON.stringify(req.body));
-    user=null;
+    user = null;
     let messaging_events = req.body.entry[0].messaging;
     for (let i = 0; i < messaging_events.length; i++) {
 
         let event = messaging_events[i];
         let sender = event.sender.id;
-        InfoPersona(sender);
+        request({
+            url: 'https://graph.facebook.com/' + sender + '?fields=first_name,last_name&access_token=' + token,
+            method: 'GET',
+        }, function (error, response, body) {
+            var infou = JSON.parse(body);
+            console.log(infou);
+//        let u = '{';
+//        u += '"first_name": "' + infou.first_name + '",';
+//        u += '"last_name": "' + infou.last_name + '",';
+//        u += '"id": "' + infou.id + '"';
+//        u += '}';
+            findUser(infou)
+            console.log("user: " + user.id);
+        });
         if (typeof user != 'undefined') {
             let recipient = event.recipient.id;
             let time = req.body.entry[0].time;
@@ -66,12 +79,12 @@ app.post('/webhook/', function (req, res) {
             var compareresult = compare.localeCompare(type.split(":")[0]);
             var compareresult2 = compare2.localeCompare(type.split(":")[0]);
             if (compareresult === 0) {
-                if(user.ingredientes.length!=0){
+                if (user.ingredientes.length != 0) {
                     user.ingredientes += ",";
                 }
-                user.ingredientes +=  text;
+                user.ingredientes += text;
             } else if (compareresult2 === 0) {
-                type=type+":"+user.ingredientes;
+                type = type + ":" + user.ingredientes;
                 request({
                     url: msngerServerUrl,
                     method: 'POST',
@@ -150,8 +163,8 @@ function findUser(infou) {
         user = Usuarios.get(infou.id);
     }
     for (var valor of Usuarios.values()) {
-        console.log("nombre user: "+valor.first_name);
-        console.log("ingredientes user: "+valor.ingredientes);
+        console.log("nombre user: " + valor.first_name);
+        console.log("ingredientes user: " + valor.ingredientes);
     }
 }
 //app.post('/webhook/', function (req, res) {
