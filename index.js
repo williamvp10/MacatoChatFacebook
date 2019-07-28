@@ -43,7 +43,7 @@ app.post('/webhook/', function (req, res) {
         let time = req.body.entry[0].time;
         InfoPersona(sender)
         console.log("before setInterval"); //called first
-        var tid = setInterval(function () {
+        var tid = setInterval(function (event, messaging_events) {
             //called 1 times each time after one second  
             //before getting cleared by below timeout. 
             sendServer(event, messaging_events)
