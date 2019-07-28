@@ -41,86 +41,8 @@ app.post('/webhook/', function (req, res) {
         let sender = event.sender.id;
         let recipient = event.recipient.id;
         let time = req.body.entry[0].time;
-        InfoPersona(sender);
-
-        //let sender = event.sender.id;
-        try {
-            user = Usuarios.get(sender.id);
-        } catch (err) {
-            console.log("error usuario no encontrado")
-        }
-        if (typeof user != 'undefined') {
-            let text = "";
-            let type = "";
-            try {
-                text = messaging_events[i].postback.title;
-            } catch (err) {
-            }
-            try {
-                type = messaging_events[i].postback.payload;
-            } catch (err) {
-            }
-
-            if (type.length == 0) {
-                text = event.message.text;
-            }
-            console.log("type " + type);
-            console.log("userr " + user.nombre);
-            var compare = "addIngredient";
-            var compare2 = "requestTiendas";
-            type.split(":");
-            var compareresult = compare.localeCompare(type.split(":")[0]);
-            var compareresult2 = compare2.localeCompare(type.split(":")[0]);
-            if (compareresult === 0) {
-                if (user.ingredientes.length != 0) {
-                    user.ingredientes += ",";
-                }
-                user.ingredientes += text;
-            } else if (compareresult2 === 0) {
-                type = type + ":" + user.ingredientes;
-                request({
-                    url: msngerServerUrl,
-                    method: 'POST',
-                    form: {
-                        'userId': user.id,
-                        'userName': user.first_name,
-                        'userType': type,
-                        'userUtterance': user.ingredientes
-                    }
-                },
-                        function (error, response, body) {
-                            //response is from the bot
-                            if (!error && response.statusCode === 200) {
-                                selectTypeBotMessage(sender, body);
-                            } else {
-                                sendTextMessage(sender, 'Error!');
-                            }
-                        });
-            } else {
-                if (type.length != 0) {
-                    request({
-                        url: msngerServerUrl,
-                        method: 'POST',
-                        form: {
-                            'userId': user.id,
-                            'userName': user.first_name,
-                            'userType': type,
-                            'userUtterance': text
-                        }
-                    },
-                            function (error, response, body) {
-                                //response is from the bot
-                                if (!error && response.statusCode === 200) {
-                                    selectTypeBotMessage(sender, body);
-                                } else {
-                                    sendTextMessage(sender, 'Error!');
-                                }
-                            });
-                } else {
-                    sendtextbot(event, sender);
-                }
-            }
-        }
+        setTimeout("InfoPersona(sender)",5000)
+        setTimeout("sendServer(event, messaging_events)",5000)
     }
     res.sendStatus(200);
 });
