@@ -106,10 +106,6 @@ function sendServer(event, messaging_events) {
             type = messaging_events[i].postback.payload;
         } catch (err) {
         }
-
-        if (type.length == 0) {
-            text = event.message.text;
-        }
         console.log("type " + type);
         console.log("userr " + user.nombre);
         var compare = "addIngredient";
