@@ -47,10 +47,10 @@ app.post('/webhook/', function (req, res) {
             //called 1 times each time after one second  
             //before getting cleared by below timeout. 
             sendServer(event, messaging_events)
-        }, 3000); //delay is in milliseconds  second
+        }, 30); //delay is in milliseconds  second
         setTimeout(function () {
             clearInterval(tid); //clear above interval after 5 seconds
-        }, 4000);
+        }, 40);
         
     }
     res.sendStatus(200);
