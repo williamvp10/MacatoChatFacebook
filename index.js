@@ -34,7 +34,7 @@ app.listen(app.get('port'), function () {
 
 app.post('/webhook/', function (req, res) {
     console.log(JSON.stringify(req.body));
-
+    user=null;
     let messaging_events = req.body.entry[0].messaging;
     for (let i = 0; i < messaging_events.length; i++) {
 
@@ -69,7 +69,7 @@ app.post('/webhook/', function (req, res) {
                 if(user.ingredientes.length!=0){
                     user.ingredientes += ",";
                 }
-                user.ingredientes += text;
+                user.ingredientes +=  text;
             } else if (compareresult2 === 0) {
                 type=type+":"+user.ingredientes;
                 request({
@@ -149,9 +149,10 @@ function findUser(infou) {
     } else {
         user = Usuarios.get(infou.id);
     }
-//    for (var valor of Usuarios.values()) {
-//        console.log(valor);
-//    }
+    for (var valor of Usuarios.values()) {
+        console.log("nombre user: "+valor.first_name);
+        console.log("ingredientes user: "+valor.ingredientes);
+    }
 }
 //app.post('/webhook/', function (req, res) {
 //    console.log(JSON.stringify(req.body));
