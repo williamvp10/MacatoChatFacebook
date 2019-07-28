@@ -58,15 +58,17 @@ app.post('/webhook/', function (req, res) {
             if (type.length == 0) {
                 text = event.message.text;
             }
-            console.log("type" + type);
-            console.log("userr " + user);
-            var compare = "add ingredient";
+            console.log("type " + type);
+            console.log("userr " + user.nombre);
+            var compare = "addingredient";
             var compare2 = "requestTiendas";
-            var compareresult = compare.localeCompare(type);
-            var compareresult2 = compare2.localeCompare(type);
+            type.split(":");
+            var compareresult = compare.localeCompare(type.split(":")[0]);
+            var compareresult2 = compare2.localeCompare(type.split(":")[0]);
             if (compareresult === 0) {
                 user.ingredientes += "," + text;
             } else if (compareresult2 === 0) {
+                type=type+user.ingredientes;
                 request({
                     url: msngerServerUrl,
                     method: 'POST',
@@ -272,21 +274,21 @@ function selectTypeBotMessage(sender, body) {
                 if (botOut.buttons.length === 0) {
                     sendTextMessage(sender, botOut.botUtterance);
                 } else {
-                    sendTextMessageType(sender, botOut);
+                    sendUserPostback(sender, botOut);
                 }
             } else if (n2 === 0) {
                 sendTextMessageList(sender, botOut)
                 if (botOut.buttons.length === 0) {
                     sendTextMessage(sender, botOut.botUtterance);
                 } else {
-                    sendTextMessageType(sender, botOut);
+                    sendUserPostback(sender, botOut);
                 }
             } else if (n3 === 0) {
                 sendTextMessageList(sender, botOut)
                 if (botOut.buttons.length === 0) {
                     sendTextMessage(sender, botOut.botUtterance);
                 } else {
-                    sendTextMessageType(sender, botOut);
+                    sendUserPostback(sender, botOut);
                 }
             } else if (n4 === 0) {
                 sendTextMessage(sender, botOut.botUtterance);
@@ -307,7 +309,7 @@ function selectTypeBotMessage(sender, body) {
         console.log(botOut.botUtterance);
     }
 }
-function sendTextMessageType(sender, bot) {
+function sendUserPostback(sender, bot) {
     let buttons = '[ ';
     for (var i = 0; i < bot.buttons.length; i++) {
         if (i !== 0) {
@@ -379,8 +381,8 @@ function sendTextMessage(sender, text) {
     }
 }
 
-
 function sendTextMessageList(sender, bot) {
+    console.log(bot);
     let elements = '[';
     let cant = 0;
     if (bot.elements.length > 10) {
@@ -393,11 +395,16 @@ function sendTextMessageList(sender, bot) {
             elements += ',';
         }
         elements += '{';
-        elements += ' "title":"' + bot.elements[i].titulo + '",';
+        elements += '"title":"' + bot.elements[i].titulo + '"';
         var subtitulo = "";
         try {
-            var subtitulo = bot.elements[i].titulo;
-            elements += ' "subtitle":"' + subtitulo + '",';
+            var t1 = "undefined";
+            var n1 = bot.elements[i].subtitulo.localeCompare(t1);
+            if (n1 !== 0) {
+                var subtitulo = bot.elements[i].subtitulo;
+                elements += ',"subtitle":"' + subtitulo + '"';
+            }
+
         } catch (err) {
         }
         try {
@@ -405,21 +412,23 @@ function sendTextMessageList(sender, bot) {
             var n1 = bot.elements[i].url.localeCompare(t1);
             if (n1 !== 0) {
                 var url = bot.elements[i].url;
-                elements += ' "image_url":"' + url + '",';
+                url = fixUrl(url);
+                elements += ',"image_url":"' + url + '"';
             }
         } catch (err) {
         }
-
-        elements += ' "buttons":[';
-        for (var j = 0; j < bot.elements[i].buttons.length; j++) {
-            elements += ' { ';
-            elements += ' "type": "postback",';
-            elements += ' "title": "' + bot.elements[i].buttons[j].titulo + '",';
-            elements += ' "payload": "' + bot.elements[i].buttons[j].respuesta + '"';
-            elements += '  }  ';
+        if (bot.elements[i].buttons.length > 0) {
+            elements += ',"buttons":[';
+            for (var j = 0; j < bot.elements[i].buttons.length; j++) {
+                elements += '{';
+                elements += ' "type": "postback",';
+                elements += ' "title": "' + bot.elements[i].buttons[j].titulo + '",';
+                elements += ' "payload": "' + bot.elements[i].buttons[j].respuesta + '"';
+                elements += '}';
+            }
+            elements += ']';
         }
-        elements += ' ]  ';
-        elements += ' }  ';
+        elements += '}';
     }
     elements += ']';
 
