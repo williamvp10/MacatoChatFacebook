@@ -39,7 +39,6 @@ app.post('/webhook/', function (req, res) {
         let sender = event.sender.id;
         let recipient = event.recipient.id;
         let time = req.body.entry[0].time;
-        let user=InfoPersona(sender)
         let text = "";
         let type = "";
         try {
@@ -50,17 +49,13 @@ app.post('/webhook/', function (req, res) {
             type = messaging_events[i].postback.payload;
         } catch (err) {
         }
-        
         console.log("type " + type);
-        console.log("userr " + user.nombre);
-
         if (type.length != 0) {
             request({
                 url: msngerServerUrl,
                 method: 'POST',
                 form: {
-                    'userId': user.id,
-                    'userName': user.first_name,
+                    'userId': sender,
                     'userType': type,
                     'userUtterance': text
                 }
@@ -74,7 +69,7 @@ app.post('/webhook/', function (req, res) {
                         }
                     });
         } else {
-            sendtextbot(user,event, sender);
+            sendtextbot(event, sender);
         }
 
     }
@@ -111,8 +106,7 @@ function sendtextbot(user,event, sender) {
             url: msngerServerUrl,
             method: 'POST',
             form: {
-                'userId': user.id,
-                'userName': user.first_name,
+                'userId': sender,
                 'userUtterance': text
             }
         },
@@ -144,6 +138,7 @@ function selectTypeBotMessage(sender, body) {
             var t6 = "confirmarPedido";
             var t7 = "finalizar";
             var t8 = "menu";
+            var t9 = "addIngredient";
             var n1 = ty.localeCompare(t1);
             var n2 = ty.localeCompare(t2);
             var n3 = ty.localeCompare(t3);
@@ -152,6 +147,7 @@ function selectTypeBotMessage(sender, body) {
             var n6 = ty.localeCompare(t6);
             var n7 = ty.localeCompare(t7);
             var n8 = ty.localeCompare(t8);
+            var n9 = ty.localeCompare(t9);
             if (n1 === 0) {
                 sendTextMessageList(sender, botOut)
                 if (botOut.buttons.length === 0) {
@@ -185,6 +181,8 @@ function selectTypeBotMessage(sender, body) {
             } else if (n8 === 0) {
                 sendTextMessage(sender, botOut.botUtterance);
                 sendTextMessageList(sender, botOut);
+            } else if (n8 === 0) {
+                Console.log(botOut.botUtterance)
             } else {
                 sendTextMessage(sender, "disculpa no puedo responder a tu solicitud");
             }
