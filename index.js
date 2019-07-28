@@ -181,8 +181,8 @@ function selectTypeBotMessage(sender, body) {
             } else if (n8 === 0) {
                 sendTextMessage(sender, botOut.botUtterance);
                 sendTextMessageList(sender, botOut);
-            } else if (n8 === 0) {
-                Console.log(botOut.botUtterance)
+            } else if (n9 === 0) {
+                console.log(botOut.botUtterance)
             } else {
                 sendTextMessage(sender, "disculpa no puedo responder a tu solicitud");
             }
@@ -567,7 +567,7 @@ function sendTextMessageConfirm(sender, bot) {
                 "type": "template",
                 "payload": {
                     "template_type": "receipt",
-                    "recipient_name": " n" + user.first_name,
+                    "recipient_name": " n" + bot.username,
                     "order_number": bot.Pedido.tipo + "  en la tienda " + bot.Pedido.tienda,
                     "currency": "COP",
                     "payment_method": "Visa 2345",
