@@ -41,20 +41,20 @@ app.post('/webhook/', function (req, res) {
         let event = messaging_events[i];
         let sender = event.sender.id;
         InfoPersona(sender);
-        if (typeof user != 'undefined'){
+        if (typeof user != 'undefined') {
             let recipient = event.recipient.id;
             let time = req.body.entry[0].time;
             let text = "";
             let type = "";
-            try{
-                  text = messaging_events[i].postback.title;
-            }catch (err){
+            try {
+                text = messaging_events[i].postback.title;
+            } catch (err) {
             }
-            try{
-                  type = messaging_events[i].postback.payload;
-            }catch (err){   
+            try {
+                type = messaging_events[i].postback.payload;
+            } catch (err) {
             }
-            
+
             if (type.length == 0) {
                 text = event.message.text;
             }
@@ -86,27 +86,27 @@ app.post('/webhook/', function (req, res) {
                             }
                         });
             } else {
-                if(type.length != 0){
+                if (type.length != 0) {
                     request({
-                    url: msngerServerUrl,
-                    method: 'POST',
-                    form: {
-                        'userId': user.id,
-                        'userName': user.first_name,
-                        'userType': type,
-                        'userUtterance': user.ingredientes
-                    }
-                },
-                        function (error, response, body) {
-                            //response is from the bot
-                            if (!error && response.statusCode === 200) {
-                                selectTypeBotMessage(sender, body);
-                            } else {
-                                sendTextMessage(sender, 'Error!');
-                            }
-                        });
-                }else{
-                sendtextbot(event, sender);
+                        url: msngerServerUrl,
+                        method: 'POST',
+                        form: {
+                            'userId': user.id,
+                            'userName': user.first_name,
+                            'userType': type,
+                            'userUtterance': text
+                        }
+                    },
+                            function (error, response, body) {
+                                //response is from the bot
+                                if (!error && response.statusCode === 200) {
+                                    selectTypeBotMessage(sender, body);
+                                } else {
+                                    sendTextMessage(sender, 'Error!');
+                                }
+                            });
+                } else {
+                    sendtextbot(event, sender);
                 }
             }
         }
@@ -293,11 +293,12 @@ function selectTypeBotMessage(sender, body) {
             } else if (n5 === 0) {
                 sendTextMessage(sender, botOut.botUtterance);
             } else if (n6 === 0) {
-                sendTextMessageConfirm(sender, botOut) 
-                sendButtonsConfirm(sender) 
+                sendTextMessageConfirm(sender, botOut)
+                sendButtonsConfirm(sender)
             } else if (n7 === 0) {
                 sendTextMessage(sender, botOut.botUtterance);
             } else if (n8 === 0) {
+                sendTextMessage(sender, botOut.botUtterance);
                 sendTextMessageList(sender, botOut);
             } else {
                 sendTextMessage(sender, "disculpa no puedo responder a tu solicitud");
@@ -676,7 +677,7 @@ function sendTextMessageConfirm(sender, bot) {
                 "type": "template",
                 "payload": {
                     "template_type": "receipt",
-                    "recipient_name": " n" + user.first_name ,
+                    "recipient_name": " n" + user.first_name,
                     "order_number": bot.Pedido.tipo + "  en la tienda " + bot.Pedido.tienda,
                     "currency": "COP",
                     "payment_method": "Visa 2345",
