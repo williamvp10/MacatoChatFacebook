@@ -38,6 +38,7 @@ app.post('/webhook/', function (req, res) {
 
     for (let i = 0; i < messaging_events.length; i++) {
         let event = messaging_events[i];
+        let sender = event.sender.id;
         let recipient = event.recipient.id;
         let time = req.body.entry[0].time;
         InfoPersona(sender);
