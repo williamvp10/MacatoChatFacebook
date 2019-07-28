@@ -87,7 +87,7 @@ function sendServer(event, messaging_events) {
 
     let sender = event.sender.id;
     try {
-        user = Usuarios.get(infou.id);
+        user = Usuarios.get(sender.id);
     } catch (err) {
         console.log("error usuario no encontrado")
     }
