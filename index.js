@@ -44,8 +44,10 @@ app.post('/webhook/', function (req, res) {
 
         InfoPersona(sender);
         var start = new Date().getTime();
+        console.log("entro")
         for (var ti = 0; ti < 1e7; ti++) {
             if ((new Date().getTime() - start) > 3000) {
+                console.log("salio")
                 break;
             }
         }
