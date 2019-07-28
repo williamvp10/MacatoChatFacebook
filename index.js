@@ -36,98 +36,14 @@ app.post('/webhook/', function (req, res) {
     console.log(JSON.stringify(req.body));
     user = null;
     let messaging_events = req.body.entry[0].messaging;
-    for (let i = 0; i < messaging_events.length; i++) {
 
+    for (let i = 0; i < messaging_events.length; i++) {
         let event = messaging_events[i];
         let sender = event.sender.id;
-        request({
-            url: 'https://graph.facebook.com/' + sender + '?fields=first_name,last_name&access_token=' + token,
-            method: 'GET',
-        }, function (error, response, body) {
-            var infou = JSON.parse(body);
-            console.log(infou);
-//        let u = '{';
-//        u += '"first_name": "' + infou.first_name + '",';
-//        u += '"last_name": "' + infou.last_name + '",';
-//        u += '"id": "' + infou.id + '"';
-//        u += '}';
-            findUser(infou)
-            console.log("user: " + user.id);
-        });
-        if (typeof user != 'undefined') {
-            let recipient = event.recipient.id;
-            let time = req.body.entry[0].time;
-            let text = "";
-            let type = "";
-            try {
-                text = messaging_events[i].postback.title;
-            } catch (err) {
-            }
-            try {
-                type = messaging_events[i].postback.payload;
-            } catch (err) {
-            }
-
-            if (type.length == 0) {
-                text = event.message.text;
-            }
-            console.log("type " + type);
-            console.log("userr " + user.nombre);
-            var compare = "addIngredient";
-            var compare2 = "requestTiendas";
-            type.split(":");
-            var compareresult = compare.localeCompare(type.split(":")[0]);
-            var compareresult2 = compare2.localeCompare(type.split(":")[0]);
-            if (compareresult === 0) {
-                if (user.ingredientes.length != 0) {
-                    user.ingredientes += ",";
-                }
-                user.ingredientes += text;
-            } else if (compareresult2 === 0) {
-                type = type + ":" + user.ingredientes;
-                request({
-                    url: msngerServerUrl,
-                    method: 'POST',
-                    form: {
-                        'userId': user.id,
-                        'userName': user.first_name,
-                        'userType': type,
-                        'userUtterance': user.ingredientes
-                    }
-                },
-                        function (error, response, body) {
-                            //response is from the bot
-                            if (!error && response.statusCode === 200) {
-                                selectTypeBotMessage(sender, body);
-                            } else {
-                                sendTextMessage(sender, 'Error!');
-                            }
-                        });
-            } else {
-                if (type.length != 0) {
-                    request({
-                        url: msngerServerUrl,
-                        method: 'POST',
-                        form: {
-                            'userId': user.id,
-                            'userName': user.first_name,
-                            'userType': type,
-                            'userUtterance': text
-                        }
-                    },
-                            function (error, response, body) {
-                                //response is from the bot
-                                if (!error && response.statusCode === 200) {
-                                    selectTypeBotMessage(sender, body);
-                                } else {
-                                    sendTextMessage(sender, 'Error!');
-                                }
-                            });
-                } else {
-                    sendtextbot(event, sender);
-                }
-            }
-        }
+        let recipient = event.recipient.id;
+        let time = req.body.entry[0].time;
+        InfoPersona(sender);
+        sendServer(event, messaging_events)
     }
     res.sendStatus(200);
 });
@@ -167,75 +83,81 @@ function findUser(infou) {
         console.log("ingredientes user: " + valor.ingredientes);
     }
 }
-//app.post('/webhook/', function (req, res) {
-//    console.log(JSON.stringify(req.body));
-//    let messaging_events = req.body.entry[0].messaging;
-//    for (let i = 0; i < messaging_events.length; i++) {
-//
-//        let event = req.body.entry[0].messaging[i];
-//        let sender = event.sender.id;
-//        InfoPersona(sender);
-//        let recipient = event.recipient.id;
-//        let time = req.body.entry[0].time;
-//        let text = "";
-//        try {
-//            text = req.body.entry[0].messaging[i].postback.title;
-//            let type = req.body.entry[0].messaging[i].postback.payload;
-//            console.log(type);
-//            var compare = "add ingredient";
-//            var compare2 = "requestTiendas";
-//            var compareresult = compare.localeCompare(type);
-//            var compareresult2 = compare2.localeCompare(type);
-//            if (compareresult === 0) {
-//                ingredientes += "," + text;
-//            } else if (compareresult2 === 0) {
-//                console.log(ingredientes);
-//                request({
-//                    url: msngerServerUrl,
-//                    method: 'POST',
-//                    form: {
-//                        'userId': user.id,
-//                        'userName': user.first_name,
-//                        'userType': type,
-//                        'userUtterance': ingredientes
-//                    }
-//                }, function (error, response, body) {
-//                    //response is from the bot
-//                    ingredientes = "";
-//                    if (!error && response.statusCode === 200) {
-//                        selectTypeBotMessage(sender, body);
-//                    } else {
-//                        sendTextMessage(sender, 'Error!');
-//                    }
-//                });
-//            } else {
-//                request({
-//                    url: msngerServerUrl,
-//                    method: 'POST',
-//                    form: {
-//                        'userId': user.id,
-//                        'userName': user.first_name,
-//                        'userType': type,
-//                        'userUtterance': text
-//                    }
-//                },
-//                        function (error, response, body) {
-//                            //response is from the bot
-//                            if (!error && response.statusCode === 200) {
-//                                selectTypeBotMessage(sender, body);
-//                            } else {
-//                                sendTextMessage(sender, 'Error!');
-//                            }
-//                        });
-//            }
-//        } catch (err) {
-//            sendtextbot(event, sender);
-//        }
-//    }
-//    res.sendStatus(200);
-//});
 
+function sendServer(event, messaging_events) {
+    if (typeof user != 'undefined') {
+        let text = "";
+        let type = "";
+        try {
+            text = messaging_events[i].postback.title;
+        } catch (err) {
+        }
+        try {
+            type = messaging_events[i].postback.payload;
+        } catch (err) {
+        }
 
+        if (type.length == 0) {
+            text = event.message.text;
+        }
+        console.log("type " + type);
+        console.log("userr " + user.nombre);
+        var compare = "addIngredient";
+        var compare2 = "requestTiendas";
+        type.split(":");
+        var compareresult = compare.localeCompare(type.split(":")[0]);
+        var compareresult2 = compare2.localeCompare(type.split(":")[0]);
+        if (compareresult === 0) {
+            if (user.ingredientes.length != 0) {
+                user.ingredientes += ",";
+            }
+            user.ingredientes += text;
+        } else if (compareresult2 === 0) {
+            type = type + ":" + user.ingredientes;
+            request({
+                url: msngerServerUrl,
+                method: 'POST',
+                form: {
+                    'userId': user.id,
+                    'userName': user.first_name,
+                    'userType': type,
+                    'userUtterance': user.ingredientes
+                }
+            },
+                    function (error, response, body) {
+                        //response is from the bot
+                        if (!error && response.statusCode === 200) {
+                            selectTypeBotMessage(sender, body);
+                        } else {
+                            sendTextMessage(sender, 'Error!');
+                        }
+                    });
+        } else {
+            if (type.length != 0) {
+                request({
+                    url: msngerServerUrl,
+                    method: 'POST',
+                    form: {
+                        'userId': user.id,
+                        'userName': user.first_name,
+                        'userType': type,
+                        'userUtterance': text
+                    }
+                },
+                        function (error, response, body) {
+                            //response is from the bot
+                            if (!error && response.statusCode === 200) {
+                                selectTypeBotMessage(sender, body);
+                            } else {
+                                sendTextMessage(sender, 'Error!');
+                            }
+                        });
+            } else {
+                sendtextbot(event, sender);
+            }
+        }
+    }
+}
 
 function sendtextbot(event, sender) {
     if (event.message && event.message.text) {
