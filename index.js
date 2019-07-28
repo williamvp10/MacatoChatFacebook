@@ -93,7 +93,7 @@ function findUser(infou) {
 }
 
 function sendServer(event, messaging_events) {
-
+    console.log("send server")
     let sender = event.sender.id;
     if (typeof user != 'undefined') {
         let text = "";
