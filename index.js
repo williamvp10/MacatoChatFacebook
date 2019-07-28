@@ -66,7 +66,10 @@ app.post('/webhook/', function (req, res) {
             var compareresult = compare.localeCompare(type.split(":")[0]);
             var compareresult2 = compare2.localeCompare(type.split(":")[0]);
             if (compareresult === 0) {
-                user.ingredientes += "," + text;
+                if(user.ingredientes.length!=0){
+                    user.ingredientes += ",";
+                }
+                user.ingredientes += text;
             } else if (compareresult2 === 0) {
                 type=type+":"+user.ingredientes;
                 request({
