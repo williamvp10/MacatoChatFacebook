@@ -60,7 +60,7 @@ app.post('/webhook/', function (req, res) {
             }
             console.log("type " + type);
             console.log("userr " + user.nombre);
-            var compare = "addingredient";
+            var compare = "addIngredient";
             var compare2 = "requestTiendas";
             type.split(":");
             var compareresult = compare.localeCompare(type.split(":")[0]);
@@ -68,7 +68,7 @@ app.post('/webhook/', function (req, res) {
             if (compareresult === 0) {
                 user.ingredientes += "," + text;
             } else if (compareresult2 === 0) {
-                type=type+user.ingredientes;
+                type=type+":"+user.ingredientes;
                 request({
                     url: msngerServerUrl,
                     method: 'POST',
