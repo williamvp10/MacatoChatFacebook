@@ -7,8 +7,6 @@ const app = express();
 const token = "EAADiQpmWQRgBAPglvHwxHZCMaXlZBHHjADrALySMQvlwR4wl5MbnhW5ZA3JDaKqOagA6ZC32lZBoDAv0mYO3rwgJtlihDcGAnfmb3xgj5YTen2ZBPA4a3zsSot4TVB7W0xdjnrmh4ZAt4NVvmBoZAzONDTmWNh119KA1f4YQZA18towZDZD";
 const msngerServerUrl = 'https://mecatobot.herokuapp.com/bot';
 //global var
-var Usuarios = new Map();
-var user;
 app.set('port', (process.env.PORT || 5000));
 // Process application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}));
@@ -41,61 +39,7 @@ app.post('/webhook/', function (req, res) {
         let sender = event.sender.id;
         let recipient = event.recipient.id;
         let time = req.body.entry[0].time;
-        InfoPersona(sender)
-        console.log("before setInterval"); //called first
-        var tid = setInterval(
-            //called 1 times each time after one second  
-            //before getting cleared by below timeout. 
-            sendServer
-        , 30,event, messaging_events); //delay is in milliseconds  second
-        setTimeout(function () {
-            clearInterval(tid); //clear above interval after 5 seconds
-        }, 40);
-        
-    }
-    res.sendStatus(200);
-});
-function InfoPersona(sender) {
-    request({
-        url: 'https://graph.facebook.com/' + sender + '?fields=first_name,last_name&access_token=' + token,
-        method: 'GET',
-    }, function (error, response, body) {
-        var infou = JSON.parse(body);
-        console.log(infou);
-//        let u = '{';
-//        u += '"first_name": "' + infou.first_name + '",';
-//        u += '"last_name": "' + infou.last_name + '",';
-//        u += '"id": "' + infou.id + '"';
-//        u += '}';
-        findUser(infou)
-        console.log("user: " + user.id);
-    });
-}
-function findUser(infou) {
-    if (typeof Usuarios.get(infou.id) === 'undefined') {
-        console.log('entro')
-        let u = '{';
-        u += '"first_name": "' + infou.first_name + '",';
-        u += '"last_name": "' + infou.last_name + '",';
-        u += '"id": "' + infou.id + '",';
-        u += '"ingredientes": ""';
-        u += '}';
-        user = JSON.parse(u);
-        Usuarios.set(infou.id, user);
-        console.log(user)
-    } else {
-        user = Usuarios.get(infou.id);
-    }
-    for (var valor of Usuarios.values()) {
-        console.log("nombre user: " + valor.first_name);
-        console.log("ingredientes user: " + valor.ingredientes);
-    }
-}
-
-function sendServer(event, messaging_events) {
-    console.log("send server")
-    let sender = event.sender.id;
-    if (typeof user != 'undefined') {
+        let user=InfoPersona(sender)
         let text = "";
         let type = "";
         try {
@@ -106,20 +50,11 @@ function sendServer(event, messaging_events) {
             type = messaging_events[i].postback.payload;
         } catch (err) {
         }
+        
         console.log("type " + type);
         console.log("userr " + user.nombre);
-        var compare = "addIngredient";
-        var compare2 = "requestTiendas";
-        type.split(":");
-        var compareresult = compare.localeCompare(type.split(":")[0]);
-        var compareresult2 = compare2.localeCompare(type.split(":")[0]);
-        if (compareresult === 0) {
-            if (user.ingredientes.length != 0) {
-                user.ingredientes += ",";
-            }
-            user.ingredientes += text;
-        } else if (compareresult2 === 0) {
-            type = type + ":" + user.ingredientes;
+
+        if (type.length != 0) {
             request({
                 url: msngerServerUrl,
                 method: 'POST',
@@ -127,7 +62,7 @@ function sendServer(event, messaging_events) {
                     'userId': user.id,
                     'userName': user.first_name,
                     'userType': type,
-                    'userUtterance': user.ingredientes
+                    'userUtterance': text
                 }
             },
                     function (error, response, body) {
@@ -139,33 +74,36 @@ function sendServer(event, messaging_events) {
                         }
                     });
         } else {
-            if (type.length != 0) {
-                request({
-                    url: msngerServerUrl,
-                    method: 'POST',
-                    form: {
-                        'userId': user.id,
-                        'userName': user.first_name,
-                        'userType': type,
-                        'userUtterance': text
-                    }
-                },
-                        function (error, response, body) {
-                            //response is from the bot
-                            if (!error && response.statusCode === 200) {
-                                selectTypeBotMessage(sender, body);
-                            } else {
-                                sendTextMessage(sender, 'Error!');
-                            }
-                        });
-            } else {
-                sendtextbot(event, sender);
-            }
+            sendtextbot(user,event, sender);
         }
+
     }
+    res.sendStatus(200);
+});
+
+function InfoPersona(sender) {
+    let user=null
+    request({
+        url: 'https://graph.facebook.com/' + sender + '?fields=first_name,last_name&access_token=' + token,
+        method: 'GET',
+    }, function (error, response, body) {
+        console.log(body);
+        var infou = JSON.parse(body);
+        console.log(infou);
+        let u = '{';
+        u += '"first_name": "' + infou.first_name + '",';
+        u += '"last_name": "' + infou.last_name + '",';
+        u += '"id": "' + infou.id + '"';
+        u += '}';
+        user = JSON.parse(u);
+        console.log("completado"+user);
+        console.log("completado"+user.first_name);
+        return user;
+    });
+
 }
 
-function sendtextbot(event, sender) {
+function sendtextbot(user,event, sender) {
     if (event.message && event.message.text) {
         let text = event.message.text;
         //send it to the bot
