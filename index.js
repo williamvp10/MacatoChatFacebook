@@ -41,12 +41,14 @@ app.post('/webhook/', function (req, res) {
         let sender = event.sender.id;
         let recipient = event.recipient.id;
         let time = req.body.entry[0].time;
-        InfoPersona(sender)
-        setTimeout(sendServer,100,event, messaging_events)
-    }
-   // res.sendStatus(200);
-});
 
+        InfoPersona(sender);
+        let objetivo = (new Date()).getTime() + 1000 * Math.abs(300);
+        while ((new Date()).getTime() < objetivo){}
+        sendServer(event, messaging_events)
+    }
+    res.sendStatus(200);
+});
 function InfoPersona(sender) {
     request({
         url: 'https://graph.facebook.com/' + sender + '?fields=first_name,last_name&access_token=' + token,
