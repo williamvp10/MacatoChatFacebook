@@ -44,7 +44,7 @@ app.post('/webhook/', function (req, res) {
 
         InfoPersona(sender);
         var start = new Date().getTime();
-        for (var i = 0; i < 1e7; i++) {
+        for (var ti = 0; ti < 1e7; ti++) {
             if ((new Date().getTime() - start) > 3000) {
                 break;
             }
