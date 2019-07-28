@@ -43,7 +43,7 @@ app.post('/webhook/', function (req, res) {
         let time = req.body.entry[0].time;
 
         InfoPersona(sender);
-        let objetivo = (new Date()).getTime() + 1000 * Math.abs(300);
+        let objetivo = (new Date()).getTime() + 1000 * Math.abs(3);
         while ((new Date()).getTime() < objetivo){}
         sendServer(event, messaging_events)
     }
