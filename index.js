@@ -42,9 +42,9 @@ app.post('/webhook/', function (req, res) {
         let recipient = event.recipient.id;
         let time = req.body.entry[0].time;
         InfoPersona(sender)
-        setTimeout(sendServer(event, messaging_events),5000)
+        setTimeout(sendServer,3000,event, messaging_events)
     }
-    res.sendStatus(200);
+   // res.sendStatus(200);
 });
 
 function InfoPersona(sender) {
