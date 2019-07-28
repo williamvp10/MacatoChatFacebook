@@ -98,7 +98,7 @@ function InfoPersona(sender) {
 
 }
 
-function sendtextbot(user,event, sender) {
+function sendtextbot(event, sender) {
     if (event.message && event.message.text) {
         let text = event.message.text;
         //send it to the bot
