@@ -404,6 +404,7 @@ function sendTextMessageConfirm(sender, bot) {
         elements += '{';
         elements += ' "title": "' + bot.Pedido.ingredientes[i] + '",';
         elements += imagenes(bot.Pedido.ingredientes[i]);
+        elements += ' "image_url":"'+ bot.msg[i] + '",';
         //elements += ' "subtitle":"<ITEM_DESCRIPTION_OR_DETAILS>",';
         elements += ' "quantity": "1", ';
         elements += ' "price": 5000,';
