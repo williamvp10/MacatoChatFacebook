@@ -403,11 +403,11 @@ function sendTextMessageConfirm(sender, bot) {
         }
         elements += '{';
         elements += ' "title": "' + bot.Pedido.ingredientes[i] + '",';
-        elements += ' "image_url":"'+ bot.msg[i] + '",';
         //elements += ' "subtitle":"<ITEM_DESCRIPTION_OR_DETAILS>",';
         elements += ' "quantity": "1", ';
         elements += ' "price": 5000,';
-        elements += ' "currency": "COP"';
+        elements += ' "currency": "COP",';
+        elements += ' "image_url":"'+ bot.msg[i] + '",';
         //elements += ' "image_url":"https://goo.gl/images/JJpN9r"';
         elements += ' }  ';
     }
@@ -426,7 +426,7 @@ function sendTextMessageConfirm(sender, bot) {
                     "currency": "COP",
                     "payment_method": "Visa 2345",
                     "order_url": "http://petersapparel.parseapp.com/order?order_id=123456",
-                    "timestamp": time,
+                    "timestamp": '"'+time+'"',
                     "address": {
                         "street_1": "1 Hacker Way",
                         "street_2": "",
