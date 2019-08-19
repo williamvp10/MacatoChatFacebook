@@ -122,7 +122,11 @@ function sendtextbot(event, sender) {
                     if (!error && response.statusCode === 200) {
                         selectTypeBotMessage(sender, body);
                     } else {
-                        sendTextMessage(sender, 'disculpa, podrias repetir');
+                            console.log("error" + error);
+                            console.log("response" + response);
+                            console.log("re send- " + body);
+                            sendtextbot(event, sender);
+                            // sendTextMessage(sender, 'Error!');
                     }
                 });
     }
