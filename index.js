@@ -34,7 +34,7 @@ app.listen(app.get('port'), function () {
 app.post('/webhook/', function (req, res) {
     sendtoBot(req, res);
 });
-function sendtoBot(req, res){
+function sendtoBot(req, res) {
     console.log(JSON.stringify(req.body));
     let messaging_events = req.body.entry[0].messaging;
 
@@ -68,11 +68,12 @@ function sendtoBot(req, res){
                         //response is from the bot
                         if (!error && response.statusCode === 200) {
                             selectTypeBotMessage(sender, body);
-                        } else{
-                             console.log("error"+error);
-                             console.log("re send- "+body);
-                             sendtoBot(req, res);  
-                             //sendTextMessage(sender, 'Error!');
+                        } else {
+                            console.log("error" + error);
+                            console.log("response" + response);
+                            console.log("re send- " + body);
+                            sendtoBot(req, res);
+                            // sendTextMessage(sender, 'Error!');
                         }
                     });
         } else {
