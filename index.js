@@ -7,6 +7,7 @@ const app = express();
 const token = "EAADiQpmWQRgBAPglvHwxHZCMaXlZBHHjADrALySMQvlwR4wl5MbnhW5ZA3JDaKqOagA6ZC32lZBoDAv0mYO3rwgJtlihDcGAnfmb3xgj5YTen2ZBPA4a3zsSot4TVB7W0xdjnrmh4ZAt4NVvmBoZAzONDTmWNh119KA1f4YQZA18towZDZD";
 const msngerServerUrl = 'https://mecatobot.herokuapp.com/bot';
 //global var
+var time
 app.set('port', (process.env.PORT || 5000));
 // Process application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}));
@@ -31,6 +32,9 @@ app.listen(app.get('port'), function () {
 //FBM webhook
 
 app.post('/webhook/', function (req, res) {
+    sendtoBot(req, res);
+});
+function sendtoBot(req, res){
     console.log(JSON.stringify(req.body));
     let messaging_events = req.body.entry[0].messaging;
 
@@ -38,7 +42,7 @@ app.post('/webhook/', function (req, res) {
         let event = messaging_events[i];
         let sender = event.sender.id;
         let recipient = event.recipient.id;
-        let time = req.body.entry[0].time;
+        time = req.body.entry[0].time;
         let text = "";
         let type = "";
         try {
@@ -64,8 +68,12 @@ app.post('/webhook/', function (req, res) {
                         //response is from the bot
                         if (!error && response.statusCode === 200) {
                             selectTypeBotMessage(sender, body);
-                        } else {
-                            sendTextMessage(sender, 'Error!');
+                        } else if(error) {
+                            console.log("error"+error);
+                            console.log("re send- "+body);
+                            sendtoBot(req, res);  
+                        }else{
+                             sendTextMessage(sender, 'Error!');
                         }
                     });
         } else {
@@ -74,10 +82,9 @@ app.post('/webhook/', function (req, res) {
 
     }
     res.sendStatus(200);
-});
-
+}
 function InfoPersona(sender) {
-    let user=null
+    let user = null
     request({
         url: 'https://graph.facebook.com/' + sender + '?fields=first_name,last_name&access_token=' + token,
         method: 'GET',
@@ -91,8 +98,8 @@ function InfoPersona(sender) {
         u += '"id": "' + infou.id + '"';
         u += '}';
         user = JSON.parse(u);
-        console.log("completado"+user);
-        console.log("completado"+user.first_name);
+        console.log("completado" + user);
+        console.log("completado" + user.first_name);
         return user;
     });
 
@@ -115,7 +122,7 @@ function sendtextbot(event, sender) {
                     if (!error && response.statusCode === 200) {
                         selectTypeBotMessage(sender, body);
                     } else {
-                        sendTextMessage(sender, 'Error!');
+                        sendTextMessage(sender, 'disculpa, podrias repetir');
                     }
                 });
     }
@@ -190,6 +197,7 @@ function selectTypeBotMessage(sender, body) {
         console.log(botOut.botUtterance);
     }
 }
+
 function sendUserPostback(sender, bot) {
     let buttons = '[ ';
     for (var i = 0; i < bot.buttons.length; i++) {
@@ -370,170 +378,6 @@ function sendTextMessage(sender, text) {
     }
 }
 
-function imagenes(ingredientes) {
-    var text = '';
-    var t1 = "Queso";
-    var t2 = "masa";
-    var t3 = "champiñones";
-    var t4 = "pollo";
-    var t5 = "bocadillo";
-    var t6 = "piña";
-    var t7 = "tomates";
-    var t8 = "oregano";
-    var t9 = "carne";
-    var t10 = "salchichon";
-    var n1 = ingredientes.localeCompare(t1);
-    var n2 = ingredientes.localeCompare(t2);
-    var n3 = ingredientes.localeCompare(t3);
-    var n4 = ingredientes.localeCompare(t4);
-    var n5 = ingredientes.localeCompare(t5);
-    var n6 = ingredientes.localeCompare(t6);
-    var n7 = ingredientes.localeCompare(t7);
-    var n8 = ingredientes.localeCompare(t8);
-    var n9 = ingredientes.localeCompare(t9);
-    var n10 = ingredientes.localeCompare(t10);
-
-    if (n1 === 0) {
-        text += ' "image_url":"https://previews.123rf.com/images/peterhermesfurian/peterhermesfurian1611/peterhermesfurian161100063/66300148-rallado-queso-para-pizza-de-mozzarella-en-un-taz%C3%B3n-de-madera-sobre-blanco-cheddar-como-el-queso-italian.jpg",';
-        text += ' "subtitle":"delicioso queso rallado",';
-    } else if (n2 === 0) {
-        text += ' "image_url":"https://comemelapizza.com/wp-content/uploads/2014/09/masa-b%C3%A1sica-de-pizza-5.jpg",';
-        text += ' "subtitle":" masa para pizza",';
-    } else if (n3 === 0) {
-        text += ' "image_url":"https://www.hogarmania.com/archivos/201202/champinones-668x400x80xX.jpg",';
-        text += ' "subtitle":" championes frescos ",';
-    } else if (n4 === 0) {
-        text += ' "image_url":"https://previews.123rf.com/images/duplass/duplass0805/duplass080500061/3054741-bowl-de-pechuga-de-pollo-desmenuzado-en-un-taz%C3%B3n-en-la-cocina-o-restaurante-.jpg",';
-        text += ' "subtitle":" pollo desmenuzado",';
-    } else if (n5 === 0) {
-        text += ' "image_url":"https://upload.wikimedia.org/wikipedia/commons/6/60/Bocadillo.jpg",';
-        text += ' "subtitle":" bocadillo dulce",';
-    } else if (n6 === 0) {
-        text += ' "image_url":"https://comemelapizza.com/wp-content/uploads/2014/09/masa-b%C3%A1sica-de-pizza-5.jpg",';
-        text += ' "subtitle":" masa para pizza",';
-    } else if (n7 === 0) {
-        text += ' "image_url":"https://www.webconsultas.com/sites/default/files/styles/encabezado_articulo/public/migrated/tomate.jpg",';
-        text += ' "subtitle":" masa para pizza",';
-    } else if (n8 === 0) {
-        text += ' "image_url":"https://comemelapizza.com/wp-content/uploads/2014/09/masa-b%C3%A1sica-de-pizza-5.jpg",';
-        text += ' "subtitle":" masa para pizza",';
-    } else if (n9 === 0) {
-        text += ' "image_url":"https://www.chefzeecooks.com/wp-content/uploads/2018/08/Carne_Asada_web.jpg",';
-        text += ' "subtitle":" carne",';
-    } else if (n10 === 0) {
-        text += ' "image_url":"https://comemelapizza.com/wp-content/uploads/2014/09/masa-b%C3%A1sica-de-pizza-5.jpg",';
-        text += ' "subtitle":" masa para pizza",';
-    }
-    return text;
-}
-
-function sendTextMessageIngredients(sender, bot) {
-    let elements = '[';
-    let cant = 0;
-    if (bot.buttons.Ingredient.length > 10) {
-        cant = 10;
-    } else {
-        cant = bot.buttons.Ingredient.length;
-    }
-    for (var i = 0; i < cant; i++) {
-        if (i !== 0) {
-            elements += ',';
-        }
-        elements += '{';
-        elements += ' "title":"' + bot.buttons.Ingredient[i].nombre + '",';
-        elements += imagenes(bot.buttons.Ingredient[i].nombre);
-        //  elements += ' "image_url":"https://petersfancybrownhats.com/company_image.png",';
-        //  elements += ' "subtitle":"null",';
-        //  elements += ' "default_action": {';
-        //  elements += ' "type": "web_url",';
-        //  elements += ' "url": "https://petersfancybrownhats.com/view?item=103",';
-        //  elements += ' "messenger_extensions": false,';
-        //  elements += ' "webview_height_ratio": "tall"';
-        //  elements += '  },';
-        elements += ' "buttons":[';
-        elements += ' { ';
-        elements += ' "type": "postback",';
-        elements += ' "title": "' + bot.buttons.Ingredient[i].nombre + '",';
-        elements += ' "payload": "add ingredient"';
-        elements += '  }  ';
-        elements += ' ]  ';
-        elements += ' }  ';
-    }
-    elements += ']';
-
-    let arrayElements = JSON.parse(elements);
-    console.log(arrayElements);
-    if (bot !== 'null') {
-        let messageData = {
-            "attachment": {
-                "type": "template",
-                "payload": {
-                    "template_type": "generic",
-                    "elements": arrayElements
-                }
-            }
-        };
-        console.log(messageData);
-        // Start the request
-        request({
-            url: 'https://graph.facebook.com/v2.6/me/messages',
-            qs: {access_token: token},
-            method: 'POST',
-            json: {
-                recipient: {id: sender},
-                message: messageData
-
-            }
-        }, function (error, response, body) {
-            if (error) {
-                console.log('Error sending messages: ', error);
-            } else if (response.body.error) {
-                console.log('Error: ', response.body.error);
-            }
-        });
-    }
-}
-
-function sendTextMessageIngredientsButtons(sender) {
-    let buttons = '[ ';
-    buttons += '{';
-    buttons += '"type": "postback",';
-    buttons += ' "title": "enviar",';
-    buttons += ' "payload": "requestTiendas"';
-    buttons += '}';
-    buttons += ']';
-    console.log(buttons);
-    let b = JSON.parse(buttons);
-    let messageData = {
-        "attachment": {
-            "type": "template",
-            "payload": {
-                "template_type": "button",
-                "text": " Seleccione los ingredientes, al finalizar presione el boton enviar",
-                "buttons": b
-            }
-        }
-    };
-    console.log(messageData);
-    // Start the request
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token: token},
-        method: 'POST',
-        json: {
-            recipient: {id: sender},
-            message: messageData
-
-        }
-    }, function (error, response, body) {
-        if (error) {
-            console.log('Error sending messages: ', error);
-        } else if (response.body.error) {
-            console.log('Error: ', response.body.error);
-        }
-    });
-}
-
 function sendTextMessageConfirm(sender, bot) {
     console.log(bot);
     let elements = '[';
@@ -567,19 +411,19 @@ function sendTextMessageConfirm(sender, bot) {
                 "type": "template",
                 "payload": {
                     "template_type": "receipt",
-                    "recipient_name": " n" + bot.username,
+                    "recipient_name": " " + bot.username,
                     "order_number": bot.Pedido.tipo + "  en la tienda " + bot.Pedido.tienda,
                     "currency": "COP",
                     "payment_method": "Visa 2345",
                     "order_url": "http://petersapparel.parseapp.com/order?order_id=123456",
-                    "timestamp": "1428444852",
+                    "timestamp": time,
                     "address": {
                         "street_1": "1 Hacker Way",
                         "street_2": "",
-                        "city": "Menlo Park",
+                        "city": "Bogotá",
                         "postal_code": "94025",
-                        "state": "CA",
-                        "country": "US"
+                        "state": "BA",
+                        "country": "CO"
                     },
                     "summary": {
                         "subtotal": "5000",
@@ -657,59 +501,6 @@ function sendButtonsConfirm(sender) {
     });
 }
 
-function sendTextMessageTiendas(sender, bot) {
-    let buttons = '[ ';
-    let cant = 0;
-    if (bot.buttons.tienda.length > 3) {
-        cant = 3;
-    } else {
-        cant = bot.buttons.tienda.length;
-    }
-    for (var i = 0; i < cant; i++) {
-        if (i !== 0) {
-            buttons += ',';
-        }
-        buttons += '{';
-        buttons += ' "type":"postback",';
-        buttons += ' "title": "' + bot.buttons.tienda[i].nombre + '",';
-        buttons += ' "payload": "confirmar pedido"';
-        buttons += '}';
-    }
-    buttons += ']';
-    console.log(buttons);
-    let b = JSON.parse(buttons);
-    if (bot !== 'null') {
-        let messageData = {
-            "attachment": {
-                "type": "template",
-                "payload": {
-                    "template_type": "button",
-                    "text": bot.botUtterance,
-                    "buttons": b
-                }
-            }
-        };
-        console.log(messageData);
-        // Start the request
-        request({
-            url: 'https://graph.facebook.com/v2.6/me/messages',
-            qs: {access_token: token},
-            method: 'POST',
-            json: {
-                recipient: {id: sender},
-                message: messageData
-
-            }
-        }, function (error, response, body) {
-            if (error) {
-                console.log('Error sending messages: ', error);
-            } else if (response.body.error) {
-                console.log('Error: ', response.body.error);
-            }
-        });
-    }
-}
-
 
 function fixUrl(url) {
     console.log("url" + url)
@@ -732,78 +523,6 @@ function fixUrl(url) {
     console.log("fix url " + res)
     return res;
 }
-
-//function sendTextMessageList(sender, bot) {
-//    let elements = '[';
-//    let cant = 0;
-//    if (bot.elements.length > 10) {
-//        cant = 10;
-//    } else {
-//        cant = bot.elements.length;
-//    }
-//    for (var i = 0; i < cant; i++) {
-//        if (i !== 0) {
-//            elements += ',';
-//        }
-//        elements += '{';
-//        elements += ' "title":"' + bot.elements[i].titulo + '",';
-//        var subtitulo = "";
-//        try {
-//            var subtitulo = bot.elements[i].titulo;
-//            elements += ' "subtitle":"' + subtitulo + '",';
-//        } catch (err) {
-//        }
-//        try {
-//            var url = bot.elements.url;
-//            elements += ' "image_url":"' + url + '",';
-//        } catch (err) {
-//        }
-//        elements += ' "buttons":[';
-//        for (var j = 0; j < bot.elements[i].buttons.length; j++) {
-//            elements += ' { ';
-//            elements += ' "type": "postback",';
-//            elements += ' "title": "' + bot.elements[i].buttons[j].titulo + '",';
-//            elements += ' "payload": "' + bot.elements[i].buttons[j].respuesta + '"';
-//            elements += '  }  ';
-//        }
-//        elements += ' ]  ';
-//        elements += ' }  ';
-//    }
-//    elements += ']';
-//
-//    let arrayElements = JSON.parse(elements);
-//    console.log(arrayElements);
-//    if (bot !== 'null') {
-//        let messageData = {
-//            "attachment": {
-//                "type": "template",
-//                "payload": {
-//                    "template_type": "generic",
-//                    "elements": arrayElements
-//                }
-//            }
-//        };
-//        console.log(messageData);
-//        // Start the request
-//        request({
-//            url: 'https://graph.facebook.com/v2.6/me/messages',
-//            qs: {access_token: token},
-//            method: 'POST',
-//            json: {
-//                recipient: {id: sender},
-//                message: messageData
-//
-//            }
-//        }, function (error, response, body) {
-//            if (error) {
-//                console.log('Error sending messages: ', error);
-//            } else if (response.body.error) {
-//                console.log('Error: ', response.body.error);
-//            }
-//        });
-//    }
-//}
-
 
 function encode_utf8(s) {
     return unescape(encodeURIComponent(s));
