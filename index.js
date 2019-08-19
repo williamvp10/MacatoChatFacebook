@@ -68,12 +68,11 @@ function sendtoBot(req, res){
                         //response is from the bot
                         if (!error && response.statusCode === 200) {
                             selectTypeBotMessage(sender, body);
-                        } else if(error) {
-                            console.log("error"+error);
-                            console.log("re send- "+body);
-                            sendtoBot(req, res);  
-                        }else{
-                             sendTextMessage(sender, 'Error!');
+                        } else{
+                             console.log("error"+error);
+                             console.log("re send- "+body);
+                             sendtoBot(req, res);  
+                             //sendTextMessage(sender, 'Error!');
                         }
                     });
         } else {
