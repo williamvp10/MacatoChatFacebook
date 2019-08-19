@@ -129,7 +129,7 @@ function sendtextbot(event, sender,numintent) {
                             console.log("intent" + numintent);
                             console.log("response" + JSON.stringify(response));
                             console.log("re send- " + body);
-                            intent++;
+                            numintent++;
                             sendtextBot(event, sender,numintent);
                         }else{
                             sendTextMessage(sender, 'no te puedo ayudar con tu solicitud');
