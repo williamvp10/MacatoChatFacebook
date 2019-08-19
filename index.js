@@ -407,7 +407,7 @@ function sendTextMessageConfirm(sender, bot) {
         elements += ' "quantity": "1", ';
         elements += ' "price": 5000,';
         elements += ' "currency": "COP",';
-        elements += ' "image_url":"'+ decodeURIComponent(bot.msg[i]) + '"';
+        elements += ' "image_url":"'+ decodeURIComponent(fixUrl(bot.msg[i])) + '"';
         //elements += ' "image_url":"https://goo.gl/images/JJpN9r"';
         elements += ' }  ';
     }
@@ -514,7 +514,7 @@ function sendButtonsConfirm(sender) {
 
 function fixUrl(url) {
     console.log("url" + url)
-    /*var res = ''
+    var res = ''
     var var2 = url.split("u003d");
     for (var i = 0; i < var2.length; i++) {
         if (i != 0) {
@@ -530,9 +530,6 @@ function fixUrl(url) {
         }
         res += var2[i]
     }
-    console.log("fix url " + res)
-    */
-    var res=decodeURIComponent(url);
     console.log("fix url " + res)
     return res;
 }
