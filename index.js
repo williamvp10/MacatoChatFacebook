@@ -70,7 +70,7 @@ function sendtoBot(req, res) {
                             selectTypeBotMessage(sender, body);
                         } else {
                             console.log("error" + error);
-                            console.log("response" + JSON.parse(response));
+                            console.log("response" + JSON.stringify(response));
                             console.log("re send- " + body);
                             sendtoBot(req, res);
                             // sendTextMessage(sender, 'Error!');
@@ -123,7 +123,7 @@ function sendtextbot(event, sender) {
                         selectTypeBotMessage(sender, body);
                     } else {
                             console.log("error" + error);
-                            console.log("response" + JSON.parse(response));
+                            console.log("response" + JSON.stringify(response));
                             console.log("re send- " + body);
                             sendtextbot(event, sender);
                             // sendTextMessage(sender, 'Error!');
