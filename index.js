@@ -32,9 +32,11 @@ app.listen(app.get('port'), function () {
 //FBM webhook
 
 app.post('/webhook/', function (req, res) {
-    sendtoBot(req, res);
+    var intent=0;
+    sendtoBot(req, res,intent);
 });
-function sendtoBot(req, res) {
+
+function sendtoBot(req, res,numintent) {
     console.log(JSON.stringify(req.body));
     let messaging_events = req.body.entry[0].messaging;
 
@@ -68,16 +70,18 @@ function sendtoBot(req, res) {
                         //response is from the bot
                         if (!error && response.statusCode === 200) {
                             selectTypeBotMessage(sender, body);
-                        } else {
-                            console.log("error" + error);
+                        } else if(!error && numintent<10) {
+                            console.log("intent" + numintent);
                             console.log("response" + JSON.stringify(response));
                             console.log("re send- " + body);
-                            sendtoBot(req, res);
-                            // sendTextMessage(sender, 'Error!');
+                            numintent++;
+                            sendtoBot(req, res,numintent);
+                        }else{
+                            sendTextMessage(sender, 'no te puedo ayudar con tu solicitud');
                         }
                     });
         } else {
-            sendtextbot(event, sender);
+            sendtextbot(event, sender,numintent);
         }
 
     }
@@ -105,7 +109,7 @@ function InfoPersona(sender) {
 
 }
 
-function sendtextbot(event, sender) {
+function sendtextbot(event, sender,numintent) {
     if (event.message && event.message.text) {
         let text = event.message.text;
         //send it to the bot
@@ -121,13 +125,15 @@ function sendtextbot(event, sender) {
                     //response is from the bot
                     if (!error && response.statusCode === 200) {
                         selectTypeBotMessage(sender, body);
-                    } else {
-                            console.log("error" + error);
+                    } else if(!error && numintent<10) {
+                            console.log("intent" + numintent);
                             console.log("response" + JSON.stringify(response));
                             console.log("re send- " + body);
-                            sendtextbot(event, sender);
-                            // sendTextMessage(sender, 'Error!');
-                    }
+                            intent++;
+                            sendtextBot(event, sender,numintent);
+                        }else{
+                            sendTextMessage(sender, 'no te puedo ayudar con tu solicitud');
+                        }
                 });
     }
 }
